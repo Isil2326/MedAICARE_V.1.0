@@ -2,28 +2,45 @@
 
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --color-primary-50: #eef7ff;
-  --color-primary-100: #d9edff;
-  --color-primary-200: #bce0ff;
-  --color-primary-300: #8ecdff;
-  --color-primary-400: #59b0ff;
-  --color-primary-500: #338dff;
-  --color-primary-600: #1b6ff5;
-  --color-primary-700: #1459e1;
-  --color-primary-800: #1748b6;
-  --color-primary-900: #193f8f;
-  --color-primary-950: #142857;
-  --color-teal-50: #effefb;
-  --color-teal-100: #c8fff4;
-  --color-teal-200: #91fee9;
-  --color-teal-300: #53f5db;
-  --color-teal-400: #20e0c7;
-  --color-teal-500: #07c4ae;
-  --color-teal-600: #039e8f;
-  --color-teal-700: #077e73;
-  --color-teal-800: #0b645d;
-  --color-teal-900: #0e534d;
-  --color-teal-950: #013331;
+
+  /* ── MediAI Care · Palette Naturelle (mySugr-inspired) ── */
+  --color-brand-50:  #f0f6ec;
+  --color-brand-100: #dcecd4;
+  --color-brand-200: #b9d9a9;
+  --color-brand-300: #8cbf78;
+  --color-brand-400: #65a44e;
+  --color-brand-500: #4a8a35;
+  --color-brand-600: #3a6e28;
+  --color-brand-700: #2e5720;
+  --color-brand-800: #27461c;
+  --color-brand-900: #1f3a16;
+  --color-brand-950: #0f1e0b;
+
+  --color-sage-50:  #f5f7f2;
+  --color-sage-100: #e8eee2;
+  --color-sage-200: #d0dcc5;
+  --color-sage-300: #aec09d;
+  --color-sage-400: #879e74;
+  --color-sage-500: #6b8459;
+  --color-sage-600: #546946;
+  --color-sage-700: #435438;
+  --color-sage-800: #384530;
+  --color-sage-900: #2f3a28;
+
+  --color-coral-50:  #fff3ef;
+  --color-coral-100: #ffe3d8;
+  --color-coral-200: #ffc2a8;
+  --color-coral-300: #ff9672;
+  --color-coral-400: #ff6540;
+  --color-coral-500: #e8441f;
+  --color-coral-600: #c43614;
+
+  --color-amber-50:  #fff8ec;
+  --color-amber-100: #ffeecc;
+  --color-amber-200: #ffd98a;
+  --color-amber-300: #ffbe47;
+  --color-amber-400: #f9a21b;
+  --color-amber-500: #e88a0d;
 }
 
 html {
@@ -34,49 +51,64 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f6ef;
+  color: #1c2b1a;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+/* ── Scrollbar naturelle ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c8d8b8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a8c090; }
 
-/* Pulse animation for live indicators */
+/* ── Animations ── */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.5); }
+  50%       { opacity: 0.5; transform: scale(1.5); }
 }
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 
-.animate-pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
 }
+.animate-float { animation: float 4s ease-in-out infinite; }
 
-/* Gradient text */
+/* ── Gradient text ── */
 .gradient-text {
-  background: linear-gradient(135deg, #1b6ff5 0%, #07c4ae 100%);
+  background: linear-gradient(135deg, #3a6e28 0%, #65a44e 50%, #8cbf78 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass morphism */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ── Glucose chart filter ── */
+.recharts-area-curve {
+  filter: drop-shadow(0 3px 6px rgba(74, 138, 53, 0.25));
 }
 
-/* Smooth chart area */
-.recharts-area-curve {
-  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
+/* ── Card shadows ── */
+.card-shadow {
+  box-shadow:
+    0 1px 3px rgba(30, 46, 26, 0.06),
+    0 4px 16px rgba(30, 46, 26, 0.06),
+    0 0 0 1px rgba(180, 210, 160, 0.18);
+}
+
+.card-shadow-md {
+  box-shadow:
+    0 2px 8px rgba(30, 46, 26, 0.08),
+    0 8px 32px rgba(30, 46, 26, 0.07),
+    0 0 0 1px rgba(180, 210, 160, 0.15);
+}
+
+/* ── Focus rings ── */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 138, 53, 0.18);
+}
+
+/* ── Blob decoration ── */
+.blob {
+  border-radius: 72% 28% 46% 54% / 41% 60% 40% 59%;
 }

@@ -31,10 +31,19 @@ Configured as a static site deployment:
 - **Build:** `cd MedAICare_V.3_10Patients && npm run build`
 - **Public Dir:** `MedAICare_V.3_10Patients/dist`
 
+## Design System — Thème Naturel (mySugr-inspired)
+Complete light/warm redesign as of v4.0.0:
+- **Brand palette:** brand-green (#4a8a35), sage (#f4f6ef), coral (#e8441f), amber — all defined as CSS custom properties in `index.css`
+- **Design primitives:** `src/components/ui/primitives.tsx` — Card, StatTile, Badge, TimeRangeSelector
+- All dark `bg-white/[0.x]` / `text-white/x` classes replaced with light sage/white equivalents
+- Components fully converted: `DoctorDashboard`, `PatientDashboard`, `Messaging`, `AuditLog`, `DevicesView`, `TreatmentEditor`, `LabReportTimeline`, `LabReportScanner`, `LandingPage`, `ClinicalRecommendationCard`, `TimeRangeSelector`
+- Engine/auth files intentionally untouched
+
 ## Key Features
 - Patient and clinician dashboards with role-based views
 - IoMT device integration (CGM, insulin pumps, smartwatches)
 - Explainable AI recommendations using EBM and XGBoost
-- Secure messaging between patients and clinicians
+- Secure messaging between patients and clinicians (iMessage-like bubbles)
 - Audit log for medical decision traceability
-- QR code scanning for device pairing
+- QR code scanning for lab report import
+- Prescription management with full audit trail
