@@ -174,6 +174,17 @@ export default function PatientDashboard() {
 
   const chartData = vitalsHistory.map(v => ({ time: formatTime(v.timestamp), g: v.glucose }));
 
+  // Glucose trend from prediction or computed from last 2 readings
+  const glucoseTrendDir: 'rising' | 'falling' | 'stable' =
+    recommendation.trendPrediction?.direction ??
+    (vitalsHistory.length >= 2
+      ? Math.abs(vitalsHistory[vitalsHistory.length - 1].glucose - vitalsHistory[vitalsHistory.length - 2].glucose) < 3
+        ? 'stable'
+        : vitalsHistory[vitalsHistory.length - 1].glucose > vitalsHistory[vitalsHistory.length - 2].glucose
+        ? 'rising'
+        : 'falling'
+      : 'stable');
+
   return (
     <div className="space-y-5 pb-20 lg:pb-0">
 
@@ -258,6 +269,21 @@ export default function PatientDashboard() {
 
             <div className="flex items-end gap-3 mb-5">
               <div className="text-[68px] leading-none font-black text-slate-900 tabular-nums">{glucose}</div>
+              {/* Trend arrow — standard CGM display (LibreLink / Dexcom Clarity) */}
+              <div className="pb-3 flex flex-col items-center gap-0.5">
+                {glucoseTrendDir === 'rising'
+                  ? <TrendingUp className="w-8 h-8 text-coral-500" />
+                  : glucoseTrendDir === 'falling'
+                  ? <TrendingDown className="w-8 h-8 text-amber-500" />
+                  : <Minus className="w-7 h-7 text-brand-500" />
+                }
+                <span className={cn(
+                  'text-[10px] font-bold',
+                  glucoseTrendDir === 'rising' ? 'text-coral-500' : glucoseTrendDir === 'falling' ? 'text-amber-500' : 'text-brand-500'
+                )}>
+                  {glucoseTrendDir === 'rising' ? 'Hausse' : glucoseTrendDir === 'falling' ? 'Baisse' : 'Stable'}
+                </span>
+              </div>
               <div className="pb-2">
                 <div className="text-[15px] text-slate-400 font-semibold">mg/dL</div>
                 <div className="text-[11px] text-slate-300 mt-1">Cible {carePlan.glucoseTargetMin}–{carePlan.glucoseTargetMax}</div>
@@ -499,7 +525,7 @@ export default function PatientDashboard() {
                   <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="4 3" />
                   <Area type="monotone" dataKey="p95" stroke="rgba(74,138,53,0.15)" strokeWidth={1} fill="none" />
                   <Area type="monotone" dataKey="p75" stroke="none" fill="url(#agpRange)" />
-                  <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(244,246,239,1)" />
+                  <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(241,245,249,1)" />
                   <Area type="monotone" dataKey="p5"  stroke="rgba(74,138,53,0.15)" strokeWidth={1} fill="none" />
                   <Line type="monotone" dataKey="p50" stroke="#4a8a35" strokeWidth={2.5} dot={false} />
                 </ComposedChart>

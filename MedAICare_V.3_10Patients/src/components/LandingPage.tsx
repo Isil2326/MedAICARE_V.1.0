@@ -23,10 +23,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   const openAuth = (type: 'patient' | 'doctor', mode: 'login' | 'register') => { setAuthType(type); setAuthMode(mode); };
 
   return (
-    <div className="min-h-screen bg-white text-sage-900 antialiased selection:bg-brand-100">
+    <div className="min-h-screen bg-white text-slate-900 antialiased selection:bg-brand-100">
 
       {/* ── NAV ─────────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-xl border-b border-sage-100/80">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-100/80">
         <div className="mx-auto max-w-6xl px-5 lg:px-8 h-16 flex items-center justify-between">
 
           {/* Logo */}
@@ -41,15 +41,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* Links */}
-          <div className="hidden md:flex items-center gap-7 text-[13.5px] text-sage-500 font-medium">
-            <a href="#fonctionnalites" className="hover:text-sage-900 transition-colors">Fonctionnalités</a>
-            <a href="#pour-qui" className="hover:text-sage-900 transition-colors">Pour qui ?</a>
-            <a href="#securite" className="hover:text-sage-900 transition-colors">Sécurité</a>
+          <div className="hidden md:flex items-center gap-7 text-[13.5px] text-slate-500 font-medium">
+            <a href="#fonctionnalites" className="hover:text-slate-900 transition-colors">Fonctionnalités</a>
+            <a href="#pour-qui" className="hover:text-slate-900 transition-colors">Pour qui ?</a>
+            <a href="#securite" className="hover:text-slate-900 transition-colors">Sécurité</a>
           </div>
 
           {/* CTAs */}
           <div className="flex items-center gap-2">
-            <button onClick={() => openAuth('patient', 'login')} className="hidden sm:block px-4 py-2 text-[13px] text-sage-600 font-semibold hover:text-sage-900 transition">
+            <button onClick={() => openAuth('patient', 'login')} className="hidden sm:block px-4 py-2 text-[13px] text-slate-600 font-semibold hover:text-slate-900 transition">
               Connexion
             </button>
             <button onClick={() => openAuth('patient', 'register')} className="px-4 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition shadow-[0_2px_12px_rgba(74,138,53,0.3)]">
@@ -62,7 +62,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
       <section className="relative pt-16 min-h-screen flex items-center overflow-hidden">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f0f5eb] via-white to-white" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] via-white to-white" />
         <div className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full bg-brand-100/40 blur-[120px] -translate-y-32 translate-x-32 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-amber-100/30 blur-[80px] translate-y-24 -translate-x-24 pointer-events-none" />
 
@@ -79,7 +79,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </motion.div>
 
               <motion.h1 variants={fade(0.08)} initial="hidden" animate="visible"
-                className="text-[52px] sm:text-[64px] leading-[1.04] font-black tracking-[-2px] text-sage-900 mb-6"
+                className="text-[52px] sm:text-[64px] leading-[1.04] font-black tracking-[-2px] text-slate-900 mb-6"
               >
                 L'IA qui<br />
                 <span className="text-brand-600">simplifie</span><br />
@@ -87,7 +87,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </motion.h1>
 
               <motion.p variants={fade(0.16)} initial="hidden" animate="visible"
-                className="text-[17px] leading-[1.7] text-sage-500 mb-8 font-medium"
+                className="text-[17px] leading-[1.7] text-slate-500 mb-8 font-medium"
               >
                 Des prédictions glycémiques en langage clair, une analyse de vos données en temps réel, et une équipe médicale connectée — tout dans une seule application.
               </motion.p>
@@ -102,7 +102,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </button>
                 <button
                   onClick={() => openAuth('doctor', 'register')}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white border border-sage-200 text-sage-800 font-bold text-[15px] hover:bg-sage-50 transition-all hover:border-sage-300 hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white border border-slate-200 text-slate-800 font-bold text-[15px] hover:bg-slate-50 transition-all hover:border-slate-300 hover:-translate-y-0.5"
                 >
                   Accès médecin
                 </button>
@@ -110,7 +110,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
               {/* App store badges */}
               <motion.div variants={fade(0.28)} initial="hidden" animate="visible" className="flex items-center gap-3">
-                <span className="text-[12px] text-sage-400 font-medium">Application mobile :</span>
+                <span className="text-[12px] text-slate-400 font-medium">Application mobile :</span>
                 <AppStoreBadge store="apple" />
                 <AppStoreBadge store="google" />
               </motion.div>
@@ -125,7 +125,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* Scroll hint */}
-          <motion.div variants={fade(0.5)} initial="hidden" animate="visible" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-sage-300">
+          <motion.div variants={fade(0.5)} initial="hidden" animate="visible" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-300">
             <span className="text-[11px] font-medium uppercase tracking-widest">Découvrir</span>
             <ChevronDown className="w-4 h-4 animate-bounce" />
           </motion.div>
@@ -133,7 +133,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── TRUST BAND ──────────────────────────────────────────────────────── */}
-      <section className="py-12 border-y border-sage-100 bg-sage-50/50">
+      <section className="py-12 border-y border-slate-100 bg-slate-50/50">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -144,7 +144,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             ].map(({ val, label }) => (
               <div key={label} className="text-center">
                 <div className="text-[32px] font-black text-brand-600 leading-none mb-1">{val}</div>
-                <div className="text-[13px] text-sage-400 font-medium">{label}</div>
+                <div className="text-[13px] text-slate-400 font-medium">{label}</div>
               </div>
             ))}
           </div>
@@ -161,7 +161,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               Ce qu'on fait
             </motion.p>
             <motion.h2 variants={fade(0.06)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="text-[42px] font-black tracking-tight text-sage-900 leading-[1.1]"
+              className="text-[42px] font-black tracking-tight text-slate-900 leading-[1.1]"
             >
               Une IA médicale,<br />enfin compréhensible.
             </motion.h2>
@@ -192,7 +192,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               },
             ].map(({ Icon, color, title, desc, tag }) => (
               <motion.div key={title} variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="group p-8 rounded-3xl border border-sage-100 hover:border-transparent hover:shadow-[0_8px_40px_rgba(74,138,53,0.12)] transition-all duration-300 cursor-default"
+                className="group p-8 rounded-3xl border border-slate-100 hover:border-transparent hover:shadow-[0_8px_40px_rgba(74,138,53,0.12)] transition-all duration-300 cursor-default"
               >
                 <div className={`w-12 h-12 rounded-2xl mb-6 flex items-center justify-center ${
                   color === 'brand' ? 'bg-brand-100' : color === 'blue' ? 'bg-blue-100' : 'bg-coral-50'
@@ -201,9 +201,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     color === 'brand' ? 'text-brand-600' : color === 'blue' ? 'text-blue-600' : 'text-coral-500'
                   }`} />
                 </div>
-                <div className="text-[11px] font-bold text-sage-400 uppercase tracking-widest mb-2">{tag}</div>
-                <h3 className="text-[20px] font-black text-sage-900 leading-tight mb-3">{title}</h3>
-                <p className="text-[14px] text-sage-500 leading-relaxed font-medium">{desc}</p>
+                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">{tag}</div>
+                <h3 className="text-[20px] font-black text-slate-900 leading-tight mb-3">{title}</h3>
+                <p className="text-[14px] text-slate-500 leading-relaxed font-medium">{desc}</p>
               </motion.div>
             ))}
           </div>
@@ -211,16 +211,16 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── FEATURE DEEP DIVE 1 — AI Predictions ───────────────────────────── */}
-      <section className="py-24 bg-[#f6f8f3]">
+      <section className="py-24 bg-slate-50">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div variants={fadeX(1, 0)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <span className="text-[12px] font-bold text-brand-600 uppercase tracking-widest block mb-4">Prédictions IA</span>
-              <h2 className="text-[38px] font-black tracking-tight leading-[1.1] text-sage-900 mb-5">
+              <h2 className="text-[38px] font-black tracking-tight leading-[1.1] text-slate-900 mb-5">
                 "Votre glycémie va monter dans 90 min."<br />
-                <span className="text-sage-400">On vous dit pourquoi.</span>
+                <span className="text-slate-400">On vous dit pourquoi.</span>
               </h2>
-              <p className="text-[16px] text-sage-500 leading-relaxed mb-7 font-medium">
+              <p className="text-[16px] text-slate-500 leading-relaxed mb-7 font-medium">
                 Notre moteur XGBoost analyse vos patterns CGM et génère des prédictions expliquées en français, avec le facteur déclencheur principal mis en avant. Fini les alertes sans contexte.
               </p>
               <ul className="space-y-3 mb-8">
@@ -230,7 +230,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   'Confiance IA affichée clairement',
                   'Validé par un comité clinique',
                 ].map(it => (
-                  <li key={it} className="flex items-center gap-3 text-[14px] text-sage-700 font-semibold">
+                  <li key={it} className="flex items-center gap-3 text-[14px] text-slate-700 font-semibold">
                     <div className="w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center shrink-0">
                       <Check className="w-3 h-3 text-white" strokeWidth={3} />
                     </div>
@@ -264,11 +264,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
             <motion.div variants={fadeX(-1, 0)} initial="hidden" whileInView="visible" viewport={{ once: true }} className="order-1 lg:order-2">
               <span className="text-[12px] font-bold text-blue-600 uppercase tracking-widest block mb-4">Analyse données IoMT</span>
-              <h2 className="text-[38px] font-black tracking-tight leading-[1.1] text-sage-900 mb-5">
+              <h2 className="text-[38px] font-black tracking-tight leading-[1.1] text-slate-900 mb-5">
                 Toutes vos données,<br />
-                <span className="text-sage-400">enfin réunies.</span>
+                <span className="text-slate-400">enfin réunies.</span>
               </h2>
-              <p className="text-[16px] text-sage-500 leading-relaxed mb-7 font-medium">
+              <p className="text-[16px] text-slate-500 leading-relaxed mb-7 font-medium">
                 CGM, pompe à insuline, glucomètre, montre connectée — toutes vos sources synchronisées automatiquement. Notre algorithme détecte les tendances invisibles à l'œil nu.
               </p>
               <ul className="space-y-3 mb-8">
@@ -278,7 +278,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   'Rapports cliniques automatiques',
                   'Partage sécurisé avec votre équipe',
                 ].map(it => (
-                  <li key={it} className="flex items-center gap-3 text-[14px] text-sage-700 font-semibold">
+                  <li key={it} className="flex items-center gap-3 text-[14px] text-slate-700 font-semibold">
                     <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
                       <Check className="w-3 h-3 text-white" strokeWidth={3} />
                     </div>
@@ -295,33 +295,33 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── POUR QUI ────────────────────────────────────────────────────────── */}
-      <section id="pour-qui" className="py-24 bg-[#f6f8f3]">
+      <section id="pour-qui" className="py-24 bg-slate-50">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="text-center mb-14">
             <motion.h2 variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="text-[40px] font-black tracking-tight text-sage-900"
+              className="text-[40px] font-black tracking-tight text-slate-900"
             >
               Conçu pour deux réalités.
             </motion.h2>
-            <p className="text-[16px] text-sage-400 mt-3 font-medium">Patients et soignants, enfin sur la même longueur d'onde.</p>
+            <p className="text-[16px] text-slate-400 mt-3 font-medium">Patients et soignants, enfin sur la même longueur d'onde.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Patient */}
             <motion.div variants={fadeX(1, 0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-white rounded-3xl p-9 shadow-[0_2px_24px_rgba(74,138,53,0.08)] border border-sage-100"
+              className="bg-white rounded-3xl p-9 shadow-[0_2px_24px_rgba(74,138,53,0.08)] border border-slate-100"
             >
               <div className="w-10 h-10 rounded-2xl bg-brand-100 flex items-center justify-center mb-5">
                 <Activity className="w-5 h-5 text-brand-600" />
               </div>
               <div className="text-[12px] font-bold text-brand-600 uppercase tracking-widest mb-2">Patients</div>
-              <h3 className="text-[26px] font-black text-sage-900 leading-tight mb-3">Reprenez le contrôle.</h3>
-              <p className="text-[14px] text-sage-500 leading-relaxed mb-6 font-medium">
+              <h3 className="text-[26px] font-black text-slate-900 leading-tight mb-3">Reprenez le contrôle.</h3>
+              <p className="text-[14px] text-slate-500 leading-relaxed mb-6 font-medium">
                 Fini les 5 apps différentes. Toutes vos données dans un seul endroit, avec une IA qui vous parle vraiment.
               </p>
               <ul className="space-y-2.5 mb-8">
                 {['Alertes avant les crises', 'Conseils quotidiens personnalisés', 'Journal repas & insuline', 'Communication directe avec votre médecin'].map(it => (
-                  <li key={it} className="flex items-center gap-2.5 text-[13.5px] text-sage-700 font-medium">
+                  <li key={it} className="flex items-center gap-2.5 text-[13.5px] text-slate-700 font-medium">
                     <div className="w-4 h-4 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
                       <Check className="w-2.5 h-2.5 text-brand-700" strokeWidth={3} />
                     </div>
@@ -336,7 +336,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
             {/* Clinicien */}
             <motion.div variants={fadeX(-1, 0.05)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-sage-900 rounded-3xl p-9 text-white"
+              className="bg-slate-900 rounded-3xl p-9 text-white"
             >
               <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
                 <BrainCircuit className="w-5 h-5 text-white" />
@@ -373,31 +373,31 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="flex justify-center gap-1 mb-8">
               {[0,1,2,3,4].map(i => <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />)}
             </div>
-            <blockquote className="text-[26px] md:text-[30px] font-bold text-sage-900 leading-[1.4] tracking-tight mb-10">
+            <blockquote className="text-[26px] md:text-[30px] font-bold text-slate-900 leading-[1.4] tracking-tight mb-10">
               "MediAI Care a changé notre pratique. Les explications IA nous permettent de valider les recommandations en secondes et d'instaurer une vraie confiance avec nos patients."
             </blockquote>
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-700 text-[15px] mb-2">MR</div>
-              <div className="font-bold text-sage-900 text-[15px]">Dr. M. Renaud</div>
-              <div className="text-[13px] text-sage-400 font-medium">Diabétologue référent · CHU Bordeaux</div>
+              <div className="font-bold text-slate-900 text-[15px]">Dr. M. Renaud</div>
+              <div className="text-[13px] text-slate-400 font-medium">Diabétologue référent · CHU Bordeaux</div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* ── SÉCURITÉ ────────────────────────────────────────────────────────── */}
-      <section id="securite" className="py-16 bg-[#f6f8f3]">
+      <section id="securite" className="py-16 bg-slate-50">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <motion.div variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-10 rounded-3xl bg-white border border-sage-100 shadow-[0_2px_24px_rgba(0,0,0,0.04)]"
+            className="flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-10 rounded-3xl bg-white border border-slate-100 shadow-[0_2px_24px_rgba(0,0,0,0.04)]"
           >
             <div className="flex items-start gap-5">
               <div className="w-12 h-12 rounded-2xl bg-brand-100 flex items-center justify-center shrink-0">
                 <Shield className="w-6 h-6 text-brand-600" />
               </div>
               <div>
-                <h3 className="text-[20px] font-black text-sage-900 mb-1">Vos données vous appartiennent.</h3>
-                <p className="text-[14px] text-sage-500 font-medium">Chiffrement AES-256 · Hébergement HDS France · Conforme RGPD & IEC 62304</p>
+                <h3 className="text-[20px] font-black text-slate-900 mb-1">Vos données vous appartiennent.</h3>
+                <p className="text-[14px] text-slate-500 font-medium">Chiffrement AES-256 · Hébergement HDS France · Conforme RGPD & IEC 62304</p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {['HDS', 'RGPD', 'HL7 FHIR', 'IEC 62304', 'ISO 13485'].map(t => (
                     <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold">{t}</span>
@@ -441,7 +441,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-      <footer className="bg-sage-900 py-12">
+      <footer className="bg-slate-900 py-12">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
@@ -453,13 +453,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <span className="text-[15px] font-black text-white">MediAI<span className="text-brand-400">Care</span></span>
             </div>
 
-            <div className="flex items-center gap-6 text-[12.5px] text-sage-400 font-medium">
+            <div className="flex items-center gap-6 text-[12.5px] text-slate-400 font-medium">
               <a href="#" className="hover:text-white transition">Confidentialité</a>
               <a href="#" className="hover:text-white transition">CGU</a>
               <a href="#" className="hover:text-white transition">Contact</a>
             </div>
 
-            <p className="text-[12px] text-sage-500 font-medium">© 2026 MediAI Care · Thèse Bioinfo</p>
+            <p className="text-[12px] text-slate-500 font-medium">© 2026 MediAI Care · Thèse Bioinfo</p>
           </div>
         </div>
       </footer>
@@ -515,31 +515,31 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
       <div className="absolute inset-0 rounded-[48px] bg-brand-200/30 blur-[60px] scale-110" />
 
       {/* Phone frame */}
-      <div className="relative w-[300px] h-[620px] rounded-[44px] bg-sage-900 shadow-[0_32px_80px_rgba(0,0,0,0.35)] overflow-hidden border-4 border-sage-800">
+      <div className="relative w-[300px] h-[620px] rounded-[44px] bg-slate-900 shadow-[0_32px_80px_rgba(0,0,0,0.35)] overflow-hidden border-4 border-slate-800">
         {/* Notch */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-sage-950 rounded-full z-20" />
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-slate-950 rounded-full z-20" />
 
         {/* Screen */}
-        <div className="absolute inset-1 rounded-[40px] bg-[#f6f8f3] overflow-hidden">
+        <div className="absolute inset-1 rounded-[40px] bg-slate-50 overflow-hidden">
           {/* Status bar */}
           <div className="h-10" />
 
           {/* App header */}
           <div className="px-5 pb-3">
-            <div className="text-[10px] text-sage-400 font-bold uppercase tracking-wider">Bonjour, Alexandre 👋</div>
-            <div className="text-[16px] font-black text-sage-900 mt-0.5">Aujourd'hui</div>
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Bonjour, Alexandre 👋</div>
+            <div className="text-[16px] font-black text-slate-900 mt-0.5">Aujourd'hui</div>
           </div>
 
           {/* Glucose card */}
           <div className="mx-4 mb-3 bg-white rounded-3xl p-4 shadow-sm">
             <div className="flex items-start justify-between mb-1">
               <div>
-                <div className="text-[10px] text-sage-400 font-bold uppercase tracking-wide">Glycémie actuelle</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">Glycémie actuelle</div>
                 <div className="text-[44px] font-black text-brand-600 leading-none tabular-nums mt-1">117</div>
                 <div className="text-[11px] text-brand-500 font-bold mt-1">mg/dL · Dans la cible ✓</div>
               </div>
               <div className="text-right">
-                <div className="text-[10px] text-sage-300 mb-1">TIR 14j</div>
+                <div className="text-[10px] text-slate-300 mb-1">TIR 14j</div>
                 <div className="text-[22px] font-black text-brand-600">78%</div>
                 <div className="text-[9px] text-brand-400 font-bold">▲ Excellent</div>
               </div>
@@ -575,7 +575,7 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
             ].map(({ label, bg, ico }) => (
               <div key={label} className={`${bg} rounded-2xl p-2 flex flex-col items-center gap-1`}>
                 <span className="text-[16px]">{ico}</span>
-                <span className="text-[8px] font-bold text-sage-600">{label}</span>
+                <span className="text-[8px] font-bold text-slate-600">{label}</span>
               </div>
             ))}
           </div>
@@ -583,9 +583,9 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
       </div>
 
       {/* Floating badge */}
-      <div className="absolute -right-6 top-20 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] px-4 py-3 z-20 border border-sage-100">
-        <div className="text-[9px] text-sage-400 font-bold uppercase">Streak</div>
-        <div className="text-[16px] font-black text-sage-900 flex items-center gap-1">🔥 7 jours</div>
+      <div className="absolute -right-6 top-20 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] px-4 py-3 z-20 border border-slate-100">
+        <div className="text-[9px] text-slate-400 font-bold uppercase">Streak</div>
+        <div className="text-[16px] font-black text-slate-900 flex items-center gap-1">🔥 7 jours</div>
       </div>
     </div>
   );
@@ -595,52 +595,52 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
 
 function AIFeatureCard() {
   return (
-    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(74,138,53,0.12)] border border-sage-100 p-6 space-y-4">
+    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(74,138,53,0.12)] border border-slate-100 p-6 space-y-4">
       <div className="flex items-center gap-3 mb-2">
         <div className="w-9 h-9 rounded-2xl bg-brand-100 flex items-center justify-center">
           <BrainCircuit className="w-5 h-5 text-brand-600" />
         </div>
         <div>
-          <div className="text-[13px] font-black text-sage-900">Prédiction glycémique</div>
-          <div className="text-[10px] text-sage-400 font-medium">Dans 2 heures</div>
+          <div className="text-[13px] font-black text-slate-900">Prédiction glycémique</div>
+          <div className="text-[10px] text-slate-400 font-medium">Dans 2 heures</div>
         </div>
       </div>
 
       {/* Prediction bar */}
-      <div className="bg-sage-50 rounded-2xl p-4">
+      <div className="bg-slate-50 rounded-2xl p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[12px] text-sage-500 font-medium">Valeur prédite</span>
+          <span className="text-[12px] text-slate-500 font-medium">Valeur prédite</span>
           <span className="text-[20px] font-black text-brand-600">142 mg/dL</span>
         </div>
-        <div className="w-full h-2 bg-sage-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-brand-400 to-brand-600" style={{ width: '62%' }} />
         </div>
-        <div className="flex justify-between mt-1 text-[9px] text-sage-400 font-medium">
+        <div className="flex justify-between mt-1 text-[9px] text-slate-400 font-medium">
           <span>70</span><span className="text-brand-500 font-bold">Cible 80–160</span><span>300</span>
         </div>
       </div>
 
       {/* Explanation */}
       <div>
-        <div className="text-[10px] font-bold text-sage-400 uppercase tracking-wider mb-2">Pourquoi ? (IA explicable)</div>
+        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Pourquoi ? (IA explicable)</div>
         {[
           { label: 'Repas récent (pizza)', pct: 72, color: 'bg-amber-400' },
           { label: 'Stress détecté',       pct: 18, color: 'bg-coral-400' },
-          { label: 'Activité réduite',     pct: 10, color: 'bg-sage-300' },
+          { label: 'Activité réduite',     pct: 10, color: 'bg-slate-300' },
         ].map(({ label, pct, color }) => (
           <div key={label} className="flex items-center gap-2 mb-2">
-            <div className="w-24 text-[10px] text-sage-600 font-medium shrink-0">{label}</div>
-            <div className="flex-1 h-1.5 bg-sage-100 rounded-full overflow-hidden">
+            <div className="w-24 text-[10px] text-slate-600 font-medium shrink-0">{label}</div>
+            <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
               <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
             </div>
-            <div className="text-[10px] font-bold text-sage-500 w-8 text-right">{pct}%</div>
+            <div className="text-[10px] font-bold text-slate-500 w-8 text-right">{pct}%</div>
           </div>
         ))}
       </div>
 
       <div className="flex items-center gap-2 pt-1">
         <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
-        <span className="text-[11px] text-sage-500 font-medium">Confiance IA : <span className="text-brand-600 font-bold">89%</span></span>
+        <span className="text-[11px] text-slate-500 font-medium">Confiance IA : <span className="text-brand-600 font-bold">89%</span></span>
       </div>
     </div>
   );
@@ -657,23 +657,23 @@ function DataFeatureCard() {
   ];
 
   return (
-    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(37,99,235,0.10)] border border-sage-100 p-6">
+    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(37,99,235,0.10)] border border-slate-100 p-6">
       <div className="flex items-center gap-3 mb-5">
         <div className="w-9 h-9 rounded-2xl bg-blue-100 flex items-center justify-center">
           <BarChart3 className="w-5 h-5 text-blue-600" />
         </div>
         <div>
-          <div className="text-[13px] font-black text-sage-900">Analyse · 30 derniers jours</div>
-          <div className="text-[10px] text-sage-400 font-medium">Source : Dexcom G7 · FreeStyle Libre</div>
+          <div className="text-[13px] font-black text-slate-900">Analyse · 30 derniers jours</div>
+          <div className="text-[10px] text-slate-400 font-medium">Source : Dexcom G7 · FreeStyle Libre</div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
         {metrics.map(({ label, val, sub, color, bg, bar }) => (
           <div key={label} className={`${bg} rounded-2xl p-3.5`}>
-            <div className="text-[9px] text-sage-400 font-bold uppercase tracking-wider mb-1">{label}</div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1">{label}</div>
             <div className={`text-[22px] font-black ${color} leading-none mb-0.5`}>{val}</div>
-            <div className="text-[9px] text-sage-400 font-medium mb-2">{sub}</div>
+            <div className="text-[9px] text-slate-400 font-medium mb-2">{sub}</div>
             <div className="w-full h-1 bg-white/70 rounded-full overflow-hidden">
               <div className="h-full rounded-full bg-current opacity-40" style={{ width: `${bar}%`, color: 'currentColor' }} />
             </div>
@@ -681,10 +681,10 @@ function DataFeatureCard() {
         ))}
       </div>
 
-      <div className="bg-sage-50 rounded-2xl p-3.5 flex items-center gap-3">
+      <div className="bg-slate-50 rounded-2xl p-3.5 flex items-center gap-3">
         <Sparkles className="w-4 h-4 text-brand-600 shrink-0" />
-        <p className="text-[11px] text-sage-600 font-medium leading-snug">
-          <span className="font-bold text-sage-900">TIR en hausse de +8%</span> vs mois précédent — continuez vos efforts post-repas !
+        <p className="text-[11px] text-slate-600 font-medium leading-snug">
+          <span className="font-bold text-slate-900">TIR en hausse de +8%</span> vs mois précédent — continuez vos efforts post-repas !
         </p>
       </div>
     </div>

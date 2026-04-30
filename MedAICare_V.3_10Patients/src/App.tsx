@@ -20,11 +20,11 @@ import { cn } from './utils/cn';
 import type { ViewMode } from './types/medical';
 
 const allNavItems = [
-  { key: 'patient'  as ViewMode, label: 'Tableau de bord', icon: LayoutDashboard, roles: ['patient'] },
-  { key: 'messages' as ViewMode, label: 'Messages',         icon: MessageSquare,   roles: ['patient', 'clinician'] },
-  { key: 'devices'  as ViewMode, label: 'Mes appareils',    icon: Wifi,            roles: ['patient'] },
-  { key: 'doctor'   as ViewMode, label: 'Espace clinique',  icon: Stethoscope,     roles: ['clinician'] },
-  { key: 'audit'    as ViewMode, label: 'Audit & logs',     icon: FileText,        roles: ['clinician'] },
+  { key: 'patient'  as ViewMode, label: 'Tableau de bord', short: 'Accueil',    icon: LayoutDashboard, roles: ['patient'] },
+  { key: 'messages' as ViewMode, label: 'Messages',         short: 'Messages',   icon: MessageSquare,   roles: ['patient', 'clinician'] },
+  { key: 'devices'  as ViewMode, label: 'Mes appareils',    short: 'Appareils',  icon: Wifi,            roles: ['patient'] },
+  { key: 'doctor'   as ViewMode, label: 'Espace clinique',  short: 'Clinique',   icon: Stethoscope,     roles: ['clinician'] },
+  { key: 'audit'    as ViewMode, label: 'Audit & logs',     short: 'Audit',      icon: FileText,        roles: ['clinician'] },
 ];
 
 // ─── Inner App ────────────────────────────────────────────────────────────────
@@ -264,27 +264,32 @@ function AppContent() {
         </main>
 
         {/* Bottom nav mobile */}
-        <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-around px-2 py-1 z-40 shadow-[0_-4px_24px_rgba(15,23,42,0.08)]">
-          {navItems.map(({ key, icon: Icon }) => {
+        <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-around px-1 pt-1 pb-safe z-40 shadow-[0_-4px_24px_rgba(15,23,42,0.08)]" style={{ paddingBottom: 'max(4px, env(safe-area-inset-bottom, 4px))' }}>
+          {navItems.map(({ key, icon: Icon, short }) => {
             const isActive = activeView === key;
             const badge = key === 'messages' ? unreadMessages : 0;
             return (
               <button key={key} onClick={() => navigate(key)} className={cn(
-                'relative flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all',
+                'relative flex flex-col items-center gap-0.5 py-1.5 px-3 rounded-xl transition-all min-w-0',
                 isActive ? 'text-brand-600' : 'text-slate-400'
               )}>
-                <Icon className={cn('w-5 h-5', isActive && 'scale-110')} />
+                <div className={cn('p-1 rounded-lg transition-all', isActive && 'bg-brand-50')}>
+                  <Icon className={cn('w-5 h-5 transition-transform', isActive && 'scale-110')} />
+                </div>
+                <span className={cn('text-[10px] font-semibold truncate', isActive ? 'text-brand-600' : 'text-slate-400')}>{short}</span>
                 {badge > 0 && (
                   <span className="absolute top-1 right-2 w-3.5 h-3.5 rounded-full bg-coral-500 text-white text-[7px] font-bold flex items-center justify-center">
                     {badge}
                   </span>
                 )}
-                {isActive && <div className="w-1 h-1 rounded-full bg-brand-600" />}
               </button>
             );
           })}
-          <button onClick={handleLogout} className="flex flex-col items-center gap-0.5 py-2 px-4 text-slate-400 hover:text-red-500 transition">
-            <LogOut className="w-5 h-5" />
+          <button onClick={handleLogout} className="flex flex-col items-center gap-0.5 py-1.5 px-3 text-slate-400 hover:text-red-500 transition rounded-xl">
+            <div className="p-1 rounded-lg">
+              <LogOut className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-semibold">Quitter</span>
           </button>
         </nav>
 

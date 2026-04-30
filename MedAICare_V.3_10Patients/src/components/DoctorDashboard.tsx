@@ -79,7 +79,7 @@ export default function DoctorDashboard() {
 
       {/* === TABS + ACTIONS === */}
       <div className="bg-white rounded-xl border border-slate-200 flex items-center justify-between overflow-hidden">
-        <div className="flex items-center border-b border-slate-200 w-full">
+        <div className="flex items-center w-full">
           <div className="flex items-center px-1">
             <ClinicianTab active={tab === 'cohort'}  onClick={() => setTab('cohort')}  icon={Users}        label="Cohorte"        badge={patients.length} />
             <ClinicianTab active={tab === 'patient'} onClick={() => selectedPatient && setTab('patient')} icon={Stethoscope}  label="Fiche patient"  disabled={!selectedPatient} />
@@ -544,7 +544,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                   <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="3 3" />
                   <Area type="monotone" dataKey="p95" stroke="rgba(59,130,246,0.2)" strokeWidth={1} fill="none" />
                   <Area type="monotone" dataKey="p75" stroke="none" fill="url(#agpDoc)" />
-                  <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(244,246,239,1)" />
+                  <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(241,245,249,1)" />
                   <Area type="monotone" dataKey="p5"  stroke="rgba(59,130,246,0.2)" strokeWidth={1} fill="none" />
                   <Line type="monotone" dataKey="p50" stroke="#3b82f6" strokeWidth={2.5} dot={false} />
                 </ComposedChart>

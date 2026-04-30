@@ -31,21 +31,25 @@ Configured as a static site deployment:
 - **Build:** `cd MedAICare_V.3_10Patients && npm run build`
 - **Public Dir:** `MedAICare_V.3_10Patients/dist`
 
-## Design System — Premium Healthtech v5.0 (Linear/Notion-level polish)
-Full UI/UX transformation as of v5.0 — minimaliste, lumineux, sobre, rassurant:
-- **Body background:** neutral slate-50 (#f8fafc) — no green tint
+## Design System — Premium Healthtech v5.1 (Linear/Notion-level polish)
+Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant:
+- **Body background:** neutral slate-50 (#f8fafc) — zero green tint
 - **Brand palette:** brand-green (#4a8a35/#3a6e28), coral (#e8441f), amber — unchanged brand colors
-- **Slate neutrals:** all text/borders/backgrounds use slate-* tokens for neutral feel
-- **Card shadows:** neutral rgba(15,23,42,...) shadow system (not green-tinted)
+- **Slate neutrals:** ALL text/borders/backgrounds use slate-* tokens — sage palette completely eliminated
+- **Sage palette:** defined in index.css for legacy but ZERO usages remaining in any component
+- **Card shadows:** neutral rgba(15,23,42,...) shadow system
 - **Tabs:** underline-style (border-b-2) across all views — no pill containers
-- **Zero emojis:** all navigation, dashboard tabs, quick actions use Lucide icons
-- **Design primitives v5:** `src/components/ui/primitives.tsx` — TabBar, StatTile, Card with slate-100 border
-- **Landing page v5:** mySugr-inspired hero with CSS phone mockup, App Store badges, 3 pillars
-- **AuthModal v5:** premium form, uppercase tracking labels, input-premium class
-- **App.tsx sidebar v5:** square icon containers, active=brand-50+left indicator, no emoji in nav
-- **PatientDashboard v5:** underline tabs (Activity/BookOpen/BarChart3/FlaskConical/Stethoscope), Lucide QuickActions, clean greeting banner
-- **DoctorDashboard v5:** underline ClinicianTabs, premium ClinicalKPI cards with accent colors
-- All secondary views (Messaging, AuditLog, DevicesView) fully converted to slate-* neutrals
+
+### v5.1 Fixes (complete):
+- **LandingPage:** 0 sage-* classes remaining (was 78) — AIFeatureCard, DataFeatureCard, Trust Band, section bgs, hero gradient, footer all converted to slate-*
+- **LandingPage:** Hero gradient `from-[#f8fafc]` (neutral) — was greenish `#f0f5eb`
+- **LandingPage:** All section backgrounds `bg-slate-50` — was greenish `#f6f8f3`
+- **LandingPage:** Phone mockup frame `bg-slate-900/border-slate-800` — premium dark slate
+- **PatientDashboard:** Glucose trend arrow added inline (TrendingUp/Minus/TrendingDown from trendPrediction.direction) — standard CGM display (LibreLink/Dexcom Clarity pattern)
+- **PatientDashboard + DoctorDashboard:** AGP p25 fill `rgba(241,245,249,1)` (slate-50) — was greenish `rgba(244,246,239,1)`
+- **DoctorDashboard:** Tab bar double-border removed (inner `border-b` eliminated, outer card border sufficient)
+- **App.tsx:** Mobile bottom nav has text labels (short: Accueil/Messages/Appareils/Clinique/Audit/Quitter) under each icon
+- **AuthModal:** Bug fixed — LandingPage now passes correct props (isOpen/type/defaultMode)
 - Demo credentials: patient@demo.fr / clinicien@demo.fr (Demo1234!)
 
 ## Key Features
