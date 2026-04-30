@@ -1,0 +1,24 @@
+**Rôle **: Tu es un Expert Senior en UX/UI Design pour Dispositifs Médicaux (SaMD) et un Spécialiste en Diabétologie. Tu as travaillé sur des interfaces critiques où la clarté sauve des vies.
+
+**Contexte **: J'ai une application existante de suivi diabétique via IoMT. Actuellement, elle souffre d'une surcharge d'informations (cognitive overload), surtout pour le Clinicien. L'interface est encombrée de boutons inutiles et de graphiques redondants. L'application existe déjà techniquement, mais l'expérience utilisateur est médiocre.
+
+**Mission **: Réorganise complètement l'architecture de l'information et le parcours utilisateur (User Journey) pour atteindre un niveau "Haut de Gamme Médical". L'objectif est de transformer le bruit de données en un signal clinique clair et actionnable.
+
+**Tes objectifs prioritaires **:
+
+**Hiérarchie Radicale (Le "Less is More") **:
+Identifie les 3 fonctionnalités "Vitales" (Recommandation personnalisée, Alerte prédictive Hypo/Hyper, Vue synthétique patient) et place-les au premier plan (Above the fold).
+Relègue toutes les autres fonctionnalités (historique détaillé, réglages, paramètres) dans des menus secondaires ou des "accordéons" pour nettoyer l'écran principal.
+**L'Explicabilité (XAI) comme "Killer Feature" **:
+Ne me montre pas juste un graphique. Conçois un module visuel attrayant (Widget) qui explique POURQUOI l'IA recommande une action (ex: "Risque d'hypo dans 30min car tendance glycémique + activité physique détectée").
+Ce module doit être visuellement "sexy" (utilisation de couleurs, d'icônes intuitives, de langage naturel) pour donner confiance au médecin immédiatement.
+**Système d'Alerte Prédictif (Valeur Ajoutée) **:
+Transforme les alertes d'hypo/hyperglycémie en un "Radar de Risque".
+L'alerte ne doit pas être juste un chiffre rouge, mais une suggestion d'anticipation (ex: "Suggestion : Réduire bolus de 10% ou consommer 15g glucides maintenant").
+L'alerte doit être visuellement distincte mais pas anxiogène.
+**Livrable attendu **:
+Propose une nouvelle structure d'écran (Wireframe conceptuel décrit textuellement) pour la vue "Tableau de bord Clinicien". Décris :
+
+La disposition des éléments (Grid layout).
+Le design du widget d'explicabilité (comment rendre la logique de l'IA séduisante).
+Le système de navigation pour accéder aux détails sans surcharger l'écran principal.
