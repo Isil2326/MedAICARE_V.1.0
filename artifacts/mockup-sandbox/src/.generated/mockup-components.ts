@@ -4,5 +4,7 @@ export const modules: ModuleMap = {
   "./components/mockups/logo-variants/A_Precision.tsx": () => import("../components/mockups/logo-variants/A_Precision.tsx"),
   "./components/mockups/logo-variants/B_MedicalPro.tsx": () => import("../components/mockups/logo-variants/B_MedicalPro.tsx"),
   "./components/mockups/logo-variants/C_UltraMinimal.tsx": () => import("../components/mockups/logo-variants/C_UltraMinimal.tsx"),
+  "./components/mockups/logo-variants/LogoV1.tsx": () => import("../components/mockups/logo-variants/LogoV1.tsx"),
+  "./components/mockups/logo-variants/LogoV2.tsx": () => import("../components/mockups/logo-variants/LogoV2.tsx"),
   "./components/mockups/logo-variants/NewLogo.tsx": () => import("../components/mockups/logo-variants/NewLogo.tsx")
 };
