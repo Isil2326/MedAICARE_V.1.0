@@ -31,17 +31,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
           {/* Logo */}
           <div className="flex items-center gap-3">
-            {/* ECG pulse mark */}
-            <div className="relative w-10 h-10 rounded-[13px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-              <svg width="24" height="14" viewBox="0 0 28 16" fill="none">
-                <polyline
-                  points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
-                  stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-                />
-                <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.9" />
-              </svg>
-            </div>
+            {/* Water drop + stethoscope mark */}
+            <img src="/logo-mark.svg" alt="MediAI Care" className="w-10 h-10 shrink-0" />
             {/* Wordmark */}
             <div className="flex flex-col gap-0">
               <div className="flex items-baseline leading-none">
@@ -477,16 +468,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 rounded-[10px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-                <svg width="18" height="11" viewBox="0 0 28 16" fill="none">
-                  <polyline
-                    points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
-                    stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-                  />
-                  <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.85" />
-                </svg>
-              </div>
+              <img src="/logo-mark.svg" alt="MediAI Care" className="w-8 h-8 shrink-0 brightness-[1.05]" />
               <div className="flex flex-col">
                 <div className="flex items-baseline leading-none">
                   <span className="text-[15px] font-black text-white tracking-tight">Medi</span>

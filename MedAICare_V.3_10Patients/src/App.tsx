@@ -85,15 +85,8 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-5">
-          <div className="relative w-16 h-16 rounded-[20px] icon-vivid-emerald flex items-center justify-center animate-float overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-            <svg width="32" height="20" viewBox="0 0 28 16" fill="none">
-              <polyline
-                points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
-                stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              />
-              <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.9" />
-            </svg>
+          <div className="animate-float">
+            <img src="/logo-mark.svg" alt="MediAI Care" className="w-16 h-16" />
           </div>
           <div className="text-[13px] text-slate-500 font-medium tracking-tight">Connexion sécurisée en cours…</div>
         </div>
@@ -134,16 +127,7 @@ function AppContent() {
         {/* Logo */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100">
           <button onClick={() => navigate(isPatient ? 'patient' : 'doctor')} className="flex items-center gap-3 w-full group">
-            <div className="relative w-9 h-9 rounded-[11px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-              <svg width="20" height="12" viewBox="0 0 28 16" fill="none">
-                <polyline
-                  points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
-                  stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-                />
-                <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.9" />
-              </svg>
-            </div>
+            <img src="/logo-mark.svg" alt="MediAI Care" className="w-9 h-9 shrink-0" />
             <div className="text-left">
               <div className="flex items-baseline leading-none">
                 <span className="text-[15px] font-black text-slate-900 tracking-[-0.02em]">Medi</span>
@@ -231,13 +215,7 @@ function AppContent() {
           <div className="flex items-center justify-between px-5 sm:px-6 h-14">
             <div className="flex items-center gap-3">
               {/* Mobile logo */}
-              <div className="lg:hidden relative w-7 h-7 rounded-lg icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-                <svg width="14" height="9" viewBox="0 0 28 16" fill="none">
-                  <polyline points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
-                    stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
+              <img src="/logo-mark.svg" alt="MediAI Care" className="lg:hidden w-7 h-7 shrink-0" />
               <div>
                 <h1 className="text-[14px] font-bold text-slate-900 tracking-tight">
                   {currentNav?.label || `Bonjour, ${firstName}`}
