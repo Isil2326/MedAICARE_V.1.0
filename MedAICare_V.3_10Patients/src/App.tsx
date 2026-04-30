@@ -129,7 +129,7 @@ function AppContent() {
             <div className="text-left">
               <div className="flex items-baseline leading-none">
                 <span className="text-[15px] font-black text-slate-900 tracking-[-0.02em]">Medi</span>
-                <span className="text-[15px] font-black gradient-text-brand tracking-[-0.02em]">AI</span>
+                <span className="text-[15px] font-black text-[#1565C0] tracking-[-0.02em]">AI</span>
                 <span className="text-[10px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
               <div className="text-[7.5px] text-slate-300 font-bold mt-[3px] uppercase tracking-[0.18em]">

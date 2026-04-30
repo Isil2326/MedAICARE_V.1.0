@@ -36,7 +36,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="flex flex-col gap-0">
               <div className="flex items-baseline leading-none">
                 <span className="text-[18px] font-black text-slate-900 tracking-[-0.03em]">Medi</span>
-                <span className="text-[18px] font-black gradient-text-brand tracking-[-0.03em]">AI</span>
+                <span className="text-[18px] font-black text-[#1565C0] tracking-[-0.03em]">AI</span>
                 <span className="text-[12px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
               <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.22em] mt-[3px] leading-none">
