@@ -94,7 +94,7 @@ export function U2Affordance() {
           </div>
 
           {/* Alert identity */}
-          <div style={{ background: SURFACE, borderRadius: 14, border: `1px solid ${BORDER}`, padding: "16px 20px` }}>
+          <div style={{ background: SURFACE, borderRadius: 14, border: `1px solid ${BORDER}`, padding: "16px 20px" }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: AMBER, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 8 }}>Alerte active · Patiente</div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,171,0,0.10)", border: `2px solid rgba(255,171,0,0.30)`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: AMBER, fontSize: 14 }}>MD</div>
@@ -225,7 +225,7 @@ export function U2Affordance() {
           </div>
 
           {/* Predicted outcomes if applied */}
-          <div style={{ background: SURFACE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: "12px 16px` }}>
+          <div style={{ background: SURFACE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: "12px 16px" }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.25)", textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 10 }}>
               Si vous appliquez · résultat estimé
             </div>

@@ -245,7 +245,7 @@ export function U3Access() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {CAUSES.map(c => (
-                  <div key={c.label} style={{ background: SURFACE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: "14px 18px` }}>
+                  <div key={c.label} style={{ background: SURFACE, borderRadius: 12, border: `1px solid ${BORDER}`, padding: "14px 18px" }}>
                     <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
                       {/* Icône + forme + couleur — 3 redondances visuelles */}
                       <div style={{ width: 42, height: 42, borderRadius: 10, background: `${c.color}14`, border: `2px solid ${c.color}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: c.color, fontWeight: 900, flexShrink: 0 }}>
