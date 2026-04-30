@@ -30,18 +30,28 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="mx-auto max-w-6xl px-5 lg:px-8 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-[12px] icon-vivid-emerald flex items-center justify-center shrink-0">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 3C8.68 3 6 5.68 6 9c0 4.77 6 12 6 12s6-7.23 6-12c0-3.32-2.68-6-6-6z" fill="white" fillOpacity="0.95"/>
-                <circle cx="12" cy="9" r="2.8" fill="white" fillOpacity="0.45"/>
+          <div className="flex items-center gap-3">
+            {/* ECG pulse mark */}
+            <div className="relative w-10 h-10 rounded-[13px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
+              <svg width="24" height="14" viewBox="0 0 28 16" fill="none">
+                <polyline
+                  points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
+                  stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                />
+                <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.9" />
               </svg>
             </div>
-            <div>
-              <div className="text-[17px] font-black tracking-tight leading-none text-slate-900">
-                Medi<span className="gradient-text-brand">AI</span> Care
+            {/* Wordmark */}
+            <div className="flex flex-col gap-0">
+              <div className="flex items-baseline leading-none">
+                <span className="text-[18px] font-black text-slate-900 tracking-[-0.03em]">Medi</span>
+                <span className="text-[18px] font-black gradient-text-brand tracking-[-0.03em]">AI</span>
+                <span className="text-[12px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
-              <div className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.12em] mt-0.5">Intelligence médicale</div>
+              <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.22em] mt-[3px] leading-none">
+                Votre santé, augmentée
+              </div>
             </div>
           </div>
 
@@ -92,11 +102,21 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 votre diabète.
               </motion.h1>
 
-              <motion.p variants={fade(0.13)} initial="hidden" animate="visible"
-                className="text-[18px] font-bold gradient-text-emerald-sky mb-3 tracking-tight"
+              <motion.div variants={fade(0.13)} initial="hidden" animate="visible"
+                className="flex items-center gap-3 mb-4"
               >
-                Intelligence médicale. Clarté humaine.
-              </motion.p>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+                  <div className="w-6 h-px bg-gradient-to-r from-brand-400 to-brand-200" />
+                </div>
+                <span className="text-[11.5px] font-black uppercase tracking-[0.2em] gradient-text-vivid">
+                  Intelligence médicale · Clarté humaine
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-px bg-gradient-to-l from-brand-400 to-brand-200" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+                </div>
+              </motion.div>
 
               <motion.p variants={fade(0.18)} initial="hidden" animate="visible"
                 className="text-[16px] leading-[1.75] text-slate-500 mb-8 font-medium"
@@ -457,12 +477,24 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-[9px] bg-brand-600 flex items-center justify-center">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" fillOpacity="0.9"/>
+              <div className="relative w-8 h-8 rounded-[10px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
+                <svg width="18" height="11" viewBox="0 0 28 16" fill="none">
+                  <polyline
+                    points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
+                    stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                  />
+                  <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.85" />
                 </svg>
               </div>
-              <span className="text-[15px] font-black text-white">MediAI<span className="text-brand-400">Care</span></span>
+              <div className="flex flex-col">
+                <div className="flex items-baseline leading-none">
+                  <span className="text-[15px] font-black text-white tracking-tight">Medi</span>
+                  <span className="text-[15px] font-black text-brand-400 tracking-tight">AI</span>
+                  <span className="text-[10px] font-bold text-slate-500 tracking-wide ml-1 self-center">CARE</span>
+                </div>
+                <div className="text-[7px] font-bold text-slate-600 uppercase tracking-[0.2em] mt-[2px]">Votre santé, augmentée</div>
+              </div>
             </div>
 
             <div className="flex items-center gap-6 text-[12.5px] text-slate-400 font-medium">
