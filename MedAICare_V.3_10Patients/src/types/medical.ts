@@ -155,7 +155,7 @@ export interface Alert {
   patientId: string;
 }
 
-export type ViewMode = 'landing' | 'patient' | 'doctor' | 'devices' | 'audit' | 'messages';
+export type ViewMode = 'landing' | 'patient' | 'doctor' | 'devices' | 'audit' | 'messages' | 'alerts';
 
 // ============================================================================
 // JOURNAL PATIENT — Évènements quotidiens (repas, insuline, activité, notes)

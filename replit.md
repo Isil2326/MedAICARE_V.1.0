@@ -65,3 +65,5 @@ Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant. Vivid & s
 - Audit log for medical decision traceability
 - QR code scanning for lab report import
 - Prescription management with full audit trail
+- **Centre d'alerte (clinicien)** — vue immersive V3-Dark "Salle de contrôle" (`AlertCenter.tsx`) avec strip patient, countdown live, cartes XAI (3 signaux pondérés), suggestion IA + alternatives, panneau décision (Appliquer/Modifier/Ignorer). Persistance via `engine/decisionLog.ts` (localStorage append-only, clé `(patientId, decisionId)`, traceID v4-like, vérification post-écriture, sync multi-onglet via `storage` event). Banner honnête : "Tracée dans le journal local" + traceID + acteur + horodatage ; `persisted=false` → banner d'erreur "Décision non tracée". Note SaMD : journal local non-autoritaire (démo).
+- **Navigation clinicien** : landing par défaut + bouton logo → `alerts` (Centre d'alerte). Tab `Alertes` avec icône `Zap` ajoutée à la sidebar et au bottom nav mobile (rôle `clinician` uniquement).
