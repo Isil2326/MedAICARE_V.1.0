@@ -31,7 +31,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src="/logo-mark.svg" alt="MediAI Care" className="w-10 h-10 shrink-0" />
+            <img src="/logo-mark.png" alt="MediAI Care" className="w-10 h-10 shrink-0" />
             {/* Wordmark */}
             <div className="flex flex-col gap-0">
               <div className="flex items-baseline leading-none">
@@ -467,7 +467,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <img src="/logo-mark.svg" alt="MediAI Care" className="w-8 h-8 shrink-0" />
+              <img src="/logo-mark.png" alt="MediAI Care" className="w-8 h-8 shrink-0" />
               <div className="flex flex-col">
                 <div className="flex items-baseline leading-none">
                   <span className="text-[15px] font-black text-white tracking-tight">Medi</span>
