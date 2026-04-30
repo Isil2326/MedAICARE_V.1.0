@@ -40,7 +40,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="text-[12px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
               <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.22em] mt-[3px] leading-none">
-                Votre santé, augmentée
+                Reprenez le contrôle
               </div>
             </div>
           </div>
@@ -474,7 +474,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   <span className="text-[15px] font-black text-brand-400 tracking-tight">AI</span>
                   <span className="text-[10px] font-bold text-slate-500 tracking-wide ml-1 self-center">CARE</span>
                 </div>
-                <div className="text-[7px] font-bold text-slate-600 uppercase tracking-[0.2em] mt-[2px]">Votre santé, augmentée</div>
+                <div className="text-[7px] font-bold text-slate-600 uppercase tracking-[0.2em] mt-[2px]">Reprenez le contrôle</div>
               </div>
             </div>
 

@@ -1,65 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#34D399"/>
-      <stop offset="55%"  stop-color="#10B981"/>
-      <stop offset="100%" stop-color="#047857"/>
+    <!-- Dégradé rouge sang : bordeaux profond → rouge vif -->
+    <linearGradient id="dropRed" x1="50" y1="5" x2="50" y2="88"
+      gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#6B1010"/>
+      <stop offset="35%"  stop-color="#B91C1C"/>
+      <stop offset="80%"  stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#EF4444"/>
     </linearGradient>
-    <clipPath id="icon-clip">
-      <rect width="100" height="100" rx="22"/>
-    </clipPath>
+
+    <!-- Ombre douce sous la goutte -->
+    <filter id="shadow" x="-20%" y="-10%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5"
+        flood-color="#7F1D1D" flood-opacity="0.28"/>
+    </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+  <!-- ── ANNEAUX DE RIPPLE concentriques (dessinés derrière la goutte) ──
+       3 bandes elliptiques horizontales — rouge décroissant vers l'extérieur -->
 
-  <!-- Ambient light overlay (premium feel) -->
-  <rect width="100" height="100" rx="22"
-    fill="url(#shine)" opacity="0.12"/>
-  <defs>
-    <radialGradient id="shine" cx="28%" cy="22%" r="55%">
-      <stop offset="0%"   stop-color="white" stop-opacity="1"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+  <!-- Anneau 3 (le plus grand, le plus clair) -->
+  <ellipse cx="50" cy="88" rx="46" ry="11" fill="#FCA5A5" opacity="0.50"/>
+  <ellipse cx="50" cy="88" rx="38" ry="7"  fill="white"/>
 
-  <!-- ─────────────────────────────────────────
-       WATER DROP  — mathematically precise
-       Circle center (54, 64) radius 27
-       Tip at (54, 8)  Leftmost (27, 64)  Rightmost (81, 64)
-  ───────────────────────────────────────── -->
+  <!-- Anneau 2 -->
+  <ellipse cx="50" cy="88" rx="32" ry="8"  fill="#EF4444" opacity="0.68"/>
+  <ellipse cx="50" cy="88" rx="25" ry="4.5" fill="white"/>
+
+  <!-- Anneau 1 (le plus proche de la goutte, le plus intense) -->
+  <ellipse cx="50" cy="88" rx="22" ry="5.5" fill="#DC2626" opacity="0.85"/>
+  <ellipse cx="50" cy="88" rx="15" ry="3"   fill="white"/>
+
+  <!-- ── GOUTTE REMPLIE — forme organique identique à la référence ──
+       Tip en haut (50, 6) · cercle centre (50, 66) r=22 · base (50, 88) -->
   <path
-    d="M 54 8
-       C 69 29  81 46  81 64
-       A 27 27  0 1 1  27 64
-       C 27 46  39 29  54 8 Z"
-    stroke="white" stroke-width="5" stroke-linejoin="round"
+    d="M 50 6
+       C 30 26 27 50 27 66
+       A 23 23 0 1 0 73 66
+       C 73 50 70 26 50 6 Z"
+    fill="url(#dropRed)"
+    filter="url(#shadow)"
   />
 
-  <!-- ─────────────────────────────────────────
-       STETHOSCOPE  — compact, hugging left edge
-  ───────────────────────────────────────── -->
-
-  <!-- Binaural spring  (U-arch, upper-left, fully outside the drop) -->
-  <path d="M 6 36 C 6 15 24 15 24 36"
-    stroke="white" stroke-width="4.5" stroke-linecap="round"/>
-
-  <!-- Ear tips -->
-  <circle cx="6"  cy="37" r="2.8" fill="white"/>
-  <circle cx="24" cy="36" r="2.8" fill="white"/>
-
-  <!-- Single tube curving down to chest piece -->
-  <path d="M 24 39.5 C 23 51 22 57 22 62"
-    stroke="white" stroke-width="4.5" stroke-linecap="round"/>
-
-  <!-- Chest piece — ring overlapping lower-left curve of drop -->
-  <circle cx="22" cy="71" r="9"   stroke="white" stroke-width="4.5"/>
-  <circle cx="22" cy="71" r="3.2" fill="white"/>
-
-  <!-- ─────────────────────────────────────────
-       DROP HIGHLIGHT — interior reflection curl
-       (subtle gloss, like Glucose app)
-  ───────────────────────────────────────── -->
-  <path d="M 63 23 C 65 32 66 42 65 50"
-    stroke="white" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
+  <!-- ── REFLET EN CROISSANT — identique à la référence
+       Épaisse forme blanche sur le bas-droite de l'intérieur de la goutte -->
+  <path
+    d="M 58 32
+       C 70 44 70 62 63 74
+       C 57 80 48 76 45 69
+       C 53 73 65 58 63 41
+       C 62 35 59 29 58 32 Z"
+    fill="white"
+    opacity="0.82"
+  />
 </svg>
