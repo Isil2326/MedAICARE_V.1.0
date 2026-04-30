@@ -1,44 +1,65 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="100" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#059669"/>
-      <stop offset="100%" stop-color="#34D399"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#34D399"/>
+      <stop offset="55%"  stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
     </linearGradient>
+    <clipPath id="icon-clip">
+      <rect width="100" height="100" rx="22"/>
+    </clipPath>
   </defs>
 
-  <!-- Rounded icon background -->
+  <!-- Background -->
   <rect width="100" height="100" rx="22" fill="url(#bg)"/>
 
-  <!-- ── HEART (white outline stroke, centered) ── -->
+  <!-- Ambient light overlay (premium feel) -->
+  <rect width="100" height="100" rx="22"
+    fill="url(#shine)" opacity="0.12"/>
+  <defs>
+    <radialGradient id="shine" cx="28%" cy="22%" r="55%">
+      <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ─────────────────────────────────────────
+       WATER DROP  — mathematically precise
+       Circle center (54, 64) radius 27
+       Tip at (54, 8)  Leftmost (27, 64)  Rightmost (81, 64)
+  ───────────────────────────────────────── -->
   <path
-    d="M 50 77
-       C 32 62  18 52  18 35
-       C 18 20  27 12  36 12
-       C 42 12  47 16  50 22
-       C 53 16  58 12  64 12
-       C 73 12  82 20  82 35
-       C 82 52  68 62  50 77 Z"
-    stroke="white" stroke-width="5.5" stroke-linejoin="round"
+    d="M 54 8
+       C 69 29  81 46  81 64
+       A 27 27  0 1 1  27 64
+       C 27 46  39 29  54 8 Z"
+    stroke="white" stroke-width="5" stroke-linejoin="round"
   />
 
-  <!-- ── STETHOSCOPE (white, left side of heart) ── -->
+  <!-- ─────────────────────────────────────────
+       STETHOSCOPE  — compact, hugging left edge
+  ───────────────────────────────────────── -->
 
-  <!-- Binaural spring arch — upper-left, clearly outside the heart -->
-  <path d="M 7 33 C 7 8 27 8 27 33"
-    stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Binaural spring  (U-arch, upper-left, fully outside the drop) -->
+  <path d="M 6 36 C 6 15 24 15 24 36"
+    stroke="white" stroke-width="4.5" stroke-linecap="round"/>
 
-  <!-- Left ear tip -->
-  <circle cx="7"  cy="34" r="3.5" fill="white"/>
-  <!-- Right ear tip -->
-  <circle cx="27" cy="34" r="3.5" fill="white"/>
+  <!-- Ear tips -->
+  <circle cx="6"  cy="37" r="2.8" fill="white"/>
+  <circle cx="24" cy="36" r="2.8" fill="white"/>
 
-  <!-- Tube: from right earpiece curving gently down → top of chest piece -->
-  <path d="M 27 37.5 C 27 44 29 49 30 51"
-    stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Single tube curving down to chest piece -->
+  <path d="M 24 39.5 C 23 51 22 57 22 62"
+    stroke="white" stroke-width="4.5" stroke-linecap="round"/>
 
-  <!-- Chest piece ring — overlapping lower-left curve of heart -->
-  <circle cx="30" cy="62" r="11" stroke="white" stroke-width="5.5"/>
+  <!-- Chest piece — ring overlapping lower-left curve of drop -->
+  <circle cx="22" cy="71" r="9"   stroke="white" stroke-width="4.5"/>
+  <circle cx="22" cy="71" r="3.2" fill="white"/>
 
-  <!-- Chest piece membrane center dot -->
-  <circle cx="30" cy="62" r="4" fill="white"/>
+  <!-- ─────────────────────────────────────────
+       DROP HIGHLIGHT — interior reflection curl
+       (subtle gloss, like Glucose app)
+  ───────────────────────────────────────── -->
+  <path d="M 63 23 C 65 32 66 42 65 50"
+    stroke="white" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
 </svg>
