@@ -31,8 +31,17 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
           {/* Logo */}
           <div className="flex items-center gap-3">
-            {/* Water drop + stethoscope mark */}
-            <img src="/logo-mark.svg" alt="MediAI Care" className="w-10 h-10 shrink-0" />
+            {/* ECG pulse mark */}
+            <div className="relative w-10 h-10 rounded-[13px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
+              <svg width="24" height="14" viewBox="0 0 28 16" fill="none">
+                <polyline
+                  points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
+                  stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                />
+                <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.9" />
+              </svg>
+            </div>
             {/* Wordmark */}
             <div className="flex flex-col gap-0">
               <div className="flex items-baseline leading-none">
@@ -40,8 +49,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="text-[18px] font-black gradient-text-brand tracking-[-0.03em]">AI</span>
                 <span className="text-[12px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
-              <div className="text-[7.5px] font-bold text-slate-400 uppercase tracking-[0.13em] mt-[3px] leading-none">
-                Reprenez le contrôle
+              <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.22em] mt-[3px] leading-none">
+                Votre santé, augmentée
               </div>
             </div>
           </div>
@@ -468,14 +477,23 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <img src="/logo-mark.svg" alt="MediAI Care" className="w-8 h-8 shrink-0 brightness-[1.05]" />
+              <div className="relative w-8 h-8 rounded-[10px] icon-vivid-emerald flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
+                <svg width="18" height="11" viewBox="0 0 28 16" fill="none">
+                  <polyline
+                    points="0,8 5,8 7.5,1.5 10,14.5 12.5,5 14.5,9.5 18,9.5 20,4.5 22,11 28,11"
+                    stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                  />
+                  <circle cx="27.5" cy="11" r="1.8" fill="white" opacity="0.85" />
+                </svg>
+              </div>
               <div className="flex flex-col">
                 <div className="flex items-baseline leading-none">
                   <span className="text-[15px] font-black text-white tracking-tight">Medi</span>
                   <span className="text-[15px] font-black text-brand-400 tracking-tight">AI</span>
                   <span className="text-[10px] font-bold text-slate-500 tracking-wide ml-1 self-center">CARE</span>
                 </div>
-                <div className="text-[6.5px] font-bold text-slate-500 uppercase tracking-[0.14em] mt-[2px]">Reprenez le contrôle</div>
+                <div className="text-[7px] font-bold text-slate-600 uppercase tracking-[0.2em] mt-[2px]">Votre santé, augmentée</div>
               </div>
             </div>
 
