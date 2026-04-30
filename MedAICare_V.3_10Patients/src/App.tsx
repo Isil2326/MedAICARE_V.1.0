@@ -85,7 +85,7 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-5">
-          <img src="/logo-mark.svg" alt="MediAI Care" className="w-16 h-16 animate-float" />
+          <img src="/logo-mark.png" alt="MediAI Care" className="w-16 h-16 animate-float" />
           <div className="text-[13px] text-slate-500 font-medium tracking-tight">Connexion sécurisée en cours…</div>
         </div>
       </div>
@@ -125,7 +125,7 @@ function AppContent() {
         {/* Logo */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100">
           <button onClick={() => navigate(isPatient ? 'patient' : 'doctor')} className="flex items-center gap-3 w-full group">
-            <img src="/logo-mark.svg" alt="MediAI Care" className="w-9 h-9 shrink-0" />
+            <img src="/logo-mark.png" alt="MediAI Care" className="w-9 h-9 shrink-0" />
             <div className="text-left">
               <div className="flex items-baseline leading-none">
                 <span className="text-[15px] font-black text-slate-900 tracking-[-0.02em]">Medi</span>
@@ -213,7 +213,7 @@ function AppContent() {
           <div className="flex items-center justify-between px-5 sm:px-6 h-14">
             <div className="flex items-center gap-3">
               {/* Mobile logo */}
-              <img src="/logo-mark.svg" alt="MediAI Care" className="lg:hidden w-7 h-7 shrink-0" />
+              <img src="/logo-mark.png" alt="MediAI Care" className="lg:hidden w-7 h-7 shrink-0" />
               <div>
                 <h1 className="text-[14px] font-bold text-slate-900 tracking-tight">
                   {currentNav?.label || `Bonjour, ${firstName}`}

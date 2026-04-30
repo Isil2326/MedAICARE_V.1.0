@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "VvNpmB0Rcm59YEKMFkyuJ"
+uri = "file://MedAICare_V.3_10Patients/public/logo-mark.png"
+type = "image"
+title = "mediai care heart stethoscope logo"
