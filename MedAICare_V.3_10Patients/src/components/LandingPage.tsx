@@ -68,9 +68,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <section className="relative pt-16 min-h-screen flex items-center overflow-hidden">
         {/* Gradient background */}
         <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-brand-200/40 to-teal-200/20 blur-[140px] -translate-y-40 translate-x-40 pointer-events-none animate-glow" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-200/25 to-brand-100/30 blur-[100px] translate-y-28 -translate-x-28 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] rounded-full bg-gradient-to-br from-emerald-100/20 to-teal-100/15 blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-brand-200/40 to-brand-300/20 blur-[140px] -translate-y-40 translate-x-40 pointer-events-none animate-glow" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-brand-100/25 to-brand-200/20 blur-[100px] translate-y-28 -translate-x-28 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] rounded-full bg-gradient-to-br from-brand-100/20 to-brand-200/15 blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-5 lg:px-8 w-full py-20 lg:py-28">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
@@ -217,7 +217,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 className="group p-8 rounded-3xl border border-slate-100/80 hover:border-transparent hover:shadow-[0_16px_56px_rgba(16,185,129,0.15)] bg-white hover:bg-gradient-to-br hover:from-white hover:to-brand-50/40 transition-all duration-500 cursor-default"
               >
                 <div className={`w-14 h-14 rounded-2xl mb-6 flex items-center justify-center transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 ${
-                  color === 'brand' ? 'icon-vivid-emerald' : color === 'blue' ? 'icon-vivid-sky' : 'icon-vivid-coral'
+                  color === 'brand' ? 'icon-vivid-blue' : color === 'blue' ? 'icon-vivid-sky' : 'icon-vivid-coral'
                 }`}>
                   <Icon className="w-7 h-7 text-white" />
                 </div>
@@ -331,7 +331,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <motion.div variants={fadeX(1, 0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="bg-white rounded-3xl p-9 shadow-[0_8px_40px_rgba(16,185,129,0.12)] border border-brand-100/60 hover:shadow-[0_16px_56px_rgba(16,185,129,0.18)] transition-all duration-500"
             >
-              <div className="w-12 h-12 rounded-2xl icon-vivid-emerald flex items-center justify-center mb-5 animate-float-slow">
+              <div className="w-12 h-12 rounded-2xl icon-vivid-blue flex items-center justify-center mb-5 animate-float-slow">
                 <Activity className="w-6 h-6 text-white" />
               </div>
               <div className="text-[12px] font-bold text-brand-600 uppercase tracking-widest mb-2">Patients</div>
@@ -572,7 +572,7 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
             {/* Mini chart */}
             <div className="flex items-end gap-0.5 h-8 mt-3">
               {[55,70,80,68,85,78,88,75,80,86,90,84].map((v, i) => (
-                <div key={i} className="flex-1 rounded-sm" style={{ height: `${(v/100)*100}%`, background: i===11 ? '#10B981' : i>=9 ? '#34D399' : '#D1FAE5' }} />
+                <div key={i} className="flex-1 rounded-sm" style={{ height: `${(v/100)*100}%`, background: i===11 ? '#1565C0' : i>=9 ? '#2196F3' : '#BBDEFB' }} />
               ))}
             </div>
           </div>
