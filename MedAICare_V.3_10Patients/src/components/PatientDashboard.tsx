@@ -77,20 +77,25 @@ function PatientTabs({ active, onChange }: { active: Tab; onChange: (t: Tab) => 
 }
 
 // ── Quick action button ───────────────────────────────────────────────────────
-function QuickAction({ icon: Icon, label, onClick, bg, text }: {
+function QuickAction({ icon: Icon, label, onClick, color }: {
   icon: React.ComponentType<{ className?: string }>; label: string; onClick: () => void;
-  bg: string; text: string;
+  color: 'emerald' | 'coral' | 'amber' | 'sky';
 }) {
+  const iconClass = {
+    emerald: 'icon-vivid-emerald',
+    coral: 'icon-vivid-coral',
+    amber: 'icon-vivid-amber',
+    sky: 'icon-vivid-sky',
+  }[color];
   return (
     <button
       onClick={onClick}
-      className={cn(
-        'flex flex-col items-center justify-center gap-2 p-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] border border-transparent hover:border-current/10',
-        bg
-      )}
+      className="flex flex-col items-center justify-center gap-2.5 p-3 rounded-2xl transition-all hover:scale-[1.04] hover:-translate-y-0.5 active:scale-[0.97] bg-white hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)] border border-slate-100 hover:border-transparent"
     >
-      <Icon className={cn('w-5 h-5', text)} />
-      <span className={cn('text-[11px] font-bold', text)}>{label}</span>
+      <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', iconClass)}>
+        <Icon className="w-5 h-5 text-white" />
+      </div>
+      <span className="text-[11px] font-bold text-slate-600">{label}</span>
     </button>
   );
 }
@@ -295,20 +300,20 @@ export default function PatientDashboard() {
                 <AreaChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="gluGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#4a8a35" stopOpacity={0.25} />
-                      <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.02} />
+                      <stop offset="0%" stopColor="#10B981" stopOpacity={0.25} />
+                      <stop offset="100%" stopColor="#10B981" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                   <XAxis dataKey="time" tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
                   <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 280]} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, fontSize: 12, color: '#1e293b', boxShadow: '0 4px 20px rgba(30,46,26,0.12)' }}
+                    contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, fontSize: 12, color: '#1e293b', boxShadow: '0 4px 20px rgba(15,23,42,0.08)' }}
                     labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
                     formatter={(value: any) => [`${value} mg/dL`, 'Glycémie']}
                   />
-                  <ReferenceArea y1={carePlan.glucoseTargetMin} y2={carePlan.glucoseTargetMax} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="4 3" />
-                  <Area type="monotone" dataKey="g" stroke="#4a8a35" strokeWidth={2.5} fill="url(#gluGrad)" />
+                  <ReferenceArea y1={carePlan.glucoseTargetMin} y2={carePlan.glucoseTargetMax} fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.25)" strokeDasharray="4 3" />
+                  <Area type="monotone" dataKey="g" stroke="#10B981" strokeWidth={2.5} fill="url(#gluGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -320,10 +325,10 @@ export default function PatientDashboard() {
             <div className="bg-white rounded-2xl card-shadow p-4">
               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Enregistrer</div>
               <div className="grid grid-cols-2 gap-2">
-                <QuickAction icon={Utensils}  label="Repas"    bg="bg-brand-50 hover:bg-brand-100"  text="text-brand-700" onClick={() => setLogModal('meal')} />
-                <QuickAction icon={Syringe}   label="Insuline" bg="bg-coral-50 hover:bg-coral-100"  text="text-coral-600" onClick={() => setLogModal('insulin')} />
-                <QuickAction icon={Footprints} label="Sport"   bg="bg-amber-50 hover:bg-amber-100"  text="text-amber-700" onClick={() => setLogModal('activity')} />
-                <QuickAction icon={PenLine}   label="Note"     bg="bg-blue-50 hover:bg-blue-100"    text="text-blue-700"  onClick={() => setLogModal('note')} />
+                <QuickAction icon={Utensils}   label="Repas"    color="emerald" onClick={() => setLogModal('meal')} />
+                <QuickAction icon={Syringe}    label="Insuline" color="coral"   onClick={() => setLogModal('insulin')} />
+                <QuickAction icon={Footprints} label="Sport"    color="amber"   onClick={() => setLogModal('activity')} />
+                <QuickAction icon={PenLine}    label="Note"     color="sky"     onClick={() => setLogModal('note')} />
               </div>
             </div>
 
@@ -434,7 +439,7 @@ export default function PatientDashboard() {
             </div>
             <button
               onClick={() => setLogModal('meal')}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[13px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.3)]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[13px] font-bold transition shadow-[0_2px_8px_rgba(5,150,105,0.3)]"
             >
               <Plus className="w-4 h-4" /> Ajouter
             </button>
@@ -511,8 +516,8 @@ export default function PatientDashboard() {
                 <ComposedChart data={agp} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="agpRange" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#4a8a35" stopOpacity={0.2} />
-                      <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.03} />
+                      <stop offset="0%" stopColor="#10B981" stopOpacity={0.2} />
+                      <stop offset="100%" stopColor="#10B981" stopOpacity={0.03} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -522,12 +527,12 @@ export default function PatientDashboard() {
                     contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 12, color: '#1e293b' }}
                     labelFormatter={h => `${h}h00`}
                   />
-                  <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="4 3" />
-                  <Area type="monotone" dataKey="p95" stroke="rgba(74,138,53,0.15)" strokeWidth={1} fill="none" />
+                  <ReferenceArea y1={70} y2={180} fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.25)" strokeDasharray="4 3" />
+                  <Area type="monotone" dataKey="p95" stroke="rgba(16,185,129,0.12)" strokeWidth={1} fill="none" />
                   <Area type="monotone" dataKey="p75" stroke="none" fill="url(#agpRange)" />
                   <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(241,245,249,1)" />
-                  <Area type="monotone" dataKey="p5"  stroke="rgba(74,138,53,0.15)" strokeWidth={1} fill="none" />
-                  <Line type="monotone" dataKey="p50" stroke="#4a8a35" strokeWidth={2.5} dot={false} />
+                  <Area type="monotone" dataKey="p5"  stroke="rgba(16,185,129,0.12)" strokeWidth={1} fill="none" />
+                  <Line type="monotone" dataKey="p50" stroke="#10B981" strokeWidth={2.5} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -622,7 +627,7 @@ export default function PatientDashboard() {
             </div>
             <button
               onClick={() => setShowScanner(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[13px] font-bold shadow-[0_2px_10px_rgba(58,110,40,0.3)] transition whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[13px] font-bold shadow-[0_2px_10px_rgba(5,150,105,0.3)] transition whitespace-nowrap"
             >
               <ScanLine className="w-4 h-4" /> Scanner un bilan
             </button>
@@ -904,7 +909,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
           <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[14px] font-bold border border-slate-200 transition">
             Annuler
           </button>
-          <button onClick={handleSubmit} className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[14px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.3)] flex items-center justify-center gap-2">
+          <button onClick={handleSubmit} className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[14px] font-bold transition shadow-[0_2px_8px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2">
             <CheckCircle2 className="w-4 h-4" /> Enregistrer
           </button>
         </div>

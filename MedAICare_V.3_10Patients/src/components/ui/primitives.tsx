@@ -221,7 +221,7 @@ export function Button({
   disabled?: boolean;
 }) {
   const variants = {
-    primary:   'bg-brand-600 hover:bg-brand-700 text-white shadow-[0_2px_8px_rgba(58,110,40,0.25)] hover:shadow-[0_4px_14px_rgba(58,110,40,0.35)]',
+    primary:   'bg-brand-600 hover:bg-brand-700 text-white shadow-[0_2px_8px_rgba(16,185,129,0.25)] hover:shadow-[0_4px_14px_rgba(16,185,129,0.35)]',
     secondary: 'bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200',
     outline:   'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300',
     ghost:     'bg-transparent hover:bg-slate-50 text-slate-600 hover:text-slate-900',

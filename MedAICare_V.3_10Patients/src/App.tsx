@@ -85,8 +85,8 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-brand-600 flex items-center justify-center shadow-[0_8px_24px_rgba(58,110,40,0.3)]">
-            <Activity className="w-7 h-7 text-white animate-pulse" />
+          <div className="w-14 h-14 rounded-2xl icon-vivid-emerald flex items-center justify-center animate-float">
+            <Activity className="w-7 h-7 text-white" />
           </div>
           <div className="text-[13px] text-slate-500 font-medium tracking-tight">Connexion sécurisée en cours…</div>
         </div>
@@ -127,14 +127,14 @@ function AppContent() {
         {/* Logo */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100">
           <button onClick={() => navigate(isPatient ? 'patient' : 'doctor')} className="flex items-center gap-3 w-full group">
-            <div className="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(58,110,40,0.3)]">
-              <Activity className="w-4 h-4 text-white" />
+            <div className="w-9 h-9 rounded-[11px] icon-vivid-emerald flex items-center justify-center shrink-0">
+              <Activity className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-[16px] font-bold text-slate-900 tracking-tight leading-none">
-                MediAI<span className="text-brand-600">Care</span>
+              <div className="text-[15px] font-black text-slate-900 tracking-tight leading-none">
+                Medi<span className="gradient-text-brand">AI</span> Care
               </div>
-              <div className="text-[10px] text-slate-400 font-medium mt-0.5 uppercase tracking-wider">
+              <div className="text-[9px] text-slate-400 font-bold mt-0.5 uppercase tracking-[0.1em]">
                 {isPatient ? 'Espace patient' : 'Console clinique'}
               </div>
             </div>
@@ -172,7 +172,7 @@ function AppContent() {
                 className={cn(
                   'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150',
                   isActive
-                    ? 'bg-brand-50 text-brand-700 shadow-[inset_0_0_0_1px_rgba(74,138,53,0.2)]'
+                    ? 'bg-brand-50 text-brand-700 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.18)]'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                 )}
               >
@@ -215,7 +215,7 @@ function AppContent() {
           <div className="flex items-center justify-between px-5 sm:px-6 h-14">
             <div className="flex items-center gap-3">
               {/* Mobile logo */}
-              <div className="lg:hidden w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center shrink-0">
+              <div className="lg:hidden w-7 h-7 rounded-lg icon-vivid-emerald flex items-center justify-center shrink-0">
                 <Activity className="w-3.5 h-3.5 text-white" />
               </div>
               <div>

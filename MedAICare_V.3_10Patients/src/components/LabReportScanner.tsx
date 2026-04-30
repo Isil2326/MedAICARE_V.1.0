@@ -619,7 +619,7 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                 <Eye className="w-3 h-3" /> Trace : <code className="text-brand-700 font-mono font-bold">{savedReport.traceId}</code>
               </div>
               <div>
-                <button onClick={onClose} className="px-8 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition shadow-[0_2px_8px_rgba(58,110,40,0.3)]">Fermer</button>
+                <button onClick={onClose} className="px-8 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition shadow-[0_2px_8px_rgba(16,185,129,0.3)]">Fermer</button>
               </div>
             </div>
           )}

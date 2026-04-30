@@ -60,7 +60,7 @@ export function ClinicalRecommendationCard({ rec, isClinic, onAction }: Suggesti
           <div className="flex gap-2 pt-3 border-t border-slate-100">
             <button
               onClick={() => onAction(rec.id, 'ACCEPTED')}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[12.5px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.25)]"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[12.5px] font-bold transition shadow-[0_2px_8px_rgba(16,185,129,0.25)]"
             >
               <CheckCircle2 className="w-3.5 h-3.5" /> Accepter
             </button>

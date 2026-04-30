@@ -31,12 +31,17 @@ Configured as a static site deployment:
 - **Build:** `cd MedAICare_V.3_10Patients && npm run build`
 - **Public Dir:** `MedAICare_V.3_10Patients/dist`
 
-## Design System — Premium Healthtech v5.1 (Linear/Notion-level polish)
-Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant:
-- **Body background:** neutral slate-50 (#f8fafc) — zero green tint
-- **Brand palette:** brand-green (#4a8a35/#3a6e28), coral (#e8441f), amber — unchanged brand colors
-- **Slate neutrals:** ALL text/borders/backgrounds use slate-* tokens — sage palette completely eliminated
-- **Sage palette:** defined in index.css for legacy but ZERO usages remaining in any component
+## Design System — Premium Healthtech v5.2 (Vivid Emerald · 3D Icons · Modern Logo)
+Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant. Vivid & soothing healthtech aesthetic.
+- **Body background:** `#f0fdf8` (mint-tinted, fresh, medical)
+- **Brand palette:** Vivid Emerald — #10B981/#059669/#047857 family (ECFDF5→064E3B scale)
+- **Zero legacy green:** No #4a8a35 / #3a6e28 / rgba(74,138,53,...) / rgba(58,110,40,...) anywhere
+- **3D icon containers:** `.icon-vivid-{emerald|coral|amber|sky|violet|indigo|rose|teal|blue}` CSS classes with gradient bg + multi-layer box-shadow
+- **Logo:** 3D vivid emerald container + gradient "AI" text (.gradient-text-brand) + "Intelligence médicale" sub-slogan
+- **Hero:** `hero-gradient` CSS class + ambient animated glowing orbs (emerald/cyan/teal)
+- **Tagline:** "Intelligence médicale. Clarté humaine." in gradient emerald-sky text
+- **QuickActions:** Upgraded to 3D gradient icon containers (white card + colored icon box)
+- **Clinician card:** Dark gradient bg (slate-900 → brand-900) with ambient glow
 - **Card shadows:** neutral rgba(15,23,42,...) shadow system
 - **Tabs:** underline-style (border-b-2) across all views — no pill containers
 

@@ -192,7 +192,7 @@ export default function DevicesView() {
                         style={{
                           width: `${selected.battery}%`,
                           background: selected.battery > 50
-                            ? 'linear-gradient(90deg, #4a8a35, #6ab041)'
+                            ? 'linear-gradient(90deg, #10B981, #34D399)'
                             : selected.battery > 20
                             ? 'linear-gradient(90deg, #d97706, #f59e0b)'
                             : 'linear-gradient(90deg, #dc2626, #ef4444)',

@@ -31,13 +31,18 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-[10px] bg-brand-600 flex items-center justify-center shadow-[0_2px_10px_rgba(74,138,53,0.35)]">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" fillOpacity="0.9"/>
-                <circle cx="12" cy="9" r="2.5" fill="white" fillOpacity="0.5"/>
+            <div className="w-9 h-9 rounded-[12px] icon-vivid-emerald flex items-center justify-center shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3C8.68 3 6 5.68 6 9c0 4.77 6 12 6 12s6-7.23 6-12c0-3.32-2.68-6-6-6z" fill="white" fillOpacity="0.95"/>
+                <circle cx="12" cy="9" r="2.8" fill="white" fillOpacity="0.45"/>
               </svg>
             </div>
-            <span className="text-[17px] font-black tracking-tight">MediAI<span className="text-brand-600">Care</span></span>
+            <div>
+              <div className="text-[17px] font-black tracking-tight leading-none text-slate-900">
+                Medi<span className="gradient-text-brand">AI</span> Care
+              </div>
+              <div className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.12em] mt-0.5">Intelligence médicale</div>
+            </div>
           </div>
 
           {/* Links */}
@@ -52,7 +57,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <button onClick={() => openAuth('patient', 'login')} className="hidden sm:block px-4 py-2 text-[13px] text-slate-600 font-semibold hover:text-slate-900 transition">
               Connexion
             </button>
-            <button onClick={() => openAuth('patient', 'register')} className="px-4 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition shadow-[0_2px_12px_rgba(74,138,53,0.3)]">
+            <button onClick={() => openAuth('patient', 'register')} className="px-4 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition shadow-[0_2px_12px_rgba(16,185,129,0.3)]">
               Essayer gratuitement
             </button>
           </div>
@@ -62,9 +67,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
       <section className="relative pt-16 min-h-screen flex items-center overflow-hidden">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] via-white to-white" />
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full bg-brand-100/40 blur-[120px] -translate-y-32 translate-x-32 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-amber-100/30 blur-[80px] translate-y-24 -translate-x-24 pointer-events-none" />
+        <div className="absolute inset-0 hero-gradient" />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-brand-200/40 to-teal-200/20 blur-[140px] -translate-y-40 translate-x-40 pointer-events-none animate-glow" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-200/25 to-brand-100/30 blur-[100px] translate-y-28 -translate-x-28 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] rounded-full bg-gradient-to-br from-emerald-100/20 to-teal-100/15 blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-5 lg:px-8 w-full py-20 lg:py-28">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
@@ -86,8 +92,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 votre diabète.
               </motion.h1>
 
-              <motion.p variants={fade(0.16)} initial="hidden" animate="visible"
-                className="text-[17px] leading-[1.7] text-slate-500 mb-8 font-medium"
+              <motion.p variants={fade(0.13)} initial="hidden" animate="visible"
+                className="text-[18px] font-bold gradient-text-emerald-sky mb-3 tracking-tight"
+              >
+                Intelligence médicale. Clarté humaine.
+              </motion.p>
+
+              <motion.p variants={fade(0.18)} initial="hidden" animate="visible"
+                className="text-[16px] leading-[1.75] text-slate-500 mb-8 font-medium"
               >
                 Des prédictions glycémiques en langage clair, une analyse de vos données en temps réel, et une équipe médicale connectée — tout dans une seule application.
               </motion.p>
@@ -95,7 +107,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <motion.div variants={fade(0.22)} initial="hidden" animate="visible" className="flex flex-col sm:flex-row gap-3 mb-10">
                 <button
                   onClick={() => openAuth('patient', 'register')}
-                  className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-[15px] transition-all duration-200 shadow-[0_4px_24px_rgba(74,138,53,0.4)] hover:shadow-[0_6px_32px_rgba(74,138,53,0.5)] hover:-translate-y-0.5"
+                  className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-gradient-to-r from-brand-500 to-brand-700 hover:from-brand-400 hover:to-brand-600 text-white font-bold text-[15px] transition-all duration-200 shadow-[0_4px_24px_rgba(16,185,129,0.45)] hover:shadow-[0_8px_36px_rgba(16,185,129,0.58)] hover:-translate-y-1"
                 >
                   Commencer gratuitement
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -192,14 +204,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               },
             ].map(({ Icon, color, title, desc, tag }) => (
               <motion.div key={title} variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="group p-8 rounded-3xl border border-slate-100 hover:border-transparent hover:shadow-[0_8px_40px_rgba(74,138,53,0.12)] transition-all duration-300 cursor-default"
+                className="group p-8 rounded-3xl border border-slate-100/80 hover:border-transparent hover:shadow-[0_16px_56px_rgba(16,185,129,0.15)] bg-white hover:bg-gradient-to-br hover:from-white hover:to-brand-50/40 transition-all duration-500 cursor-default"
               >
-                <div className={`w-12 h-12 rounded-2xl mb-6 flex items-center justify-center ${
-                  color === 'brand' ? 'bg-brand-100' : color === 'blue' ? 'bg-blue-100' : 'bg-coral-50'
+                <div className={`w-14 h-14 rounded-2xl mb-6 flex items-center justify-center transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 ${
+                  color === 'brand' ? 'icon-vivid-emerald' : color === 'blue' ? 'icon-vivid-sky' : 'icon-vivid-coral'
                 }`}>
-                  <Icon className={`w-6 h-6 ${
-                    color === 'brand' ? 'text-brand-600' : color === 'blue' ? 'text-blue-600' : 'text-coral-500'
-                  }`} />
+                  <Icon className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">{tag}</div>
                 <h3 className="text-[20px] font-black text-slate-900 leading-tight mb-3">{title}</h3>
@@ -309,10 +319,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Patient */}
             <motion.div variants={fadeX(1, 0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-white rounded-3xl p-9 shadow-[0_2px_24px_rgba(74,138,53,0.08)] border border-slate-100"
+              className="bg-white rounded-3xl p-9 shadow-[0_8px_40px_rgba(16,185,129,0.12)] border border-brand-100/60 hover:shadow-[0_16px_56px_rgba(16,185,129,0.18)] transition-all duration-500"
             >
-              <div className="w-10 h-10 rounded-2xl bg-brand-100 flex items-center justify-center mb-5">
-                <Activity className="w-5 h-5 text-brand-600" />
+              <div className="w-12 h-12 rounded-2xl icon-vivid-emerald flex items-center justify-center mb-5 animate-float-slow">
+                <Activity className="w-6 h-6 text-white" />
               </div>
               <div className="text-[12px] font-bold text-brand-600 uppercase tracking-widest mb-2">Patients</div>
               <h3 className="text-[26px] font-black text-slate-900 leading-tight mb-3">Reprenez le contrôle.</h3>
@@ -329,17 +339,19 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => openAuth('patient', 'register')} className="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[14px] transition-all shadow-[0_2px_12px_rgba(74,138,53,0.25)]">
+              <button onClick={() => openAuth('patient', 'register')} className="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[14px] transition-all shadow-[0_2px_12px_rgba(16,185,129,0.25)]">
                 Créer mon espace
               </button>
             </motion.div>
 
             {/* Clinicien */}
             <motion.div variants={fadeX(-1, 0.05)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-slate-900 rounded-3xl p-9 text-white"
+              className="bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900 rounded-3xl p-9 text-white shadow-[0_16px_56px_rgba(15,23,42,0.25)] relative overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
-                <BrainCircuit className="w-5 h-5 text-white" />
+              {/* ambient glow */}
+              <div className="absolute top-0 right-0 w-56 h-56 rounded-full bg-brand-500/10 blur-[60px] pointer-events-none" />
+              <div className="w-12 h-12 rounded-2xl icon-vivid-teal flex items-center justify-center mb-5 animate-float-slow">
+                <BrainCircuit className="w-6 h-6 text-white" />
               </div>
               <div className="text-[12px] font-bold text-brand-300 uppercase tracking-widest mb-2">Cliniciens</div>
               <h3 className="text-[26px] font-black text-white leading-tight mb-3">Décidez mieux, plus vite.</h3>
@@ -547,7 +559,7 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
             {/* Mini chart */}
             <div className="flex items-end gap-0.5 h-8 mt-3">
               {[55,70,80,68,85,78,88,75,80,86,90,84].map((v, i) => (
-                <div key={i} className="flex-1 rounded-sm" style={{ height: `${(v/100)*100}%`, background: i===11 ? '#4a8a35' : i>=9 ? '#8cbf78' : '#dcecd4' }} />
+                <div key={i} className="flex-1 rounded-sm" style={{ height: `${(v/100)*100}%`, background: i===11 ? '#10B981' : i>=9 ? '#34D399' : '#D1FAE5' }} />
               ))}
             </div>
           </div>
@@ -595,7 +607,7 @@ function PhoneMockup({ onNavigate: _ }: { onNavigate: (v: ViewMode) => void }) {
 
 function AIFeatureCard() {
   return (
-    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(74,138,53,0.12)] border border-slate-100 p-6 space-y-4">
+    <div className="w-full max-w-[380px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(16,185,129,0.12)] border border-slate-100 p-6 space-y-4">
       <div className="flex items-center gap-3 mb-2">
         <div className="w-9 h-9 rounded-2xl bg-brand-100 flex items-center justify-center">
           <BrainCircuit className="w-5 h-5 text-brand-600" />

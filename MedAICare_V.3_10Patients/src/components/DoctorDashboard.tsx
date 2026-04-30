@@ -34,7 +34,7 @@ import { cn } from '../utils/cn';
 
 // ── Risk meta — light theme ───────────────────────────────────────────────────
 const RISK_META: Record<string, { label: string; color: string; bg: string; ring: string; text: string; dot: string }> = {
-  LOW:      { label: 'Stable',   color: '#4a8a35', bg: 'bg-brand-50',  ring: 'ring-brand-200',  text: 'text-brand-700',  dot: 'bg-brand-500' },
+  LOW:      { label: 'Stable',   color: '#10B981', bg: 'bg-brand-50',  ring: 'ring-brand-200',  text: 'text-brand-700',  dot: 'bg-brand-500' },
   MODERATE: { label: 'Modéré',   color: '#d97706', bg: 'bg-amber-50',  ring: 'ring-amber-200',  text: 'text-amber-700',  dot: 'bg-amber-500' },
   HIGH:     { label: 'Élevé',    color: '#ea580c', bg: 'bg-orange-50', ring: 'ring-orange-200', text: 'text-orange-700', dot: 'bg-orange-500' },
   CRITICAL: { label: 'Critique', color: '#dc2626', bg: 'bg-red-50',    ring: 'ring-red-200',    text: 'text-red-700',    dot: 'bg-red-500' },
@@ -243,15 +243,15 @@ export default function DoctorDashboard() {
                   >
                     <defs>
                       <linearGradient id="cohortTir" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#4a8a35" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.02} />
+                        <stop offset="0%" stopColor="#10B981" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#10B981" stopOpacity={0.02} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                     <XAxis dataKey="d" tick={{ fill: '#94a3b8', fontSize: 9 }} axisLine={false} tickLine={false} />
                     <YAxis tick={{ fill: '#94a3b8', fontSize: 9 }} axisLine={false} tickLine={false} domain={[40, 90]} />
                     <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 11, color: '#1e293b' }} />
-                    <Area type="monotone" dataKey="t" stroke="#4a8a35" strokeWidth={2} fill="url(#cohortTir)" />
+                    <Area type="monotone" dataKey="t" stroke="#10B981" strokeWidth={2} fill="url(#cohortTir)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -541,7 +541,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                   <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={h => `${h}h`} />
                   <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
                   <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 11, color: '#1e293b' }} labelFormatter={h => `${h}h00`} />
-                  <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="3 3" />
+                  <ReferenceArea y1={70} y2={180} fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.25)" strokeDasharray="3 3" />
                   <Area type="monotone" dataKey="p95" stroke="rgba(59,130,246,0.2)" strokeWidth={1} fill="none" />
                   <Area type="monotone" dataKey="p75" stroke="none" fill="url(#agpDoc)" />
                   <Area type="monotone" dataKey="p25" stroke="none" fill="rgba(241,245,249,1)" />
@@ -573,7 +573,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                     labelFormatter={ts => new Date(ts as number).toLocaleString('fr-FR')}
                     formatter={(v: any) => [`${v} mg/dL`, 'Glycémie']}
                   />
-                  <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="3 3" />
+                  <ReferenceArea y1={70} y2={180} fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.25)" strokeDasharray="3 3" />
                   <Area type="monotone" dataKey="glucose" stroke="#3b82f6" strokeWidth={2} fill="url(#histGlucose)" dot={false} isAnimationActive={false} />
                 </ComposedChart>
               )}
@@ -589,7 +589,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
             {[
               { label: 'Très élevé', range: '>250',    value: tir.veryHigh, color: '#dc2626', target: '<5%',  textColor: 'text-red-600' },
               { label: 'Élevé',      range: '181-250', value: tir.high,     color: '#f97316', target: '<25%', textColor: 'text-orange-600' },
-              { label: 'Cible',      range: '70-180',  value: tir.inRange,  color: '#4a8a35', target: '>70%', textColor: 'text-brand-700' },
+              { label: 'Cible',      range: '70-180',  value: tir.inRange,  color: '#10B981', target: '>70%', textColor: 'text-brand-700' },
               { label: 'Bas',        range: '54-69',   value: tir.low,      color: '#d97706', target: '<4%',  textColor: 'text-amber-700' },
               { label: 'Très bas',   range: '<54',     value: tir.veryLow,  color: '#dc2626', target: '<1%',  textColor: 'text-red-600' },
             ].map(s => (
@@ -888,7 +888,7 @@ function DecisionCard({ decision, onAction }: {
           </button>
           <button
             onClick={() => onAction(decision.id, 'accepted')}
-            className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11.5px] font-bold flex items-center gap-1.5 transition shadow-[0_2px_8px_rgba(58,110,40,0.25)]"
+            className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11.5px] font-bold flex items-center gap-1.5 transition shadow-[0_2px_8px_rgba(5,150,105,0.25)]"
           >
             <CheckCircle2 className="w-3.5 h-3.5" /> Accepter & Tracer
           </button>

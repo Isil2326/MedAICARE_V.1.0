@@ -170,7 +170,7 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
               type="submit" disabled={loading}
               className={`w-full mt-1 py-3 rounded-xl text-white font-bold text-[14px] flex items-center justify-center gap-2 transition-all ${
                 isPatient
-                  ? 'bg-brand-600 hover:bg-brand-700 shadow-[0_2px_12px_rgba(58,110,40,0.3)]'
+                  ? 'bg-brand-600 hover:bg-brand-700 shadow-[0_2px_12px_rgba(16,185,129,0.3)]'
                   : 'bg-blue-600 hover:bg-blue-700 shadow-[0_2px_12px_rgba(37,99,235,0.25)]'
               } disabled:opacity-40 disabled:cursor-not-allowed`}
             >
