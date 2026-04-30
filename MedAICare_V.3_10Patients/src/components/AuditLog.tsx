@@ -108,26 +108,26 @@ export default function AuditLog() {
 
           {/* Liste événements */}
           <Card className="xl:col-span-2">
-            <div className="p-4 border-b border-sage-100">
+            <div className="p-4 border-b border-slate-100">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h3 className="text-[14px] font-bold text-sage-900">Événements en temps réel</h3>
-                  <p className="text-[12px] text-sage-500 mt-0.5">Trace immuable signée · horodatage UTC</p>
+                  <h3 className="text-[14px] font-bold text-slate-900">Événements en temps réel</h3>
+                  <p className="text-[12px] text-slate-500 mt-0.5">Trace immuable signée · horodatage UTC</p>
                 </div>
                 <div className="relative shrink-0">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-sage-400" />
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                   <input
                     type="text"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     placeholder="Rechercher trace, user…"
-                    className="pl-8 pr-3 py-1.5 w-52 rounded-xl bg-sage-50 border border-sage-200 text-[12px] text-sage-800 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-blue-400/25 transition"
+                    className="pl-8 pr-3 py-1.5 w-52 rounded-xl bg-slate-50 border border-slate-200 text-[12px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400/25 transition"
                   />
                 </div>
               </div>
               {/* Severity filter */}
               <div className="flex items-center gap-1.5 flex-wrap">
-                <Filter className="w-3.5 h-3.5 text-sage-400 shrink-0" />
+                <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 {(['all', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'] as const).map(s => {
                   const count = s === 'all' ? logs.length : logs.filter(l => l.severity === s).length;
                   const label = s === 'all' ? 'Tous' : SEVERITY_META[s].label;
@@ -140,7 +140,7 @@ export default function AuditLog() {
                         'px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all',
                         filter === s
                           ? s === 'all' ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-200' : cn(meta?.bg, meta?.text, 'ring-1', meta?.ring)
-                          : 'text-sage-500 hover:text-sage-800 hover:bg-sage-50'
+                          : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                       )}
                     >
                       {label} <span className="opacity-60 ml-0.5 tabular-nums">{count}</span>
@@ -169,7 +169,7 @@ export default function AuditLog() {
                         onClick={() => setSelected(log)}
                         className={cn(
                           'w-full flex items-start gap-3 p-3 rounded-xl text-left transition-all',
-                          isSel ? 'bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-sage-50'
+                          isSel ? 'bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-slate-50'
                         )}
                       >
                         <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center ring-1 shrink-0', mod.bg, mod.ring)}>
@@ -177,14 +177,14 @@ export default function AuditLog() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-[12.5px] font-semibold text-sage-900 truncate">{log.action}</span>
+                            <span className="text-[12.5px] font-semibold text-slate-900 truncate">{log.action}</span>
                             <span className={cn('inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ring-1 shrink-0', sev.bg, sev.text, sev.ring)}>
                               <SevIcon className="w-2.5 h-2.5" />
                               {sev.label}
                             </span>
                           </div>
-                          <div className="text-[11px] text-sage-500 mt-0.5 truncate">{log.details}</div>
-                          <div className="flex items-center gap-2 mt-1 text-[10px] text-sage-400 font-medium">
+                          <div className="text-[11px] text-slate-500 mt-0.5 truncate">{log.details}</div>
+                          <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400 font-medium">
                             <span className="font-mono">{log.traceId}</span>
                             <span className="text-sage-200">·</span>
                             <span>{log.module}</span>
@@ -214,12 +214,12 @@ export default function AuditLog() {
                 />
                 <div className="px-5 pb-5 space-y-3">
                   <div>
-                    <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold mb-1">Action</div>
-                    <div className="text-[13px] font-bold text-sage-900">{selected.action}</div>
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Action</div>
+                    <div className="text-[13px] font-bold text-slate-900">{selected.action}</div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold mb-1">Détails</div>
-                    <div className="text-[12px] text-sage-600 leading-relaxed bg-sage-50 border border-sage-200 rounded-xl p-3 font-mono">
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Détails</div>
+                    <div className="text-[12px] text-slate-600 leading-relaxed bg-slate-50 border border-slate-200 rounded-xl p-3 font-mono">
                       {selected.details}
                     </div>
                   </div>
@@ -230,9 +230,9 @@ export default function AuditLog() {
                       { label: 'Trace ID',    value: selected.traceId, mono: true },
                       { label: 'Horodatage', value: formatTime(selected.timestamp), mono: true },
                     ].map(spec => (
-                      <div key={spec.label} className="rounded-xl bg-sage-50 border border-sage-100 p-2.5">
-                        <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold">{spec.label}</div>
-                        <div className={cn('text-[12px] font-semibold text-sage-900 mt-0.5 truncate', spec.mono && 'font-mono text-teal-700')}>{spec.value}</div>
+                      <div key={spec.label} className="rounded-xl bg-slate-50 border border-slate-100 p-2.5">
+                        <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">{spec.label}</div>
+                        <div className={cn('text-[12px] font-semibold text-slate-900 mt-0.5 truncate', spec.mono && 'font-mono text-teal-700')}>{spec.value}</div>
                       </div>
                     ))}
                   </div>
@@ -271,12 +271,12 @@ export default function AuditLog() {
                   const Icon = step.icon;
                   return (
                     <div key={step.label} className="relative">
-                      <div className="rounded-xl bg-sage-50 border border-sage-100 p-3 text-center">
+                      <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-center">
                         <div className={cn('w-9 h-9 rounded-xl mx-auto mb-2 flex items-center justify-center ring-1', step.bg, step.text.replace('text-', 'ring-').replace('-700', '-200'))}>
                           <Icon className={cn('w-4 h-4', step.text)} />
                         </div>
-                        <div className="text-[12px] font-bold text-sage-900">{step.label}</div>
-                        <div className="text-[10px] text-sage-400 mt-0.5 font-medium">{step.sub}</div>
+                        <div className="text-[12px] font-bold text-slate-900">{step.label}</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5 font-medium">{step.sub}</div>
                       </div>
                       {i < arr.length - 1 && (
                         <div className="hidden md:block absolute top-1/2 -right-1.5 w-3 h-0.5 bg-sage-300 rounded" />
@@ -303,10 +303,10 @@ export default function AuditLog() {
                 { code: 'RGPD',      label: 'Protection des données personnelles',          class: 'Pseudonymisation' },
                 { code: 'HL7 FHIR', label: 'Interopérabilité des données de santé',        class: 'R5' },
               ].map(r => (
-                <div key={r.code} className="flex items-center justify-between p-3 rounded-xl bg-sage-50 border border-sage-100">
+                <div key={r.code} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                   <div>
-                    <div className="text-[12.5px] font-bold text-sage-900">{r.code}</div>
-                    <div className="text-[10.5px] text-sage-400 font-medium">{r.label}</div>
+                    <div className="text-[12.5px] font-bold text-slate-900">{r.code}</div>
+                    <div className="text-[10.5px] text-slate-400 font-medium">{r.label}</div>
                   </div>
                   <Badge variant="success" size="xs" dot>{r.class}</Badge>
                 </div>
@@ -324,10 +324,10 @@ export default function AuditLog() {
                 { item: 'Module XAI',              value: 'tree-shap v1.8',  status: 'success' as const, hint: 'Validé par 2 cliniciens' },
                 { item: 'Schéma base de données', value: 'fhir-bridge v3.0', status: 'info' as const,    hint: 'Migration prévue' },
               ].map(v => (
-                <div key={v.item} className="flex items-center justify-between p-3 rounded-xl bg-sage-50 border border-sage-100">
+                <div key={v.item} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                   <div>
-                    <div className="text-[12px] font-semibold text-sage-900">{v.item}</div>
-                    <div className="text-[10.5px] text-sage-400 mt-0.5 font-medium">{v.hint}</div>
+                    <div className="text-[12px] font-semibold text-slate-900">{v.item}</div>
+                    <div className="text-[10.5px] text-slate-400 mt-0.5 font-medium">{v.hint}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-[11px] font-mono text-teal-700 font-bold">{v.value}</div>

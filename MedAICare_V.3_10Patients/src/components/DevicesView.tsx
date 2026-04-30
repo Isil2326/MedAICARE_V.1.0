@@ -96,7 +96,7 @@ export default function DevicesView() {
 
       {/* === Toolbar === */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-sage-100 border border-sage-200">
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-100 border border-slate-200">
           {(['all', 'connected', 'syncing', 'disconnected'] as const).map(f => {
             const count  = f === 'all' ? devices.length : devices.filter(d => d.status === f).length;
             const labels = { all: 'Tous', connected: 'Connectés', syncing: 'Synchro', disconnected: 'Hors ligne' };
@@ -106,10 +106,10 @@ export default function DevicesView() {
                 onClick={() => setFilter(f)}
                 className={cn(
                   'px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all',
-                  filter === f ? 'bg-white text-sage-900 shadow-sm' : 'text-sage-500 hover:text-sage-800 hover:bg-white/60'
+                  filter === f ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
                 )}
               >
-                {labels[f]} <span className="text-sage-400 ml-1 tabular-nums">{count}</span>
+                {labels[f]} <span className="text-slate-400 ml-1 tabular-nums">{count}</span>
               </button>
             );
           })}
@@ -139,7 +139,7 @@ export default function DevicesView() {
                 className={cn(
                   'group text-left rounded-2xl border transition-all p-4',
                   'bg-white hover:shadow-md',
-                  isSel ? 'border-brand-300 ring-1 ring-brand-200 shadow-md' : 'border-sage-200 hover:border-sage-300'
+                  isSel ? 'border-brand-300 ring-1 ring-brand-200 shadow-md' : 'border-slate-200 hover:border-sage-300'
                 )}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -149,15 +149,15 @@ export default function DevicesView() {
                   <Badge variant={statusMeta.variant} dot>{statusMeta.label}</Badge>
                 </div>
                 <div>
-                  <div className="text-[14px] font-bold text-sage-900 tracking-tight">{device.name}</div>
-                  <div className="text-[11px] text-sage-400 mt-0.5 font-medium">{device.manufacturer} · {typeMeta.label}</div>
+                  <div className="text-[14px] font-bold text-slate-900 tracking-tight">{device.name}</div>
+                  <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{device.manufacturer} · {typeMeta.label}</div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-sage-100 flex items-center justify-between text-[11px]">
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
                   <span className="flex items-center gap-1.5">
                     <Battery className={cn('w-3.5 h-3.5', batteryColor)} />
                     <span className={cn('font-bold tabular-nums', batteryColor)}>{device.battery}%</span>
                   </span>
-                  <span className="text-sage-400 flex items-center gap-1 font-medium">
+                  <span className="text-slate-400 flex items-center gap-1 font-medium">
                     <StatusIcon className={cn('w-3 h-3', device.status === 'syncing' && 'animate-spin')} />
                     {formatRelative(device.lastSync)}
                   </span>
@@ -183,10 +183,10 @@ export default function DevicesView() {
                   {/* Battery */}
                   <div>
                     <div className="flex items-center justify-between text-[11px] mb-1.5">
-                      <span className="text-sage-500 font-medium">Niveau de batterie</span>
-                      <span className="text-sage-900 font-bold tabular-nums">{selected.battery}%</span>
+                      <span className="text-slate-500 font-medium">Niveau de batterie</span>
+                      <span className="text-slate-900 font-bold tabular-nums">{selected.battery}%</span>
                     </div>
-                    <div className="h-2.5 rounded-full bg-sage-100 overflow-hidden">
+                    <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700"
                         style={{
@@ -211,12 +211,12 @@ export default function DevicesView() {
                     ].map(spec => {
                       const SpecIcon = spec.icon;
                       return (
-                        <div key={spec.label} className="rounded-xl bg-sage-50 border border-sage-100 p-2.5">
-                          <div className="flex items-center gap-1.5 text-[10px] text-sage-400 font-bold uppercase tracking-wider">
+                        <div key={spec.label} className="rounded-xl bg-slate-50 border border-slate-100 p-2.5">
+                          <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                             <SpecIcon className="w-3 h-3" />
                             {spec.label}
                           </div>
-                          <div className="text-[13px] font-bold text-sage-900 mt-1 truncate">{spec.value}</div>
+                          <div className="text-[13px] font-bold text-slate-900 mt-1 truncate">{spec.value}</div>
                         </div>
                       );
                     })}
@@ -235,8 +235,8 @@ export default function DevicesView() {
                   <ShieldCheck className="w-4 h-4 text-brand-600" />
                 </div>
                 <div>
-                  <div className="text-[12.5px] font-bold text-sage-900">Transmission sécurisée</div>
-                  <div className="text-[11px] text-sage-500 mt-0.5 leading-relaxed font-medium">
+                  <div className="text-[12.5px] font-bold text-slate-900">Transmission sécurisée</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 leading-relaxed font-medium">
                     Données chiffrées AES-256 en transit, MQTT/TLS 1.3, signature device·gateway, pseudonymisation conforme RGPD.
                   </div>
                 </div>

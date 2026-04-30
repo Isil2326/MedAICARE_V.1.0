@@ -78,19 +78,21 @@ export default function DoctorDashboard() {
       </div>
 
       {/* === TABS + ACTIONS === */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-sage-100 border border-sage-200">
-          <ClinicianTab active={tab === 'cohort'}  onClick={() => setTab('cohort')}  icon={Users}        label="Cohorte"        badge={patients.length} />
-          <ClinicianTab active={tab === 'patient'} onClick={() => selectedPatient && setTab('patient')} icon={Stethoscope}  label="Fiche patient"  disabled={!selectedPatient} />
-          <ClinicianTab active={tab === 'models'}  onClick={() => setTab('models')}  icon={Brain}        label="Performance IA" />
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="px-3 py-2 rounded-xl bg-white border border-sage-200 hover:bg-sage-50 text-sage-600 text-[12.5px] font-semibold flex items-center gap-1.5 transition shadow-sm">
-            <Download className="w-3.5 h-3.5" /> Export CSV
-          </button>
-          <button className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[12.5px] font-semibold flex items-center gap-1.5 transition shadow-[0_2px_8px_rgba(37,99,235,0.25)]">
-            <FileText className="w-3.5 h-3.5" /> Rapport ATTD
-          </button>
+      <div className="bg-white rounded-xl border border-slate-200 flex items-center justify-between overflow-hidden">
+        <div className="flex items-center border-b border-slate-200 w-full">
+          <div className="flex items-center px-1">
+            <ClinicianTab active={tab === 'cohort'}  onClick={() => setTab('cohort')}  icon={Users}        label="Cohorte"        badge={patients.length} />
+            <ClinicianTab active={tab === 'patient'} onClick={() => selectedPatient && setTab('patient')} icon={Stethoscope}  label="Fiche patient"  disabled={!selectedPatient} />
+            <ClinicianTab active={tab === 'models'}  onClick={() => setTab('models')}  icon={Brain}        label="Performance IA" />
+          </div>
+          <div className="ml-auto flex items-center gap-2 px-3 py-2 shrink-0">
+            <button className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 text-[11.5px] font-semibold flex items-center gap-1.5 transition">
+              <Download className="w-3 h-3" /> CSV
+            </button>
+            <button className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11.5px] font-semibold flex items-center gap-1.5 transition shadow-[0_2px_6px_rgba(37,99,235,0.2)]">
+              <FileText className="w-3 h-3" /> Rapport ATTD
+            </button>
+          </div>
         </div>
       </div>
 
@@ -100,25 +102,25 @@ export default function DoctorDashboard() {
 
           {/* Liste patients */}
           <div className="xl:col-span-2 bg-white rounded-2xl card-shadow overflow-hidden">
-            <div className="p-4 border-b border-sage-100">
+            <div className="p-4 border-b border-slate-100">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div>
-                  <div className="text-[14px] font-bold text-sage-900">Liste des patients</div>
-                  <div className="text-[11px] text-sage-400 font-medium">{filtered.length} sur {patients.length} · triés par risque IA</div>
+                  <div className="text-[14px] font-bold text-slate-900">Liste des patients</div>
+                  <div className="text-[11px] text-slate-400 font-medium">{filtered.length} sur {patients.length} · triés par risque IA</div>
                 </div>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-sage-400" />
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                   <input
                     type="text"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     placeholder="Rechercher patient ou ID…"
-                    className="pl-8 pr-3 py-1.5 w-56 rounded-xl bg-sage-50 border border-sage-200 text-[12px] text-sage-800 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-blue-400/25 transition"
+                    className="pl-8 pr-3 py-1.5 w-56 rounded-xl bg-slate-50 border border-slate-200 text-[12px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400/25 transition"
                   />
                 </div>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <Filter className="w-3.5 h-3.5 text-sage-400 shrink-0" />
+                <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 {(['all', 'CRITICAL', 'HIGH', 'MODERATE', 'LOW'] as const).map(r => {
                   const count = r === 'all' ? patients.length : patients.filter(p => p.currentRisk === r).length;
                   const meta  = r !== 'all' ? RISK_META[r] : null;
@@ -130,7 +132,7 @@ export default function DoctorDashboard() {
                         'px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all',
                         riskFilter === r
                           ? r === 'all' ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-200' : cn(meta?.bg, meta?.text, 'ring-1', meta?.ring)
-                          : 'text-sage-500 hover:text-sage-800 hover:bg-sage-50'
+                          : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                       )}
                     >
                       {r === 'all' ? 'Tous' : meta?.label} <span className="opacity-60 ml-0.5">{count}</span>
@@ -140,9 +142,9 @@ export default function DoctorDashboard() {
               </div>
             </div>
 
-            <div className="max-h-[580px] overflow-y-auto divide-y divide-sage-50">
+            <div className="max-h-[580px] overflow-y-auto divide-y divide-slate-100">
               {filtered.length === 0 ? (
-                <div className="p-12 text-center text-sage-400 text-[13px] font-medium">Aucun patient ne correspond aux critères.</div>
+                <div className="p-12 text-center text-slate-400 text-[13px] font-medium">Aucun patient ne correspond aux critères.</div>
               ) : (
                 filtered.map(p => {
                   const meta  = RISK_META[p.currentRisk];
@@ -154,7 +156,7 @@ export default function DoctorDashboard() {
                       onClick={() => handleSelectPatient(p)}
                       className={cn(
                         'w-full flex items-center gap-3 px-4 py-3.5 text-left transition-all',
-                        isSel ? 'bg-blue-50' : 'hover:bg-sage-50'
+                        isSel ? 'bg-blue-50' : 'hover:bg-slate-50'
                       )}
                     >
                       <div className={cn(
@@ -170,16 +172,16 @@ export default function DoctorDashboard() {
                       </div>
                       <div className="flex-1 min-w-0 grid grid-cols-12 gap-2 items-center">
                         <div className="col-span-5 min-w-0">
-                          <div className="text-[13px] font-semibold text-sage-900 truncate">{p.name}</div>
-                          <div className="text-[10.5px] text-sage-400">{p.id} · {p.age}a · {p.diabetesType}</div>
+                          <div className="text-[13px] font-semibold text-slate-900 truncate">{p.name}</div>
+                          <div className="text-[10.5px] text-slate-400">{p.id} · {p.age}a · {p.diabetesType}</div>
                         </div>
                         <div className="col-span-2 text-center">
-                          <div className="text-[12px] font-bold text-sage-800 tabular-nums">{p.hba1c}%</div>
-                          <div className="text-[9.5px] text-sage-400 uppercase tracking-wider">HbA1c</div>
+                          <div className="text-[12px] font-bold text-slate-800 tabular-nums">{p.hba1c}%</div>
+                          <div className="text-[9.5px] text-slate-400 uppercase tracking-wider">HbA1c</div>
                         </div>
                         <div className="col-span-2 text-center">
-                          <div className="text-[12px] font-bold text-sage-800 tabular-nums">{p.tir}%</div>
-                          <div className="text-[9.5px] text-sage-400 uppercase tracking-wider">TIR</div>
+                          <div className="text-[12px] font-bold text-slate-800 tabular-nums">{p.tir}%</div>
+                          <div className="text-[9.5px] text-slate-400 uppercase tracking-wider">TIR</div>
                         </div>
                         <div className="col-span-3 text-right">
                           <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-bold ring-1', meta.bg, meta.ring, meta.text)}>
@@ -188,7 +190,7 @@ export default function DoctorDashboard() {
                           </span>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-sage-300 shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                     </button>
                   );
                 })
@@ -202,7 +204,7 @@ export default function DoctorDashboard() {
             <div className="bg-white rounded-2xl card-shadow p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-4 h-4 text-violet-500" />
-                <div className="text-[13px] font-bold text-sage-900">Stratification du risque</div>
+                <div className="text-[13px] font-bold text-slate-900">Stratification du risque</div>
               </div>
               <div className="space-y-3">
                 {(['CRITICAL', 'HIGH', 'MODERATE', 'LOW'] as const).map(r => {
@@ -213,9 +215,9 @@ export default function DoctorDashboard() {
                     <div key={r}>
                       <div className="flex items-center justify-between text-[12px] mb-1.5">
                         <span className={cn('font-semibold', meta.text)}>{meta.label}</span>
-                        <span className="text-sage-500 font-medium tabular-nums">{count} <span className="text-sage-300">({pct}%)</span></span>
+                        <span className="text-slate-500 font-medium tabular-nums">{count} <span className="text-slate-300">({pct}%)</span></span>
                       </div>
-                      <div className="h-2 rounded-full bg-sage-100 overflow-hidden">
+                      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: meta.color }} />
                       </div>
                     </div>
@@ -229,8 +231,8 @@ export default function DoctorDashboard() {
               <div className="flex items-center gap-2 mb-3">
                 <Activity className="w-4 h-4 text-brand-600" />
                 <div>
-                  <div className="text-[13px] font-bold text-sage-900">TIR cohorte 14j</div>
-                  <div className="text-[11px] text-sage-400">Cible ADA ≥ 70%</div>
+                  <div className="text-[13px] font-bold text-slate-900">TIR cohorte 14j</div>
+                  <div className="text-[11px] text-slate-400">Cible ADA ≥ 70%</div>
                 </div>
               </div>
               <div className="h-[150px] -mx-2">
@@ -280,13 +282,13 @@ export default function DoctorDashboard() {
                       <Brain className={cn('w-5 h-5', accentColors.text)} />
                     </div>
                     <div>
-                      <div className="text-[13.5px] font-bold text-sage-900">{m.name}</div>
-                      <div className="text-[10.5px] text-sage-400">v{m.version} · {m.lastTrained}</div>
+                      <div className="text-[13.5px] font-bold text-slate-900">{m.name}</div>
+                      <div className="text-[10.5px] text-slate-400">v{m.version} · {m.lastTrained}</div>
                     </div>
                   </div>
                   {i === 0
                     ? <span className="px-2 py-0.5 rounded-full bg-brand-50 ring-1 ring-brand-200 text-[10px] text-brand-700 font-bold">Production</span>
-                    : <span className="px-2 py-0.5 rounded-full bg-sage-50 ring-1 ring-sage-200 text-[10px] text-sage-500 font-semibold">Candidat</span>
+                    : <span className="px-2 py-0.5 rounded-full bg-slate-50 ring-1 ring-slate-200 text-[10px] text-slate-500 font-semibold">Candidat</span>
                   }
                 </div>
 
@@ -298,8 +300,8 @@ export default function DoctorDashboard() {
                     </RadialBarChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none -mt-2">
-                    <div className="text-[26px] font-black text-sage-900 tabular-nums">{(m.f1Score * 100).toFixed(1)}</div>
-                    <div className="text-[10px] text-sage-400 uppercase tracking-wider">F1-Score</div>
+                    <div className="text-[26px] font-black text-slate-900 tabular-nums">{(m.f1Score * 100).toFixed(1)}</div>
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider">F1-Score</div>
                   </div>
                 </div>
 
@@ -312,16 +314,16 @@ export default function DoctorDashboard() {
                   ].map(metric => (
                     <div key={metric.label}>
                       <div className="flex items-center justify-between text-[11px] mb-1">
-                        <span className="text-sage-500 font-medium">{metric.label}</span>
-                        <span className="text-sage-900 font-bold tabular-nums">{(metric.value * 100).toFixed(1)}%</span>
+                        <span className="text-slate-500 font-medium">{metric.label}</span>
+                        <span className="text-slate-900 font-bold tabular-nums">{(metric.value * 100).toFixed(1)}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-sage-100 overflow-hidden">
+                      <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <div className="h-full rounded-full transition-all" style={{ width: `${metric.value * 100}%`, background: accentColors.gauge }} />
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 pt-3 border-t border-sage-100 text-[10.5px] text-sage-400 font-medium">
+                <div className="mt-4 pt-3 border-t border-slate-100 text-[10.5px] text-slate-400 font-medium">
                   Validé sur {m.trainingSamples.toLocaleString()} échantillons · k=5 cross-validation
                 </div>
               </div>
@@ -344,22 +346,23 @@ function ClinicalKPI({ label, value, unit, icon: Icon, accent, highlight }: {
   highlight?: boolean;
 }) {
   const accentMap = {
-    blue:   'bg-blue-100 ring-blue-200 text-blue-600',
-    coral:  'bg-coral-50 ring-coral-200 text-coral-500',
-    green:  'bg-brand-100 ring-brand-200 text-brand-600',
-    violet: 'bg-violet-100 ring-violet-200 text-violet-600',
+    blue:   { icon: 'bg-blue-100 text-blue-600', val: 'text-blue-700' },
+    coral:  { icon: 'bg-coral-50 text-coral-500', val: 'text-coral-600' },
+    green:  { icon: 'bg-brand-100 text-brand-600', val: 'text-brand-700' },
+    violet: { icon: 'bg-violet-100 text-violet-600', val: 'text-violet-700' },
   };
+  const a = accentMap[accent];
   return (
-    <div className={cn('bg-white rounded-2xl card-shadow p-4 transition', highlight && 'ring-1 ring-coral-200 bg-coral-50/40')}>
-      <div className="flex items-center gap-3">
-        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center ring-1 shrink-0', accentMap[accent])}>
+    <div className={cn('bg-white rounded-2xl card-shadow border border-slate-100/80 p-4 transition', highlight && 'border-coral-200 bg-coral-50/40')}>
+      <div className="flex items-start gap-3">
+        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', a.icon)}>
           <Icon className="w-5 h-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[10.5px] text-sage-400 uppercase tracking-wider font-bold">{label}</div>
-          <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="text-[22px] font-black text-sage-900 tabular-nums">{value}</span>
-            {unit && <span className="text-[10.5px] text-sage-400 font-medium">{unit}</span>}
+          <div className="text-[10.5px] text-slate-400 uppercase tracking-widest font-semibold">{label}</div>
+          <div className="flex items-baseline gap-1.5 mt-1">
+            <span className={cn('text-[24px] font-bold tabular-nums leading-none', a.val)}>{value}</span>
+            {unit && <span className="text-[10.5px] text-slate-400 font-medium">{unit}</span>}
           </div>
         </div>
       </div>
@@ -377,18 +380,18 @@ function ClinicianTab({ active, onClick, icon: Icon, label, badge, disabled }: {
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex items-center gap-2 px-3.5 py-2 rounded-xl text-[12.5px] font-semibold transition-all',
+        'flex items-center gap-2 px-4 py-3 text-[12.5px] font-semibold transition-all border-b-2 -mb-px',
         disabled
-          ? 'text-sage-300 cursor-not-allowed'
+          ? 'text-slate-200 cursor-not-allowed border-transparent'
           : active
-            ? 'bg-white text-blue-700 shadow-sm'
-            : 'text-sage-500 hover:text-sage-800 hover:bg-white/60'
+            ? 'text-blue-700 border-blue-600'
+            : 'text-slate-400 border-transparent hover:text-slate-700 hover:border-slate-300'
       )}
     >
       <Icon className="w-3.5 h-3.5" />
       {label}
       {badge !== undefined && (
-        <span className={cn('px-1.5 py-0.5 rounded-full text-[10px] font-bold tabular-nums', active ? 'bg-blue-100 text-blue-700' : 'bg-sage-200 text-sage-500')}>
+        <span className={cn('px-1.5 py-0.5 rounded-full text-[10px] font-bold tabular-nums', active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500')}>
           {badge}
         </span>
       )}
@@ -445,7 +448,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
 
       {/* Patient header */}
       <div className="bg-white rounded-2xl card-shadow p-5 border-l-4 border-l-blue-400">
-        <button onClick={onBack} className="text-[11.5px] text-sage-400 hover:text-sage-700 flex items-center gap-1 mb-3 font-semibold transition">
+        <button onClick={onBack} className="text-[11.5px] text-slate-400 hover:text-slate-700 flex items-center gap-1 mb-3 font-semibold transition">
           <ArrowLeft className="w-3.5 h-3.5" /> Retour à la cohorte
         </button>
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -455,10 +458,10 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[21px] font-black text-sage-900">{patient.name}</span>
-                <span className="text-[11px] text-sage-400 font-medium">· {patient.id}</span>
+                <span className="text-[21px] font-black text-slate-900">{patient.name}</span>
+                <span className="text-[11px] text-slate-400 font-medium">· {patient.id}</span>
               </div>
-              <div className="flex items-center gap-3 mt-1 text-[12.5px] text-sage-400 font-medium flex-wrap">
+              <div className="flex items-center gap-3 mt-1 text-[12.5px] text-slate-400 font-medium flex-wrap">
                 <span>{patient.age} ans · {patient.gender === 'M' ? 'Homme' : 'Femme'}</span>
                 <span className="text-sage-200">·</span>
                 <span>{patient.diabetesType}</span>
@@ -472,7 +475,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
               <span className={cn('w-1.5 h-1.5 rounded-full', meta.dot)} />
               {meta.label}
             </span>
-            <button className="px-3 py-2 rounded-xl bg-white border border-sage-200 hover:bg-sage-50 text-sage-600 text-[11.5px] font-semibold flex items-center gap-1.5 transition">
+            <button className="px-3 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 text-[11.5px] font-semibold flex items-center gap-1.5 transition">
               <Phone className="w-3.5 h-3.5" /> Téléconsulter
             </button>
             <button className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[11.5px] font-semibold flex items-center gap-1.5 transition shadow-[0_2px_8px_rgba(37,99,235,0.25)]">
@@ -494,7 +497,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
       {/* Sélecteur de plage temporelle */}
       <div className="bg-white rounded-2xl card-shadow px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
         <TimeRangeSelector value={timeRange} onChange={setTimeRange} accent="blue" />
-        <div className="text-[11px] text-sage-400 flex items-center gap-2 font-medium">
+        <div className="text-[11px] text-slate-400 flex items-center gap-2 font-medium">
           <History className="w-3.5 h-3.5" />
           <span>{range.description}</span>
           {!range.isLive && (
@@ -513,16 +516,16 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
         <div className="xl:col-span-2 bg-white rounded-2xl card-shadow p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="text-[14px] font-bold text-sage-900">
+              <div className="text-[14px] font-bold text-slate-900">
                 {showAGP ? 'Profil glycémique ambulatoire' : 'Glycémie continue'}
               </div>
-              <div className="text-[11px] text-sage-400 font-medium">
+              <div className="text-[11px] text-slate-400 font-medium">
                 {showAGP
                   ? `AGP standard ATTD · ${range.description} · ${patient.tir}% TIR`
                   : `${range.description} · ${historicalGlucose.length} mesures · CGM 5 min`}
               </div>
             </div>
-            <span className="text-[10.5px] text-sage-400 font-medium">Dexcom G7 · 96% actif</span>
+            <span className="text-[10.5px] text-slate-400 font-medium">Dexcom G7 · 96% actif</span>
           </div>
           <div className="h-[280px] -mx-2">
             <ResponsiveContainer width="100%" height="100%">
@@ -580,8 +583,8 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
 
         {/* TIR stratifié */}
         <div className="bg-white rounded-2xl card-shadow p-5">
-          <div className="text-[14px] font-bold text-sage-900 mb-1">TIR stratifié</div>
-          <div className="text-[11px] text-sage-400 mb-4 font-medium">5 zones — standard ATTD</div>
+          <div className="text-[14px] font-bold text-slate-900 mb-1">TIR stratifié</div>
+          <div className="text-[11px] text-slate-400 mb-4 font-medium">5 zones — standard ATTD</div>
           <div className="space-y-3">
             {[
               { label: 'Très élevé', range: '>250',    value: tir.veryHigh, color: '#dc2626', target: '<5%',  textColor: 'text-red-600' },
@@ -595,9 +598,9 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
                     <span className={cn('text-[12.5px] font-bold', s.textColor)}>{s.label}</span>
-                    <span className="text-[10px] text-sage-400">{s.range}</span>
+                    <span className="text-[10px] text-slate-400">{s.range}</span>
                   </div>
-                  <div className="text-[10px] text-sage-400">cible {s.target}</div>
+                  <div className="text-[10px] text-slate-400">cible {s.target}</div>
                 </div>
                 <div className={cn('text-[16px] font-black tabular-nums', s.textColor)}>{s.value}%</div>
               </div>
@@ -616,7 +619,7 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
               <div className="w-8 h-8 rounded-xl bg-violet-100 ring-1 ring-violet-200 flex items-center justify-center">
                 <ClipboardList className="w-4 h-4 text-violet-600" />
               </div>
-              <div className="text-[14px] font-bold text-sage-900">Notes cliniques</div>
+              <div className="text-[14px] font-bold text-slate-900">Notes cliniques</div>
             </div>
             <button onClick={() => setShowNoteEditor(!showNoteEditor)}
               className="text-[11.5px] text-blue-600 hover:text-blue-700 flex items-center gap-1 font-semibold transition">
@@ -624,31 +627,31 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
             </button>
           </div>
           {showNoteEditor && (
-            <div className="mb-3 rounded-xl bg-sage-50 border border-sage-200 p-3">
+            <div className="mb-3 rounded-xl bg-slate-50 border border-slate-200 p-3">
               <textarea
                 value={newNote}
                 onChange={e => setNewNote(e.target.value)}
                 placeholder="Observation clinique, ajustement thérapeutique…"
                 rows={3}
-                className="w-full bg-transparent text-[13px] text-sage-800 placeholder:text-sage-400 focus:outline-none resize-none"
+                className="w-full bg-transparent text-[13px] text-slate-800 placeholder:text-slate-400 focus:outline-none resize-none"
               />
               <div className="flex justify-end gap-2 mt-2">
-                <button onClick={() => setShowNoteEditor(false)} className="px-2.5 py-1 rounded-lg text-[11px] text-sage-500 hover:text-sage-800 transition font-medium">Annuler</button>
+                <button onClick={() => setShowNoteEditor(false)} className="px-2.5 py-1 rounded-lg text-[11px] text-slate-500 hover:text-slate-800 transition font-medium">Annuler</button>
                 <button onClick={addNote} className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold transition">Enregistrer</button>
               </div>
             </div>
           )}
           <div className="space-y-2 max-h-[280px] overflow-y-auto">
             {localNotes.map(n => (
-              <div key={n.id} className="rounded-xl bg-sage-50 border border-sage-100 p-3">
+              <div key={n.id} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
                 <div className="flex items-center justify-between mb-1.5">
-                  <div className="text-[11.5px] font-bold text-sage-900">{n.authorName} <span className="text-sage-400 font-normal">· {n.authorRole}</span></div>
-                  <div className="flex items-center gap-1 text-[10px] text-sage-400 font-medium">
+                  <div className="text-[11.5px] font-bold text-slate-900">{n.authorName} <span className="text-slate-400 font-normal">· {n.authorRole}</span></div>
+                  <div className="flex items-center gap-1 text-[10px] text-slate-400 font-medium">
                     <Clock className="w-2.5 h-2.5" />
                     {new Date(n.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
                   </div>
                 </div>
-                <div className="text-[12px] text-sage-600 leading-relaxed">{n.text}</div>
+                <div className="text-[12px] text-slate-600 leading-relaxed">{n.text}</div>
               </div>
             ))}
           </div>
@@ -660,17 +663,17 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
             <div className="w-8 h-8 rounded-xl bg-blue-100 ring-1 ring-blue-200 flex items-center justify-center">
               <Target className="w-4 h-4 text-blue-600" />
             </div>
-            <div className="text-[14px] font-bold text-sage-900">Plan de soins</div>
+            <div className="text-[14px] font-bold text-slate-900">Plan de soins</div>
           </div>
-          <div className="space-y-1.5 divide-y divide-sage-50">
+          <div className="space-y-1.5 divide-y divide-slate-100">
             <PlanRow label="Glycémie cible"    value={`${carePlan.glucoseTargetMin}–${carePlan.glucoseTargetMax} mg/dL`} />
             <PlanRow label="HbA1c cible"       value={`< ${carePlan.hba1cTarget}%`} />
             <PlanRow label="Insuline basale"   value={`${carePlan.insulinBasal} UI/jour`} />
             <PlanRow label="Ratio glucides"    value={`1 UI / ${carePlan.insulinRatioCarbs} g`} />
             <PlanRow label="Sensibilité"       value={`1 UI ↓ ${carePlan.insulinSensitivity} mg/dL`} />
           </div>
-          <div className="mt-3 pt-3 border-t border-sage-100">
-            <div className="text-[12px] text-sage-500 italic leading-relaxed">"{carePlan.notes}"</div>
+          <div className="mt-3 pt-3 border-t border-slate-100">
+            <div className="text-[12px] text-slate-500 italic leading-relaxed">"{carePlan.notes}"</div>
           </div>
         </div>
       </div>
@@ -685,14 +688,14 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
             <div className="w-8 h-8 rounded-xl bg-blue-100 ring-1 ring-blue-200 flex items-center justify-center">
               <FileText className="w-4 h-4 text-blue-600" />
             </div>
-            <div className="text-[14px] font-bold text-sage-900">Bilans biologiques du patient</div>
+            <div className="text-[14px] font-bold text-slate-900">Bilans biologiques du patient</div>
             {patientLabReports.length > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-sage-50 text-sage-500 text-[10.5px] font-bold ring-1 ring-sage-200">
+              <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 text-[10.5px] font-bold ring-1 ring-slate-200">
                 {patientLabReports.length}
               </span>
             )}
           </div>
-          <div className="text-[11px] text-sage-400 font-medium">Importés via QR code · Intégrés aux prédictions</div>
+          <div className="text-[11px] text-slate-400 font-medium">Importés via QR code · Intégrés aux prédictions</div>
         </div>
         <LabReportTimeline reports={patientLabReports} showDelete={false} emptyMessage="Aucun bilan biologique scanné par ce patient pour le moment." />
       </div>
@@ -728,13 +731,13 @@ function PendingDecisionsPanel({ decisions, patientName, onAction }: {
             <Zap className="w-4.5 h-4.5 text-amber-600" />
           </div>
           <div>
-            <div className="text-[14px] font-bold text-sage-900 flex items-center gap-2">
+            <div className="text-[14px] font-bold text-slate-900 flex items-center gap-2">
               Décisions en attente
               {pending.length > 0 && (
                 <span className="px-1.5 py-0.5 rounded-full bg-amber-200 text-amber-800 text-[10px] font-black tabular-nums">{pending.length}</span>
               )}
             </div>
-            <div className="text-[11px] text-sage-500 font-medium">Recommandations IA en attente de votre arbitrage pour {patientName}</div>
+            <div className="text-[11px] text-slate-500 font-medium">Recommandations IA en attente de votre arbitrage pour {patientName}</div>
           </div>
         </div>
         <div className="flex items-center gap-1.5 text-[10.5px] text-amber-700 font-semibold">
@@ -746,8 +749,8 @@ function PendingDecisionsPanel({ decisions, patientName, onAction }: {
       {pending.length === 0 ? (
         <div className="rounded-xl bg-brand-50 border border-brand-100 p-4 text-center">
           <CheckCircle2 className="w-6 h-6 text-brand-500 mx-auto mb-2" />
-          <div className="text-[12.5px] text-sage-700 font-semibold">Toutes les décisions ont été traitées</div>
-          <div className="text-[10.5px] text-sage-400 mt-0.5">{treated.length} décision{treated.length > 1 ? 's' : ''} arbitrée{treated.length > 1 ? 's' : ''}</div>
+          <div className="text-[12.5px] text-slate-700 font-semibold">Toutes les décisions ont été traitées</div>
+          <div className="text-[10.5px] text-slate-400 mt-0.5">{treated.length} décision{treated.length > 1 ? 's' : ''} arbitrée{treated.length > 1 ? 's' : ''}</div>
         </div>
       ) : (
         <div className="space-y-3">
@@ -757,14 +760,14 @@ function PendingDecisionsPanel({ decisions, patientName, onAction }: {
 
       {treated.length > 0 && (
         <details className="mt-3 group">
-          <summary className="text-[11px] text-sage-500 hover:text-sage-800 cursor-pointer flex items-center gap-1.5 font-semibold transition">
+          <summary className="text-[11px] text-slate-500 hover:text-slate-800 cursor-pointer flex items-center gap-1.5 font-semibold transition">
             <ChevronRight className="w-3 h-3 group-open:rotate-90 transition-transform" />
             {treated.length} décision{treated.length > 1 ? 's' : ''} déjà traitée{treated.length > 1 ? 's' : ''}
           </summary>
           <div className="mt-2 space-y-1.5">
             {treated.map(d => (
-              <div key={d.id} className="flex items-center justify-between text-[11px] py-1.5 px-3 rounded-xl bg-white border border-sage-100">
-                <span className="text-sage-600 truncate">{d.aiRecommendation}</span>
+              <div key={d.id} className="flex items-center justify-between text-[11px] py-1.5 px-3 rounded-xl bg-white border border-slate-100">
+                <span className="text-slate-600 truncate">{d.aiRecommendation}</span>
                 <span className={cn(
                   'shrink-0 ml-2 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold',
                   d.status === 'accepted' && 'bg-brand-100 text-brand-700',
@@ -792,15 +795,15 @@ function DecisionCard({ decision, onAction }: {
   const expiresInH = Math.round((decision.expiresAt - Date.now()) / 3600000);
 
   return (
-    <div className="bg-white rounded-xl border border-sage-200 p-4">
+    <div className="bg-white rounded-xl border border-slate-200 p-4">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-start gap-3 min-w-0">
           <span className={cn('px-2 py-1 rounded-lg ring-1 text-[10px] font-bold uppercase tracking-wider shrink-0', riskMeta.bg, riskMeta.ring, riskMeta.text)}>
             {riskMeta.label}
           </span>
           <div className="min-w-0">
-            <div className="text-[12.5px] font-bold text-sage-900 leading-snug">{decision.triggerReason}</div>
-            <div className="flex items-center gap-2 mt-1 text-[10.5px] text-sage-400 font-medium">
+            <div className="text-[12.5px] font-bold text-slate-900 leading-snug">{decision.triggerReason}</div>
+            <div className="flex items-center gap-2 mt-1 text-[10.5px] text-slate-400 font-medium">
               <Clock className="w-2.5 h-2.5" />
               <span>il y a {ageMin} min</span>
               <span className="text-sage-200">·</span>
@@ -809,8 +812,8 @@ function DecisionCard({ decision, onAction }: {
           </div>
         </div>
         <div className="text-right shrink-0">
-          <div className="text-[10px] text-sage-400 uppercase tracking-wider">Confiance IA</div>
-          <div className="text-[17px] font-black text-sage-900 tabular-nums">{Math.round(decision.aiConfidence * 100)}%</div>
+          <div className="text-[10px] text-slate-400 uppercase tracking-wider">Confiance IA</div>
+          <div className="text-[17px] font-black text-slate-900 tabular-nums">{Math.round(decision.aiConfidence * 100)}%</div>
         </div>
       </div>
 
@@ -818,7 +821,7 @@ function DecisionCard({ decision, onAction }: {
         <div className="text-[10px] text-blue-600 uppercase tracking-wider font-bold mb-1 flex items-center gap-1.5">
           <Sparkles className="w-3 h-3" /> Action proposée
         </div>
-        <div className="text-[12.5px] text-sage-800 leading-relaxed">{decision.aiRecommendation}</div>
+        <div className="text-[12.5px] text-slate-800 leading-relaxed">{decision.aiRecommendation}</div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
@@ -829,12 +832,12 @@ function DecisionCard({ decision, onAction }: {
       </div>
 
       {expanded && (
-        <div className="space-y-3 mb-3 pt-3 border-t border-sage-100">
+        <div className="space-y-3 mb-3 pt-3 border-t border-slate-100">
           <div>
-            <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold mb-2">Raisonnement IA</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-2">Raisonnement IA</div>
             <ul className="space-y-1.5">
               {decision.reasoning.map((r, i) => (
-                <li key={i} className="flex items-start gap-2 text-[11.5px] text-sage-700">
+                <li key={i} className="flex items-start gap-2 text-[11.5px] text-slate-700">
                   <span className="w-1 h-1 rounded-full bg-blue-500 mt-2 shrink-0" />
                   <span className="leading-relaxed">{r}</span>
                 </li>
@@ -842,21 +845,21 @@ function DecisionCard({ decision, onAction }: {
             </ul>
           </div>
           <div>
-            <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold mb-2">Alternatives évaluées</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-2">Alternatives évaluées</div>
             <div className="space-y-1.5">
               {decision.alternativeOptions.map((alt, i) => (
-                <div key={i} className="flex items-start gap-2 text-[11px] py-1.5 px-2.5 rounded-xl bg-sage-50 border border-sage-100">
+                <div key={i} className="flex items-start gap-2 text-[11px] py-1.5 px-2.5 rounded-xl bg-slate-50 border border-slate-100">
                   <span className={cn(
                     'shrink-0 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase',
                     alt.risk === 'lower'  && 'bg-brand-100 text-brand-700',
-                    alt.risk === 'similar' && 'bg-sage-100 text-sage-600',
+                    alt.risk === 'similar' && 'bg-slate-100 text-slate-600',
                     alt.risk === 'higher'  && 'bg-coral-50 text-coral-600',
                   )}>
                     {alt.risk === 'lower' ? 'Risque ↓' : alt.risk === 'similar' ? 'Équivalent' : 'Risque ↑'}
                   </span>
                   <div className="min-w-0">
-                    <div className="text-sage-800 font-semibold">{alt.label}</div>
-                    <div className="text-sage-500 text-[10.5px] mt-0.5">{alt.rationale}</div>
+                    <div className="text-slate-800 font-semibold">{alt.label}</div>
+                    <div className="text-slate-500 text-[10.5px] mt-0.5">{alt.rationale}</div>
                   </div>
                 </div>
               ))}
@@ -897,10 +900,10 @@ function DecisionCard({ decision, onAction }: {
 
 function ContextChip({ label, value, unit }: { label: string; value: string; unit?: string }) {
   return (
-    <div className="rounded-xl bg-sage-50 border border-sage-100 px-2.5 py-2">
-      <div className="text-[9.5px] text-sage-400 uppercase tracking-wider font-semibold">{label}</div>
-      <div className="text-[12.5px] font-black text-sage-900 tabular-nums mt-0.5">
-        {value}{unit && <span className="text-[10px] text-sage-400 font-normal ml-0.5">{unit}</span>}
+    <div className="rounded-xl bg-slate-50 border border-slate-100 px-2.5 py-2">
+      <div className="text-[9.5px] text-slate-400 uppercase tracking-wider font-semibold">{label}</div>
+      <div className="text-[12.5px] font-black text-slate-900 tabular-nums mt-0.5">
+        {value}{unit && <span className="text-[10px] text-slate-400 font-normal ml-0.5">{unit}</span>}
       </div>
     </div>
   );
@@ -923,7 +926,7 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
   };
 
   const filterTabs: Array<{ key: typeof filter; label: string; icon: React.ComponentType<{ className?: string }>; count: number; color: string }> = [
-    { key: 'all',            label: 'Tout',            icon: History,      count: totalCount,             color: 'text-sage-600' },
+    { key: 'all',            label: 'Tout',            icon: History,      count: totalCount,             color: 'text-slate-600' },
     { key: 'alert',          label: 'Alertes',         icon: Bell,         count: counts.alert,           color: 'text-coral-500' },
     { key: 'recommendation', label: 'Recommandations', icon: Sparkles,     count: counts.recommendation,  color: 'text-blue-600' },
     { key: 'decision',       label: 'Décisions',       icon: Stethoscope,  count: counts.decision,        color: 'text-violet-600' },
@@ -945,8 +948,8 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
             <History className="w-4.5 h-4.5 text-violet-600" />
           </div>
           <div>
-            <div className="text-[14px] font-bold text-sage-900">Journal historique</div>
-            <div className="text-[11px] text-sage-400 font-medium">Alertes · recommandations · événements · {rangeLabel}</div>
+            <div className="text-[14px] font-bold text-slate-900">Journal historique</div>
+            <div className="text-[11px] text-slate-400 font-medium">Alertes · recommandations · événements · {rangeLabel}</div>
           </div>
         </div>
         <button className="text-[11px] text-blue-600 hover:text-blue-700 flex items-center gap-1.5 font-semibold transition">
@@ -964,12 +967,12 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
               onClick={() => onFilterChange(t.key)}
               className={cn(
                 'flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold transition-all',
-                isActive ? 'bg-white shadow-sm ring-1 ring-sage-200 text-sage-900' : 'text-sage-500 hover:text-sage-800 hover:bg-sage-50'
+                isActive ? 'bg-white shadow-sm ring-1 ring-slate-200 text-slate-900' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
               )}
             >
               <Icon className={cn('w-3 h-3', isActive ? t.color : '')} />
               {t.label}
-              <span className={cn('px-1.5 py-0.5 rounded-full text-[9.5px] font-bold tabular-nums', isActive ? 'bg-brand-100 text-brand-700' : 'bg-sage-100 text-sage-500')}>
+              <span className={cn('px-1.5 py-0.5 rounded-full text-[9.5px] font-bold tabular-nums', isActive ? 'bg-brand-100 text-brand-700' : 'bg-slate-100 text-slate-500')}>
                 {t.count}
               </span>
             </button>
@@ -978,7 +981,7 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
       </div>
 
       {entries.length === 0 ? (
-        <div className="text-center py-12 text-sage-400 text-[13px] font-medium">
+        <div className="text-center py-12 text-slate-400 text-[13px] font-medium">
           Aucune entrée pour ce filtre sur la période sélectionnée.
         </div>
       ) : (
@@ -986,7 +989,7 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
           {Object.entries(groupedByDay).map(([day, dayEntries]) => (
             <div key={day}>
               <div className="sticky top-0 bg-white/95 backdrop-blur-sm py-1.5 mb-2 -mx-1 px-1 z-10">
-                <div className="text-[10.5px] font-bold text-sage-400 uppercase tracking-wider capitalize">{day}</div>
+                <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider capitalize">{day}</div>
               </div>
               <div className="space-y-1.5">
                 {dayEntries.map(e => <HistoricalEntryRow key={e.id} entry={e} />)}
@@ -996,7 +999,7 @@ function HistoricalJournal({ entries, totalCount, rangeLabel, filter, onFilterCh
         </div>
       )}
 
-      <div className="mt-4 pt-3 border-t border-sage-100 flex items-center justify-between text-[10.5px] text-sage-400 font-medium">
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10.5px] text-slate-400 font-medium">
         <span>{entries.length} entrée{entries.length > 1 ? 's' : ''} affichée{entries.length > 1 ? 's' : ''} · {totalCount} au total</span>
         <span className="flex items-center gap-1.5">
           <ShieldCheck className="w-3 h-3 text-brand-500" />
@@ -1019,7 +1022,7 @@ function HistoricalEntryRow({ entry }: { entry: HistoricalEntry }) {
   const time = new Date(entry.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className="flex items-start gap-3 p-3 rounded-xl bg-sage-50 border border-sage-100 hover:bg-white hover:border-sage-200 transition">
+    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-slate-200 transition">
       <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center ring-1 shrink-0 mt-0.5', m.bg, m.ring)}>
         <Icon className={cn('w-3.5 h-3.5', m.text)} />
       </div>
@@ -1028,22 +1031,22 @@ function HistoricalEntryRow({ entry }: { entry: HistoricalEntry }) {
           <span className={cn('px-1.5 py-0.5 rounded-full text-[9.5px] font-bold uppercase tracking-wider ring-1', m.bg, m.ring, m.text)}>
             {m.label}
           </span>
-          {entry.module && <span className="text-[10px] text-sage-400">{entry.module}</span>}
+          {entry.module && <span className="text-[10px] text-slate-400">{entry.module}</span>}
           {(entry.severity === 'high' || entry.severity === 'critical') && (
             <span className="px-1.5 py-0.5 rounded-full bg-coral-50 ring-1 ring-coral-200 text-coral-600 text-[9.5px] font-bold uppercase">
               {entry.severity === 'critical' ? 'Critique' : 'Sévère'}
             </span>
           )}
-          <span className="ml-auto text-[10.5px] text-sage-400 tabular-nums font-medium shrink-0">{time}</span>
+          <span className="ml-auto text-[10.5px] text-slate-400 tabular-nums font-medium shrink-0">{time}</span>
         </div>
-        <div className="text-[12.5px] font-bold text-sage-900 leading-snug">{entry.title}</div>
-        <div className="text-[11.5px] text-sage-500 mt-0.5 leading-relaxed">{entry.summary}</div>
+        <div className="text-[12.5px] font-bold text-slate-900 leading-snug">{entry.title}</div>
+        <div className="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">{entry.summary}</div>
         {entry.recommendationAction && (
           <div className="mt-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 border-l-2 border-blue-400 text-[11.5px] text-blue-800 font-medium">
             → {entry.recommendationAction}
           </div>
         )}
-        <div className="flex items-center gap-3 mt-1.5 text-[10px] text-sage-400 font-medium">
+        <div className="flex items-center gap-3 mt-1.5 text-[10px] text-slate-400 font-medium">
           {entry.acknowledgedBy && (
             <span className="flex items-center gap-1">
               <CheckCircle2 className="w-2.5 h-2.5 text-brand-500" />
@@ -1060,7 +1063,7 @@ function HistoricalEntryRow({ entry }: { entry: HistoricalEntry }) {
               {entry.outcomeStatus === 'accepted' ? 'Acceptée' : entry.outcomeStatus === 'modified' ? 'Modifiée' : 'Rejetée'}
             </span>
           )}
-          {entry.traceId && <span className="font-mono text-sage-300">{entry.traceId}</span>}
+          {entry.traceId && <span className="font-mono text-slate-300">{entry.traceId}</span>}
         </div>
       </div>
     </div>
@@ -1076,13 +1079,13 @@ function MiniMetric({ label, value, target, status }: { label: string; value: st
   const s = statusMap[status];
   return (
     <div className="bg-white rounded-xl card-shadow p-3">
-      <div className="text-[10px] text-sage-400 uppercase tracking-wider font-bold">{label}</div>
+      <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">{label}</div>
       <div className="flex items-baseline gap-1.5 mt-1">
         <span className={cn('text-[19px] font-black tabular-nums', s.text)}>{value}</span>
       </div>
       <div className="flex items-center gap-1.5 mt-1">
         <span className={cn('w-1.5 h-1.5 rounded-full', s.dot)} />
-        <span className="text-[10px] text-sage-400 font-medium">cible {target}</span>
+        <span className="text-[10px] text-slate-400 font-medium">cible {target}</span>
       </div>
     </div>
   );
@@ -1091,8 +1094,8 @@ function MiniMetric({ label, value, target, status }: { label: string; value: st
 function PlanRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between py-2.5">
-      <span className="text-[12.5px] text-sage-500 font-medium">{label}</span>
-      <span className="text-[12.5px] text-sage-900 font-bold tabular-nums">{value}</span>
+      <span className="text-[12.5px] text-slate-500 font-medium">{label}</span>
+      <span className="text-[12.5px] text-slate-900 font-bold tabular-nums">{value}</span>
     </div>
   );
 }

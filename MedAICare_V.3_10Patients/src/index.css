@@ -3,19 +3,31 @@
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* ── MediAI Care · Palette Naturelle (mySugr-inspired) ── */
-  --color-brand-50:  #f0f6ec;
-  --color-brand-100: #dcecd4;
-  --color-brand-200: #b9d9a9;
-  --color-brand-300: #8cbf78;
-  --color-brand-400: #65a44e;
+  /* ── MediAI Care v5 · Palette Premium Healthtech ── */
+  --color-brand-50:  #f0f7ed;
+  --color-brand-100: #d9edce;
+  --color-brand-200: #b3dba0;
+  --color-brand-300: #84c36b;
+  --color-brand-400: #5ea844;
   --color-brand-500: #4a8a35;
   --color-brand-600: #3a6e28;
-  --color-brand-700: #2e5720;
-  --color-brand-800: #27461c;
-  --color-brand-900: #1f3a16;
-  --color-brand-950: #0f1e0b;
+  --color-brand-700: #2d5620;
+  --color-brand-800: #254519;
+  --color_brand-900: #1c3513;
 
+  /* Neutral slate — base for premium text hierarchy */
+  --color-slate-50:  #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* Sage — kept for warm accents / legacy */
   --color-sage-50:  #f5f7f2;
   --color-sage-100: #e8eee2;
   --color-sage-200: #d0dcc5;
@@ -27,20 +39,24 @@
   --color-sage-800: #384530;
   --color-sage-900: #2f3a28;
 
+  /* Coral — danger/alert */
   --color-coral-50:  #fff3ef;
-  --color-coral-100: #ffe3d8;
-  --color-coral-200: #ffc2a8;
-  --color-coral-300: #ff9672;
-  --color-coral-400: #ff6540;
+  --color-coral-100: #ffe0d5;
+  --color-coral-200: #ffbca8;
+  --color-coral-300: #ff8e6e;
+  --color-coral-400: #ff6040;
   --color-coral-500: #e8441f;
   --color-coral-600: #c43614;
 
-  --color-amber-50:  #fff8ec;
-  --color-amber-100: #ffeecc;
-  --color-amber-200: #ffd98a;
-  --color-amber-300: #ffbe47;
-  --color-amber-400: #f9a21b;
-  --color-amber-500: #e88a0d;
+  /* Amber — warning */
+  --color-amber-50:  #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
 }
 
 html {
@@ -51,64 +67,120 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f6ef;
-  color: #1c2b1a;
+  background-color: #f8fafc;
+  color: #0f172a;
+  letter-spacing: -0.01em;
 }
 
-/* ── Scrollbar naturelle ── */
-::-webkit-scrollbar { width: 5px; }
+/* ── Scrollbar premium ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #c8d8b8; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #a8c090; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Selection ── */
+::selection { background: #d9edce; color: #2d5620; }
 
 /* ── Animations ── */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.5); }
+  50%       { opacity: 0.4; transform: scale(1.6); }
 }
 .animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-6px); }
+  50%       { transform: translateY(-8px); }
 }
-.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
 /* ── Gradient text ── */
 .gradient-text {
-  background: linear-gradient(135deg, #3a6e28 0%, #65a44e 50%, #8cbf78 100%);
+  background: linear-gradient(135deg, #3a6e28 0%, #5ea844 60%, #84c36b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ── Glucose chart filter ── */
-.recharts-area-curve {
-  filter: drop-shadow(0 3px 6px rgba(74, 138, 53, 0.25));
-}
-
-/* ── Card shadows ── */
+/* ── Premium card shadows — neutral (not green-tinted) ── */
 .card-shadow {
   box-shadow:
-    0 1px 3px rgba(30, 46, 26, 0.06),
-    0 4px 16px rgba(30, 46, 26, 0.06),
-    0 0 0 1px rgba(180, 210, 160, 0.18);
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 12px rgba(15, 23, 42, 0.05),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
 }
 
 .card-shadow-md {
   box-shadow:
-    0 2px 8px rgba(30, 46, 26, 0.08),
-    0 8px 32px rgba(30, 46, 26, 0.07),
-    0 0 0 1px rgba(180, 210, 160, 0.15);
+    0 2px 4px rgba(15, 23, 42, 0.06),
+    0 8px 28px rgba(15, 23, 42, 0.08),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
+}
+
+.card-shadow-lg {
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.06),
+    0 16px 48px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
 }
 
 /* ── Focus rings ── */
 input:focus, select:focus, textarea:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(74, 138, 53, 0.18);
+  box-shadow: 0 0 0 3px rgba(74, 138, 53, 0.15), 0 0 0 1px rgba(74, 138, 53, 0.4);
 }
 
 /* ── Blob decoration ── */
 .blob {
   border-radius: 72% 28% 46% 54% / 41% 60% 40% 59%;
 }
+
+/* ── Glucose chart glow ── */
+.recharts-area-curve {
+  filter: drop-shadow(0 2px 4px rgba(74, 138, 53, 0.2));
+}
+
+/* ── Tab underline animation ── */
+.tab-underline {
+  position: relative;
+}
+.tab-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #3a6e28;
+  border-radius: 2px 2px 0 0;
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tab-underline.active::after {
+  transform: scaleX(1);
+}
+
+/* ── Premium input ── */
+.input-premium {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input-premium::placeholder { color: #94a3b8; }
+.input-premium:focus {
+  border-color: #4a8a35;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 138, 53, 0.12);
+}
+.input-premium:hover:not(:focus) { border-color: #cbd5e1; }

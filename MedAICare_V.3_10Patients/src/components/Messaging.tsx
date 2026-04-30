@@ -229,13 +229,13 @@ function Avatar({ name, size = 'md', online = false, role }: {
 
 function EmptyConversation() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-5 p-8 bg-sage-50">
+    <div className="flex-1 flex flex-col items-center justify-center gap-5 p-8 bg-slate-50">
       <div className="w-20 h-20 rounded-3xl bg-blue-50 ring-1 ring-blue-200 flex items-center justify-center">
         <MessageSquare className="w-10 h-10 text-blue-400" strokeWidth={1.5} />
       </div>
       <div className="text-center max-w-sm">
-        <div className="text-[16px] font-bold text-sage-900 mb-1.5">Vos échanges sécurisés</div>
-        <div className="text-[13px] text-sage-500 leading-relaxed">
+        <div className="text-[16px] font-bold text-slate-900 mb-1.5">Vos échanges sécurisés</div>
+        <div className="text-[13px] text-slate-500 leading-relaxed">
           Sélectionnez une conversation pour consulter votre historique d'échanges avec votre équipe soignante.
         </div>
       </div>
@@ -288,13 +288,13 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-sage-100 shrink-0 bg-white">
-        <button onClick={onBack} className="w-8 h-8 rounded-xl hover:bg-sage-100 flex items-center justify-center transition lg:hidden">
-          <ArrowLeft className="w-4 h-4 text-sage-600" />
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 shrink-0 bg-white">
+        <button onClick={onBack} className="w-8 h-8 rounded-xl hover:bg-slate-100 flex items-center justify-center transition lg:hidden">
+          <ArrowLeft className="w-4 h-4 text-slate-600" />
         </button>
         <Avatar name={otherName === 'Moi' ? 'M' : otherName} size="md" online role={otherRole} />
         <div className="flex-1 min-w-0">
-          <div className="text-[14px] font-bold text-sage-900 truncate flex items-center gap-2">
+          <div className="text-[14px] font-bold text-slate-900 truncate flex items-center gap-2">
             {otherName}
             {otherRole === 'clinician' && (
               <span className="px-1.5 py-0.5 rounded-md bg-blue-100 ring-1 ring-blue-200 text-[9.5px] font-bold text-blue-700 uppercase tracking-wider">Pro</span>
@@ -302,7 +302,7 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
           </div>
           <div className="flex items-center gap-1.5">
             <Circle className="w-1.5 h-1.5 fill-brand-500 text-brand-500" />
-            <span className="text-[11px] text-sage-400 font-medium">{subtitle} · En ligne</span>
+            <span className="text-[11px] text-slate-400 font-medium">{subtitle} · En ligne</span>
           </div>
         </div>
         <div className="flex items-center gap-0.5">
@@ -311,24 +311,24 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
             { title: 'Visioconsultation', Icon: Video },
             { title: 'Plus', Icon: MoreVertical },
           ].map(({ title, Icon }) => (
-            <button key={title} title={title} className="w-9 h-9 rounded-xl hover:bg-sage-100 flex items-center justify-center transition group">
-              <Icon className="w-4 h-4 text-sage-400 group-hover:text-sage-700 transition" />
+            <button key={title} title={title} className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center transition group">
+              <Icon className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition" />
             </button>
           ))}
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6 bg-sage-50 scroll-smooth">
+      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6 bg-slate-50 scroll-smooth">
         {grouped.map(group => (
           <div key={group.dayKey}>
             {/* Day separator */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 h-px bg-sage-200" />
-              <span className="text-[10.5px] text-sage-400 font-semibold px-2.5 py-1 rounded-full bg-white ring-1 ring-sage-200 capitalize">
+              <div className="flex-1 h-px bg-slate-200" />
+              <span className="text-[10.5px] text-slate-400 font-semibold px-2.5 py-1 rounded-full bg-white ring-1 ring-slate-200 capitalize">
                 {group.label}
               </span>
-              <div className="flex-1 h-px bg-sage-200" />
+              <div className="flex-1 h-px bg-slate-200" />
             </div>
 
             <div className="space-y-1.5">
@@ -359,7 +359,7 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
                         'px-4 py-2.5 text-[13.5px] leading-relaxed shadow-sm',
                         isMine
                           ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-sage-200 text-sage-800',
+                          : 'bg-white border border-slate-200 text-slate-800',
                         isMine
                           ? cn('rounded-2xl', isFirstOfBurst && 'rounded-tr-2xl', isLastOfBurst ? 'rounded-br-md' : 'rounded-br-2xl')
                           : cn('rounded-2xl', isFirstOfBurst && 'rounded-tl-2xl', isLastOfBurst ? 'rounded-bl-md' : 'rounded-bl-2xl')
@@ -372,14 +372,14 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
                           'flex items-center gap-1 mt-1 px-1 opacity-60 group-hover:opacity-100 transition',
                           isMine ? 'flex-row-reverse' : 'flex-row'
                         )}>
-                          <span className="text-[10px] text-sage-400 font-medium tabular-nums">
+                          <span className="text-[10px] text-slate-400 font-medium tabular-nums">
                             {new Date(msg.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                           </span>
                           {isMine && (
                             <span title={msg.read ? `Lu ${msg.readAt ? formatSmartTime(msg.readAt) : ''}` : 'Envoyé'}>
                               {msg.read
                                 ? <CheckCheck className="w-3.5 h-3.5 text-blue-500" />
-                                : <Check className="w-3.5 h-3.5 text-sage-300" />}
+                                : <Check className="w-3.5 h-3.5 text-slate-300" />}
                             </span>
                           )}
                         </div>
@@ -395,13 +395,13 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
       </div>
 
       {/* Composer */}
-      <div className="px-4 py-3 border-t border-sage-100 shrink-0 bg-white">
+      <div className="px-4 py-3 border-t border-slate-100 shrink-0 bg-white">
         <div className="flex items-end gap-2">
-          <button title="Joindre un fichier" className="w-10 h-10 rounded-xl hover:bg-sage-100 flex items-center justify-center transition group shrink-0">
-            <Paperclip className="w-4 h-4 text-sage-400 group-hover:text-sage-700 transition" />
+          <button title="Joindre un fichier" className="w-10 h-10 rounded-xl hover:bg-slate-100 flex items-center justify-center transition group shrink-0">
+            <Paperclip className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition" />
           </button>
 
-          <div className="flex-1 rounded-2xl bg-sage-50 border border-sage-200 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-400/20 transition-all overflow-hidden">
+          <div className="flex-1 rounded-2xl bg-slate-50 border border-slate-200 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-400/20 transition-all overflow-hidden">
             <textarea
               ref={inputRef}
               value={text}
@@ -409,7 +409,7 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
               onKeyDown={handleKey}
               placeholder="Écrivez votre message…"
               rows={1}
-              className="w-full px-4 py-3 bg-transparent text-[13.5px] text-sage-800 placeholder:text-sage-400 resize-none focus:outline-none max-h-[140px]"
+              className="w-full px-4 py-3 bg-transparent text-[13.5px] text-slate-800 placeholder:text-slate-400 resize-none focus:outline-none max-h-[140px]"
               style={{ minHeight: '44px' }}
               onInput={e => {
                 const t = e.currentTarget;
@@ -419,8 +419,8 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
             />
           </div>
 
-          <button title="Emoji" className="w-10 h-10 rounded-xl hover:bg-sage-100 flex items-center justify-center transition group shrink-0">
-            <Smile className="w-4 h-4 text-sage-400 group-hover:text-sage-700 transition" />
+          <button title="Emoji" className="w-10 h-10 rounded-xl hover:bg-slate-100 flex items-center justify-center transition group shrink-0">
+            <Smile className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition" />
           </button>
 
           <button
@@ -430,7 +430,7 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
               'w-11 h-11 rounded-xl flex items-center justify-center transition-all shrink-0',
               text.trim()
                 ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-[0_4px_12px_rgba(37,99,235,0.3)] hover:scale-105 active:scale-95'
-                : 'bg-sage-100 text-sage-300 cursor-not-allowed'
+                : 'bg-slate-100 text-slate-300 cursor-not-allowed'
             )}
           >
             <Send className="w-4 h-4" />
@@ -439,9 +439,9 @@ function ConversationView({ thread, messages, currentUserId, currentRole, onSend
         <div className="flex items-center justify-between mt-2 px-1">
           <div className="flex items-center gap-1.5">
             <Shield className="w-3 h-3 text-brand-600" />
-            <span className="text-[10px] text-sage-400 font-medium">Chiffré de bout en bout · Conforme HDS · RGPD</span>
+            <span className="text-[10px] text-slate-400 font-medium">Chiffré de bout en bout · Conforme HDS · RGPD</span>
           </div>
-          <span className="text-[10px] text-sage-300 font-medium">Entrée pour envoyer · Maj+Entrée saut de ligne</span>
+          <span className="text-[10px] text-slate-300 font-medium">Entrée pour envoyer · Maj+Entrée saut de ligne</span>
         </div>
       </div>
     </div>
@@ -470,27 +470,27 @@ function ThreadItem({ thread, isActive, currentRole, onClick }: {
         'w-full flex items-start gap-3 px-4 py-3.5 text-left transition-all relative border-l-2',
         isActive
           ? 'bg-blue-50 border-l-blue-500'
-          : 'hover:bg-sage-50 border-l-transparent'
+          : 'hover:bg-slate-50 border-l-transparent'
       )}
     >
       <Avatar name={otherName === 'Moi' ? 'M' : otherName} size="md" online role={otherRole} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-0.5">
-          <span className={cn('text-[13.5px] truncate', hasUnread ? 'text-sage-900 font-bold' : 'text-sage-700 font-semibold')}>
+          <span className={cn('text-[13.5px] truncate', hasUnread ? 'text-slate-900 font-bold' : 'text-slate-700 font-semibold')}>
             {otherName}
           </span>
           {thread.lastMessage && (
-            <span className={cn('text-[10.5px] shrink-0 tabular-nums font-medium', hasUnread ? 'text-blue-600' : 'text-sage-400')}>
+            <span className={cn('text-[10.5px] shrink-0 tabular-nums font-medium', hasUnread ? 'text-blue-600' : 'text-slate-400')}>
               {formatSmartTime(thread.lastMessage.timestamp)}
             </span>
           )}
         </div>
-        <div className="text-[10.5px] text-sage-400 mb-1 truncate font-medium">{subtitle}</div>
+        <div className="text-[10.5px] text-slate-400 mb-1 truncate font-medium">{subtitle}</div>
         {thread.lastMessage && (
           <div className="flex items-center justify-between gap-2">
-            <div className={cn('text-[12px] truncate flex-1 font-medium', hasUnread ? 'text-sage-700' : 'text-sage-400')}>
+            <div className={cn('text-[12px] truncate flex-1 font-medium', hasUnread ? 'text-slate-700' : 'text-slate-400')}>
               {thread.lastMessage.senderRole === currentRole && (
-                <span className="text-sage-300 mr-1">Vous :</span>
+                <span className="text-slate-300 mr-1">Vous :</span>
               )}
               {thread.lastMessage.text}
             </div>
@@ -589,15 +589,15 @@ export default function Messaging({ compact = false }: MessagingProps) {
   if (compact) {
     return (
       <div className="flex flex-col h-full min-h-[500px]">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-sage-100 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-2">
             <MessageSquare className="w-4 h-4 text-blue-500" />
-            <span className="text-[14px] font-bold text-sage-900">Messagerie</span>
+            <span className="text-[14px] font-bold text-slate-900">Messagerie</span>
             {totalUnread > 0 && (
               <span className="px-1.5 py-0.5 rounded-full bg-coral-500 text-white text-[10px] font-bold">{totalUnread}</span>
             )}
           </div>
-          <span className="text-[10.5px] text-sage-400 font-medium">Chiffré · HDS</span>
+          <span className="text-[10.5px] text-slate-400 font-medium">Chiffré · HDS</span>
         </div>
 
         {activeThread
@@ -609,34 +609,34 @@ export default function Messaging({ compact = false }: MessagingProps) {
 
   // ─── Full screen ──────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-[calc(100vh-180px)] min-h-[560px] rounded-2xl overflow-hidden border border-sage-200 bg-white card-shadow">
+    <div className="flex h-[calc(100vh-180px)] min-h-[560px] rounded-2xl overflow-hidden border border-slate-200 bg-white card-shadow">
       {/* Thread list */}
       <div className={cn(
-        'w-full lg:w-[320px] border-r border-sage-100 flex flex-col shrink-0 bg-white',
+        'w-full lg:w-[320px] border-r border-slate-100 flex flex-col shrink-0 bg-white',
         activeThreadId ? 'hidden lg:flex' : 'flex'
       )}>
-        <div className="px-4 pt-4 pb-3 border-b border-sage-100 shrink-0">
+        <div className="px-4 pt-4 pb-3 border-b border-slate-100 shrink-0">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <span className="text-[17px] font-black text-sage-900">Messages</span>
+              <span className="text-[17px] font-black text-slate-900">Messages</span>
               {totalUnread > 0 && (
                 <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold">
                   {totalUnread}
                 </span>
               )}
             </div>
-            <button title="Nouvelle conversation" className="w-8 h-8 rounded-xl bg-sage-100 hover:bg-sage-200 flex items-center justify-center transition">
-              <Plus className="w-4 h-4 text-sage-600" />
+            <button title="Nouvelle conversation" className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition">
+              <Plus className="w-4 h-4 text-slate-600" />
             </button>
           </div>
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-sage-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Rechercher…"
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-sage-50 border border-sage-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 text-[12.5px] text-sage-800 placeholder:text-sage-400 focus:outline-none transition"
+              className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 text-[12.5px] text-slate-800 placeholder:text-slate-400 focus:outline-none transition"
             />
           </div>
         </div>
@@ -645,7 +645,7 @@ export default function Messaging({ compact = false }: MessagingProps) {
           {filteredThreads.length === 0 ? (
             <div className="p-8 text-center">
               <MessageSquare className="w-8 h-8 text-sage-200 mx-auto mb-2" strokeWidth={1.5} />
-              <div className="text-[12px] text-sage-400 font-medium">
+              <div className="text-[12px] text-slate-400 font-medium">
                 {searchQuery ? 'Aucun résultat' : 'Aucune conversation'}
               </div>
             </div>
@@ -662,12 +662,12 @@ export default function Messaging({ compact = false }: MessagingProps) {
           )}
         </div>
 
-        <div className="px-4 py-3.5 border-t border-sage-100 shrink-0 bg-sage-50">
+        <div className="px-4 py-3.5 border-t border-slate-100 shrink-0 bg-slate-50">
           <div className="flex items-center gap-2">
             <Avatar name={user?.name || 'Moi'} size="sm" role={currentRole} />
             <div className="flex-1 min-w-0">
-              <div className="text-[12px] font-bold text-sage-900 truncate">{user?.name || 'Moi'}</div>
-              <div className="text-[10px] text-sage-400 font-medium capitalize">{currentRole}</div>
+              <div className="text-[12px] font-bold text-slate-900 truncate">{user?.name || 'Moi'}</div>
+              <div className="text-[10px] text-slate-400 font-medium capitalize">{currentRole}</div>
             </div>
           </div>
         </div>

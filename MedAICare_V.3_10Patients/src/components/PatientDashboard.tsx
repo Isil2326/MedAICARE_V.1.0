@@ -9,7 +9,8 @@ import {
   Droplets, Activity, AlertTriangle, Sparkles, ChevronRight,
   TrendingUp, TrendingDown, Minus, CheckCircle2, Plus, Utensils,
   Syringe, Footprints, FileText, Target, Pill, Clock,
-  Calendar, Info, ScanLine,
+  Calendar, Info, ScanLine, BarChart3, BookOpen, FlaskConical,
+  Stethoscope, PenLine,
 } from 'lucide-react';
 import LabReportScanner from './LabReportScanner';
 import LabReportTimeline from './LabReportTimeline';
@@ -44,15 +45,15 @@ function formatDateRelative(ts: number) {
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 function PatientTabs({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
-  const tabs: { key: Tab; label: string; emoji: string }[] = [
-    { key: 'today',     label: "Aujourd'hui", emoji: '📊' },
-    { key: 'journal',   label: 'Journal',     emoji: '📓' },
-    { key: 'trends',    label: 'Tendances',   emoji: '📈' },
-    { key: 'bilans',    label: 'Mes bilans',  emoji: '🔬' },
-    { key: 'treatment', label: 'Traitement',  emoji: '💊' },
+  const tabs: { key: Tab; label: string; Icon: React.ComponentType<{ className?: string }> }[] = [
+    { key: 'today',     label: "Aujourd'hui", Icon: Activity },
+    { key: 'journal',   label: 'Journal',     Icon: BookOpen },
+    { key: 'trends',    label: 'Tendances',   Icon: BarChart3 },
+    { key: 'bilans',    label: 'Mes bilans',  Icon: FlaskConical },
+    { key: 'treatment', label: 'Traitement',  Icon: Stethoscope },
   ];
   return (
-    <div className="flex items-center gap-1 p-1 rounded-2xl bg-sage-100 border border-sage-200 overflow-x-auto">
+    <div className="flex items-center gap-0 border-b border-slate-200 overflow-x-auto bg-white rounded-t-xl px-1">
       {tabs.map(t => {
         const isActive = active === t.key;
         return (
@@ -60,13 +61,13 @@ function PatientTabs({ active, onChange }: { active: Tab; onChange: (t: Tab) => 
             key={t.key}
             onClick={() => onChange(t.key)}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all whitespace-nowrap',
+              'flex items-center gap-2 px-4 py-3 text-[13px] font-semibold transition-all whitespace-nowrap border-b-2 -mb-px relative',
               isActive
-                ? 'bg-white text-brand-700 shadow-sm'
-                : 'text-sage-500 hover:text-sage-800 hover:bg-white/60'
+                ? 'text-brand-700 border-brand-600'
+                : 'text-slate-400 border-transparent hover:text-slate-700 hover:border-slate-300'
             )}
           >
-            <span className="text-[14px]">{t.emoji}</span>
+            <t.Icon className="w-3.5 h-3.5" />
             {t.label}
           </button>
         );
@@ -76,20 +77,20 @@ function PatientTabs({ active, onChange }: { active: Tab; onChange: (t: Tab) => 
 }
 
 // ── Quick action button ───────────────────────────────────────────────────────
-function QuickAction({ emoji, label, onClick, bg, text }: {
-  emoji: string; label: string; onClick: () => void;
+function QuickAction({ icon: Icon, label, onClick, bg, text }: {
+  icon: React.ComponentType<{ className?: string }>; label: string; onClick: () => void;
   bg: string; text: string;
 }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        'flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-2xl transition-all hover:scale-[1.03] active:scale-[0.97]',
+        'flex flex-col items-center justify-center gap-2 p-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] border border-transparent hover:border-current/10',
         bg
       )}
     >
-      <span className="text-[22px]">{emoji}</span>
-      <span className={cn('text-[11.5px] font-bold', text)}>{label}</span>
+      <Icon className={cn('w-5 h-5', text)} />
+      <span className={cn('text-[11px] font-bold', text)}>{label}</span>
     </button>
   );
 }
@@ -150,7 +151,7 @@ export default function PatientDashboard() {
   if (!currentVitals || !recommendation) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex items-center gap-2 text-sage-400 text-[13px] font-medium">
+        <div className="flex items-center gap-2 text-slate-400 text-[13px] font-medium">
           <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
           Chargement de vos données…
         </div>
@@ -177,34 +178,34 @@ export default function PatientDashboard() {
     <div className="space-y-5 pb-20 lg:pb-0">
 
       {/* ── GREETING BANNER ── */}
-      <div className="bg-white rounded-2xl card-shadow p-5">
+      <div className="bg-white rounded-2xl card-shadow border border-slate-100/80 p-5">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <div className="text-[13px] font-semibold text-sage-400 uppercase tracking-wide">Bonjour</div>
-            <div className="text-[26px] font-black text-sage-900 mt-0.5">{firstName} 👋</div>
-            <div className="text-[13px] text-sage-400 mt-0.5 capitalize">
+            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">Tableau de bord</div>
+            <div className="text-[26px] font-bold text-slate-900 mt-0.5 tracking-tight">{firstName}</div>
+            <div className="text-[12.5px] text-slate-400 mt-0.5 font-medium capitalize">
               {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
             </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <div className="text-center">
-              <div className="text-[11px] text-sage-400 font-semibold uppercase tracking-wide mb-1">TIR 7j</div>
-              <div className="text-[22px] font-black text-brand-600 tabular-nums">{tir.inRange}%</div>
-              <div className="text-[10px] text-brand-500 font-semibold">
-                {tir.inRange >= 70 ? '🎉 Super !' : tir.inRange >= 55 ? '📈 Bien' : '💪 Continue'}
+              <div className="text-[10.5px] text-slate-400 font-semibold uppercase tracking-widest mb-1">TIR 7j</div>
+              <div className="text-[24px] font-bold text-brand-600 tabular-nums leading-none">{tir.inRange}%</div>
+              <div className={`text-[10px] font-bold mt-1 ${tir.inRange >= 70 ? 'text-brand-500' : tir.inRange >= 55 ? 'text-amber-500' : 'text-coral-500'}`}>
+                {tir.inRange >= 70 ? 'Excellent' : tir.inRange >= 55 ? 'Correct' : 'À améliorer'}
               </div>
             </div>
-            <div className="w-px h-10 bg-sage-100" />
+            <div className="w-px h-10 bg-slate-100" />
             <div className="text-center">
-              <div className="text-[11px] text-sage-400 font-semibold uppercase tracking-wide mb-1">Moy. 7j</div>
-              <div className="text-[22px] font-black text-sage-800 tabular-nums">{stats.avgGlucose}</div>
-              <div className="text-[10px] text-sage-400 font-medium">mg/dL</div>
+              <div className="text-[10.5px] text-slate-400 font-semibold uppercase tracking-widest mb-1">Moy. 7j</div>
+              <div className="text-[24px] font-bold text-slate-800 tabular-nums leading-none">{stats.avgGlucose}</div>
+              <div className="text-[10px] text-slate-400 font-medium mt-1">mg/dL</div>
             </div>
-            <div className="w-px h-10 bg-sage-100" />
+            <div className="w-px h-10 bg-slate-100" />
             <div className="text-center">
-              <div className="text-[11px] text-sage-400 font-semibold uppercase tracking-wide mb-1">GMI</div>
-              <div className="text-[22px] font-black text-sage-800 tabular-nums">{stats.gmi}%</div>
-              <div className="text-[10px] text-sage-400 font-medium">estimé</div>
+              <div className="text-[10.5px] text-slate-400 font-semibold uppercase tracking-widest mb-1">GMI</div>
+              <div className="text-[24px] font-bold text-slate-800 tabular-nums leading-none">{stats.gmi}%</div>
+              <div className="text-[10px] text-slate-400 font-medium mt-1">estimé</div>
             </div>
           </div>
         </div>
@@ -246,8 +247,8 @@ export default function PatientDashboard() {
                   <Droplets className="w-5 h-5 text-brand-600" />
                 </div>
                 <div>
-                  <div className="text-[12px] font-bold text-sage-400 uppercase tracking-wide">Votre glycémie</div>
-                  <div className="text-[11px] text-sage-300 mt-0.5">FreeStyle Libre 3 · {formatTime(currentVitals.timestamp)}</div>
+                  <div className="text-[12px] font-bold text-slate-400 uppercase tracking-wide">Votre glycémie</div>
+                  <div className="text-[11px] text-slate-300 mt-0.5">FreeStyle Libre 3 · {formatTime(currentVitals.timestamp)}</div>
                 </div>
               </div>
               <div className={cn('px-3 py-1 rounded-full text-[12px] font-bold ring-1', glucoseStatus.bg, glucoseStatus.color)}>
@@ -256,10 +257,10 @@ export default function PatientDashboard() {
             </div>
 
             <div className="flex items-end gap-3 mb-5">
-              <div className="text-[68px] leading-none font-black text-sage-900 tabular-nums">{glucose}</div>
+              <div className="text-[68px] leading-none font-black text-slate-900 tabular-nums">{glucose}</div>
               <div className="pb-2">
-                <div className="text-[15px] text-sage-400 font-semibold">mg/dL</div>
-                <div className="text-[11px] text-sage-300 mt-1">Cible {carePlan.glucoseTargetMin}–{carePlan.glucoseTargetMax}</div>
+                <div className="text-[15px] text-slate-400 font-semibold">mg/dL</div>
+                <div className="text-[11px] text-slate-300 mt-1">Cible {carePlan.glucoseTargetMin}–{carePlan.glucoseTargetMax}</div>
               </div>
             </div>
 
@@ -291,19 +292,19 @@ export default function PatientDashboard() {
           <div className="space-y-4">
             {/* Actions rapides */}
             <div className="bg-white rounded-2xl card-shadow p-4">
-              <div className="text-[12px] font-bold text-sage-500 uppercase tracking-wide mb-3">Enregistrer</div>
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Enregistrer</div>
               <div className="grid grid-cols-2 gap-2">
-                <QuickAction emoji="🍽️" label="Repas"    bg="bg-brand-50 hover:bg-brand-100"  text="text-brand-700" onClick={() => setLogModal('meal')} />
-                <QuickAction emoji="💉" label="Insuline" bg="bg-coral-50 hover:bg-coral-100"  text="text-coral-600" onClick={() => setLogModal('insulin')} />
-                <QuickAction emoji="🏃" label="Sport"    bg="bg-amber-50 hover:bg-amber-100"  text="text-amber-700" onClick={() => setLogModal('activity')} />
-                <QuickAction emoji="📝" label="Note"     bg="bg-blue-50 hover:bg-blue-100"    text="text-blue-700"  onClick={() => setLogModal('note')} />
+                <QuickAction icon={Utensils}  label="Repas"    bg="bg-brand-50 hover:bg-brand-100"  text="text-brand-700" onClick={() => setLogModal('meal')} />
+                <QuickAction icon={Syringe}   label="Insuline" bg="bg-coral-50 hover:bg-coral-100"  text="text-coral-600" onClick={() => setLogModal('insulin')} />
+                <QuickAction icon={Footprints} label="Sport"   bg="bg-amber-50 hover:bg-amber-100"  text="text-amber-700" onClick={() => setLogModal('activity')} />
+                <QuickAction icon={PenLine}   label="Note"     bg="bg-blue-50 hover:bg-blue-100"    text="text-blue-700"  onClick={() => setLogModal('note')} />
               </div>
             </div>
 
             {/* Derniers évènements */}
             <div className="bg-white rounded-2xl card-shadow p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-[12px] font-bold text-sage-500 uppercase tracking-wide">Récent</div>
+                <div className="text-[12px] font-bold text-slate-500 uppercase tracking-wide">Récent</div>
                 <button onClick={() => setTab('journal')} className="text-[12px] text-brand-600 hover:text-brand-700 font-semibold flex items-center gap-0.5">
                   Tout voir <ChevronRight className="w-3.5 h-3.5" />
                 </button>
@@ -328,13 +329,13 @@ export default function PatientDashboard() {
                     <Sparkles className="w-5 h-5 text-violet-600" />
                   </div>
                   <div>
-                    <div className="text-[12px] font-bold text-sage-400 uppercase tracking-wide">Recommandation IA</div>
-                    <div className="text-[15px] font-bold text-sage-900 mt-0.5">{recommendation.action}</div>
+                    <div className="text-[12px] font-bold text-slate-400 uppercase tracking-wide">Recommandation IA</div>
+                    <div className="text-[15px] font-bold text-slate-900 mt-0.5">{recommendation.action}</div>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowXAI(!showXAI)}
-                  className="px-3 py-1.5 rounded-xl bg-sage-50 hover:bg-sage-100 text-sage-600 text-[12px] font-semibold flex items-center gap-1.5 transition shrink-0 border border-sage-200"
+                  className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[12px] font-semibold flex items-center gap-1.5 transition shrink-0 border border-slate-200"
                 >
                   <Info className="w-3.5 h-3.5" />
                   {showXAI ? 'Masquer' : 'Pourquoi ?'}
@@ -344,7 +345,7 @@ export default function PatientDashboard() {
               {recommendation.actionDetails.length > 0 && (
                 <ul className="space-y-2 mb-4">
                   {recommendation.actionDetails.slice(0, 3).map((d, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-[13px] text-sage-700">
+                    <li key={i} className="flex items-start gap-2.5 text-[13px] text-slate-700">
                       <CheckCircle2 className="w-4 h-4 text-brand-500 mt-0.5 shrink-0" />
                       {d}
                     </li>
@@ -355,18 +356,18 @@ export default function PatientDashboard() {
               {/* XAI panel */}
               {showXAI && recommendation.trendPrediction && recommendation.rationale && (
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-sage-50 border border-sage-100 p-4">
+                  <div className="rounded-xl bg-slate-50 border border-slate-100 p-4">
                     <div className="flex items-center gap-2 mb-3">
                       {recommendation.trendPrediction.direction === 'rising'
                         ? <TrendingUp className="w-4 h-4 text-coral-500" />
                         : recommendation.trendPrediction.direction === 'falling'
                         ? <TrendingDown className="w-4 h-4 text-amber-500" />
                         : <Minus className="w-4 h-4 text-brand-500" />}
-                      <div className="text-[12.5px] font-bold text-sage-800">Prévision dans 30 min</div>
+                      <div className="text-[12.5px] font-bold text-slate-800">Prévision dans 30 min</div>
                     </div>
                     <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-[30px] font-black text-sage-900 tabular-nums">{recommendation.trendPrediction.predictedValue}</span>
-                      <span className="text-[12px] text-sage-400 font-medium">mg/dL</span>
+                      <span className="text-[30px] font-black text-slate-900 tabular-nums">{recommendation.trendPrediction.predictedValue}</span>
+                      <span className="text-[12px] text-slate-400 font-medium">mg/dL</span>
                       <span className={cn('text-[12px] font-bold ml-1',
                         recommendation.trendPrediction.predictedChange > 0 ? 'text-coral-500' :
                         recommendation.trendPrediction.predictedChange < 0 ? 'text-amber-500' : 'text-brand-500'
@@ -374,17 +375,17 @@ export default function PatientDashboard() {
                         ({recommendation.trendPrediction.predictedChange > 0 ? '+' : ''}{recommendation.trendPrediction.predictedChange})
                       </span>
                     </div>
-                    <div className="text-[12px] text-sage-500 leading-relaxed">{recommendation.trendPrediction.explanation}</div>
+                    <div className="text-[12px] text-slate-500 leading-relaxed">{recommendation.trendPrediction.explanation}</div>
                   </div>
-                  <div className="rounded-xl bg-sage-50 border border-sage-100 p-4">
+                  <div className="rounded-xl bg-slate-50 border border-slate-100 p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <CheckCircle2 className="w-4 h-4 text-brand-500" />
-                      <div className="text-[12.5px] font-bold text-sage-800">Pourquoi cette recommandation</div>
+                      <div className="text-[12.5px] font-bold text-slate-800">Pourquoi cette recommandation</div>
                     </div>
-                    <div className="text-[12.5px] text-sage-600 leading-relaxed mb-3">{recommendation.rationale.reasoning}</div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-sage-200">
-                      <span className="text-[11px] text-sage-400 font-medium">Fiabilité</span>
-                      <div className="flex-1 h-2 rounded-full bg-sage-200 overflow-hidden">
+                    <div className="text-[12.5px] text-slate-600 leading-relaxed mb-3">{recommendation.rationale.reasoning}</div>
+                    <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+                      <span className="text-[11px] text-slate-400 font-medium">Fiabilité</span>
+                      <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
                         <div className="h-full bg-brand-500 rounded-full transition-all duration-700" style={{ width: `${recommendation.confidence * 100}%` }} />
                       </div>
                       <span className="text-[11px] text-brand-600 font-bold tabular-nums">{(recommendation.confidence * 100).toFixed(0)}%</span>
@@ -402,8 +403,8 @@ export default function PatientDashboard() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-[17px] font-black text-sage-900">Mon journal 📓</div>
-              <div className="text-[12.5px] text-sage-400 font-medium">{events.length} évènements · 2 derniers jours</div>
+              <div className="text-[17px] font-bold text-slate-900 tracking-tight">Mon journal</div>
+              <div className="text-[12.5px] text-slate-400 font-medium">{events.length} évènements · 2 derniers jours</div>
             </div>
             <button
               onClick={() => setLogModal('meal')}
@@ -412,10 +413,10 @@ export default function PatientDashboard() {
               <Plus className="w-4 h-4" /> Ajouter
             </button>
           </div>
-          <div className="bg-white rounded-2xl card-shadow divide-y divide-sage-50">
+          <div className="bg-white rounded-2xl card-shadow divide-y divide-slate-100">
             {events.length === 0 ? (
-              <div className="p-12 text-center text-sage-400 text-[13px] font-medium">
-                <div className="text-[32px] mb-2">📓</div>
+              <div className="p-12 text-center text-slate-400 text-[13px] font-medium">
+                <BookOpen className="w-10 h-10 mx-auto mb-3 text-slate-200" />
                 Aucun évènement enregistré. Commencez à loguer !
               </div>
             ) : (
@@ -441,14 +442,14 @@ export default function PatientDashboard() {
               { label: 'Capteur actif',    value: `${stats.timeActive}%`, unit: '', target: '≥ 70%', ok: stats.timeActive >= 70 },
             ].map(s => (
               <div key={s.label} className="bg-white rounded-2xl card-shadow p-4">
-                <div className="text-[11px] text-sage-400 font-bold uppercase tracking-wide mb-1.5">{s.label}</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wide mb-1.5">{s.label}</div>
                 <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-[26px] font-black text-sage-900 tabular-nums">{s.value}</span>
-                  {s.unit && <span className="text-[12px] text-sage-400 font-medium">{s.unit}</span>}
+                  <span className="text-[26px] font-black text-slate-900 tabular-nums">{s.value}</span>
+                  {s.unit && <span className="text-[12px] text-slate-400 font-medium">{s.unit}</span>}
                 </div>
                 <div className="flex items-center gap-1.5 mt-2">
                   <div className={cn('w-2 h-2 rounded-full', s.ok ? 'bg-brand-500' : 'bg-amber-400')} />
-                  <span className="text-[10.5px] text-sage-400">Cible {s.target}</span>
+                  <span className="text-[10.5px] text-slate-400">Cible {s.target}</span>
                 </div>
               </div>
             ))}
@@ -461,8 +462,8 @@ export default function PatientDashboard() {
                 <Target className="w-4.5 h-4.5 text-brand-600" />
               </div>
               <div>
-                <div className="text-[15px] font-bold text-sage-900">Time in Range</div>
-                <div className="text-[12px] text-sage-400">14 derniers jours · Standard ATTD</div>
+                <div className="text-[15px] font-bold text-slate-900">Time in Range</div>
+                <div className="text-[12px] text-slate-400">14 derniers jours · Standard ATTD</div>
               </div>
             </div>
             <TIRBar tir={tir} />
@@ -475,8 +476,8 @@ export default function PatientDashboard() {
                 <Activity className="w-4.5 h-4.5 text-blue-600" />
               </div>
               <div>
-                <div className="text-[15px] font-bold text-sage-900">Profil Glycémique Ambulatoire (AGP)</div>
-                <div className="text-[12px] text-sage-400">Médiane et percentiles sur 24h · 14 jours agrégés</div>
+                <div className="text-[15px] font-bold text-slate-900">Profil Glycémique Ambulatoire (AGP)</div>
+                <div className="text-[12px] text-slate-400">Médiane et percentiles sur 24h · 14 jours agrégés</div>
               </div>
             </div>
             <div className="h-[260px] -mx-2">
@@ -504,7 +505,7 @@ export default function PatientDashboard() {
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
-            <div className="flex items-center gap-5 mt-3 text-[11px] text-sage-400 font-medium">
+            <div className="flex items-center gap-5 mt-3 text-[11px] text-slate-400 font-medium">
               <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-brand-500 rounded inline-block" /> Médiane</span>
               <span className="flex items-center gap-1.5"><span className="w-4 h-3 bg-brand-200/50 rounded-sm inline-block" /> Percentile 25–75</span>
               <span className="flex items-center gap-1.5"><span className="w-4 h-3 border border-brand-200 rounded-sm inline-block" /> Cible 70–180</span>
@@ -523,18 +524,18 @@ export default function PatientDashboard() {
                 <Target className="w-4.5 h-4.5 text-brand-600" />
               </div>
               <div>
-                <div className="text-[15px] font-bold text-sage-900">Mes objectifs</div>
-                <div className="text-[12px] text-sage-400">Définis avec votre médecin</div>
+                <div className="text-[15px] font-bold text-slate-900">Mes objectifs</div>
+                <div className="text-[12px] text-slate-400">Définis avec votre médecin</div>
               </div>
             </div>
-            <div className="space-y-1.5 divide-y divide-sage-50">
+            <div className="space-y-1.5 divide-y divide-slate-100">
               <ObjectiveRow label="Glycémie cible"         value={`${carePlan.glucoseTargetMin}–${carePlan.glucoseTargetMax} mg/dL`} />
               <ObjectiveRow label="HbA1c cible"            value={`< ${carePlan.hba1cTarget}%`} />
               <ObjectiveRow label="Insuline basale"        value={`${carePlan.insulinBasal} UI/jour`} />
               <ObjectiveRow label="Ratio glucides"         value={`1 UI / ${carePlan.insulinRatioCarbs} g`} />
               <ObjectiveRow label="Sensibilité insuline"   value={`1 UI ↓ ${carePlan.insulinSensitivity} mg/dL`} />
             </div>
-            <div className="mt-4 pt-3 border-t border-sage-100 flex items-center gap-2 text-[11px] text-sage-400 font-medium">
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-400 font-medium">
               <Clock className="w-3.5 h-3.5" />
               Mis à jour {formatDateRelative(carePlan.updatedAt)} · {carePlan.updatedBy}
             </div>
@@ -547,23 +548,23 @@ export default function PatientDashboard() {
                 <Pill className="w-4.5 h-4.5 text-violet-600" />
               </div>
               <div>
-                <div className="text-[15px] font-bold text-sage-900">Mes médicaments</div>
-                <div className="text-[12px] text-sage-400">{medications.filter(m => m.active).length} traitements actifs</div>
+                <div className="text-[15px] font-bold text-slate-900">Mes médicaments</div>
+                <div className="text-[12px] text-slate-400">{medications.filter(m => m.active).length} traitements actifs</div>
               </div>
             </div>
             <div className="space-y-2.5">
               {medications.map(m => (
-                <div key={m.id} className="rounded-xl bg-sage-50 border border-sage-100 p-3">
+                <div key={m.id} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[13px] font-bold text-sage-900">{m.name}</div>
-                      <div className="text-[12px] text-sage-400 mt-0.5">{m.dosage} · {m.frequency}</div>
+                      <div className="text-[13px] font-bold text-slate-900">{m.name}</div>
+                      <div className="text-[12px] text-slate-400 mt-0.5">{m.dosage} · {m.frequency}</div>
                     </div>
                     {m.active && (
                       <span className="px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 text-[10px] font-bold shrink-0">Actif</span>
                     )}
                   </div>
-                  <div className="text-[11px] text-sage-400 mt-2 flex items-center gap-1.5 font-medium">
+                  <div className="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5 font-medium">
                     <Calendar className="w-3 h-3" />
                     {m.prescribedBy}
                   </div>
@@ -574,8 +575,8 @@ export default function PatientDashboard() {
 
           {/* Note médecin */}
           <div className="lg:col-span-2 bg-brand-50 border border-brand-100 rounded-2xl p-5">
-            <div className="text-[12px] font-bold text-brand-600 uppercase tracking-wide mb-2">Note de votre médecin 👨‍⚕️</div>
-            <div className="text-[14px] text-sage-700 leading-relaxed italic">"{carePlan.notes}"</div>
+            <div className="text-[12px] font-bold text-brand-600 uppercase tracking-wide mb-2 flex items-center gap-2"><Stethoscope className="w-3.5 h-3.5" /> Note de votre médecin</div>
+            <div className="text-[14px] text-slate-700 leading-relaxed italic">"{carePlan.notes}"</div>
           </div>
         </div>
       )}
@@ -589,8 +590,8 @@ export default function PatientDashboard() {
                 <ScanLine className="w-5 h-5 text-brand-600" />
               </div>
               <div>
-                <div className="text-[15px] font-bold text-sage-900">Vos bilans biologiques 🔬</div>
-                <div className="text-[12px] text-sage-500 mt-0.5">Scannez le QR code de vos rapports pour enrichir votre dossier et améliorer la précision de l'IA.</div>
+                <div className="text-[15px] font-bold text-slate-900">Vos bilans biologiques</div>
+                <div className="text-[12px] text-slate-500 mt-0.5">Scannez le QR code de vos rapports pour enrichir votre dossier et améliorer la précision de l'IA.</div>
               </div>
             </div>
             <button
@@ -604,17 +605,17 @@ export default function PatientDashboard() {
           {labReports.length > 0 && (
             <div className="grid grid-cols-3 gap-3">
               <div className="bg-white rounded-xl card-shadow p-3 text-center">
-                <div className="text-[11px] text-sage-400 font-bold uppercase tracking-wide">Total</div>
-                <div className="text-[24px] font-black text-sage-900 tabular-nums mt-0.5">{labReports.length}</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wide">Total</div>
+                <div className="text-[24px] font-black text-slate-900 tabular-nums mt-0.5">{labReports.length}</div>
               </div>
               <div className="bg-white rounded-xl card-shadow p-3 text-center">
-                <div className="text-[11px] text-sage-400 font-bold uppercase tracking-wide">Dernier</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wide">Dernier</div>
                 <div className="text-[13px] font-bold text-brand-600 mt-1">
                   {new Date(labReports[0].payload.reportDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
                 </div>
               </div>
               <div className="bg-white rounded-xl card-shadow p-3 text-center">
-                <div className="text-[11px] text-sage-400 font-bold uppercase tracking-wide">Anomalies</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wide">Anomalies</div>
                 <div className="text-[24px] font-black text-amber-500 tabular-nums mt-0.5">
                   {labReports.reduce((sum, r) => sum + r.validation.anomaliesDetected.length, 0)}
                 </div>
@@ -623,7 +624,7 @@ export default function PatientDashboard() {
           )}
 
           <div className="bg-white rounded-2xl card-shadow p-5">
-            <div className="text-[15px] font-bold text-sage-900 mb-4 flex items-center gap-2">
+            <div className="text-[15px] font-bold text-slate-900 mb-4 flex items-center gap-2">
               <FileText className="w-4.5 h-4.5 text-brand-500" />
               Historique de mes analyses
             </div>
@@ -663,15 +664,24 @@ export default function PatientDashboard() {
 // SUB-COMPONENTS
 // ============================================================================
 
+const EVENT_ICONS = {
+  meal:     Utensils,
+  insulin:  Syringe,
+  activity: Footprints,
+  note:     PenLine,
+  glucose:  Droplets,
+};
+
 function EventRow({ event, compact = false }: { event: PatientEvent; compact?: boolean }) {
   const config = {
-    meal:     { emoji: '🍽️', bg: 'bg-brand-50',  text: 'text-brand-700' },
-    insulin:  { emoji: '💉', bg: 'bg-coral-50',   text: 'text-coral-600' },
-    activity: { emoji: '🏃', bg: 'bg-amber-50',   text: 'text-amber-700' },
-    note:     { emoji: '📝', bg: 'bg-blue-50',    text: 'text-blue-700' },
-    glucose:  { emoji: '🩸', bg: 'bg-sage-50',    text: 'text-sage-600' },
+    meal:     { bg: 'bg-brand-50',  text: 'text-brand-700' },
+    insulin:  { bg: 'bg-coral-50',  text: 'text-coral-600' },
+    activity: { bg: 'bg-amber-50',  text: 'text-amber-700' },
+    note:     { bg: 'bg-blue-50',   text: 'text-blue-700' },
+    glucose:  { bg: 'bg-slate-100', text: 'text-slate-600' },
   };
   const c = config[event.type];
+  const EventIcon = EVENT_ICONS[event.type];
 
   let title = '';
   let subtitle = '';
@@ -694,14 +704,14 @@ function EventRow({ event, compact = false }: { event: PatientEvent; compact?: b
 
   return (
     <div className="flex items-center gap-3">
-      <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-[18px]', c.bg)}>
-        {c.emoji}
+      <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center shrink-0', c.bg)}>
+        <EventIcon className={cn('w-4.5 h-4.5', c.text)} />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[13px] font-semibold text-sage-900 truncate">{title}</div>
-        <div className="text-[11.5px] text-sage-400 truncate">{subtitle}</div>
+        <div className="text-[13px] font-semibold text-slate-800 truncate">{title}</div>
+        <div className="text-[11.5px] text-slate-400 truncate font-medium">{subtitle}</div>
       </div>
-      <div className="text-[11px] text-sage-300 font-medium shrink-0">
+      <div className="text-[11px] text-slate-300 font-medium shrink-0">
         {compact ? formatTime(event.timestamp) : formatDateRelative(event.timestamp)}
       </div>
     </div>
@@ -711,8 +721,8 @@ function EventRow({ event, compact = false }: { event: PatientEvent; compact?: b
 function ObjectiveRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between py-2.5">
-      <span className="text-[13px] text-sage-500 font-medium">{label}</span>
-      <span className="text-[13px] text-sage-900 font-bold tabular-nums">{value}</span>
+      <span className="text-[13px] text-slate-500 font-medium">{label}</span>
+      <span className="text-[13px] text-slate-900 font-bold tabular-nums">{value}</span>
     </div>
   );
 }
@@ -744,9 +754,9 @@ function TIRBar({ tir }: { tir: { veryLow: number; low: number; inRange: number;
             <div className={cn('w-1 h-10 rounded-full mt-0.5 shrink-0', s.dot)} />
             <div>
               <div className={cn('text-[12px] font-bold', s.textColor)}>{s.label}</div>
-              <div className="text-[10.5px] text-sage-400">{s.range} mg/dL</div>
-              <div className="text-[10.5px] text-sage-700 font-semibold">{s.value}%</div>
-              <div className="text-[10px] text-sage-300">cible {s.target}</div>
+              <div className="text-[10.5px] text-slate-400">{s.range} mg/dL</div>
+              <div className="text-[10.5px] text-slate-700 font-semibold">{s.value}%</div>
+              <div className="text-[10px] text-slate-300">cible {s.target}</div>
             </div>
           </div>
         ))}
@@ -784,13 +794,13 @@ function LogEventModal({ type, onClose, onSubmit }: {
     else onSubmit({ noteText });
   };
 
-  const inputCls = 'w-full px-3.5 py-2.5 bg-sage-50 border border-sage-200 rounded-xl text-[14px] text-sage-900 focus:ring-2 focus:ring-brand-400/25 focus:border-brand-300 transition';
+  const inputCls = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[14px] text-slate-900 focus:ring-2 focus:ring-brand-400/25 focus:border-brand-300 transition';
   const selectCls = inputCls;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-sage-900/30 backdrop-blur-sm" onClick={onClose}>
       <div className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-[0_20px_80px_rgba(30,46,26,0.2)] p-6" onClick={e => e.stopPropagation()}>
-        <div className="text-[17px] font-black text-sage-900 mb-5">{titles[type]}</div>
+        <div className="text-[17px] font-black text-slate-900 mb-5">{titles[type]}</div>
 
         {type === 'meal' && (
           <div className="space-y-3">
@@ -812,7 +822,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
                 {(['rapid', 'basal'] as const).map(t => (
                   <button key={t} onClick={() => setInsulinType(t)}
                     className={cn('flex-1 px-3 py-2.5 rounded-xl text-[13px] font-bold transition',
-                      insulinType === t ? 'bg-coral-100 text-coral-700 ring-1 ring-coral-300' : 'bg-sage-50 text-sage-500 border border-sage-200'
+                      insulinType === t ? 'bg-coral-100 text-coral-700 ring-1 ring-coral-300' : 'bg-slate-50 text-slate-500 border border-slate-200'
                     )}>
                     {t === 'rapid' ? 'Rapide ⚡' : 'Basale 🌙'}
                   </button>
@@ -840,7 +850,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
                 {(['low', 'moderate', 'high'] as const).map(i => (
                   <button key={i} onClick={() => setIntensity(i)}
                     className={cn('flex-1 px-3 py-2.5 rounded-xl text-[13px] font-bold transition',
-                      intensity === i ? 'bg-amber-100 text-amber-700 ring-1 ring-amber-300' : 'bg-sage-50 text-sage-500 border border-sage-200'
+                      intensity === i ? 'bg-amber-100 text-amber-700 ring-1 ring-amber-300' : 'bg-slate-50 text-slate-500 border border-slate-200'
                     )}>
                     {i === 'low' ? '🚶 Faible' : i === 'moderate' ? '🚴 Modérée' : '🏃 Intense'}
                   </button>
@@ -858,7 +868,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
         )}
 
         <div className="flex gap-3 mt-6">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-sage-50 hover:bg-sage-100 text-sage-600 text-[14px] font-bold border border-sage-200 transition">
+          <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[14px] font-bold border border-slate-200 transition">
             Annuler
           </button>
           <button onClick={handleSubmit} className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[14px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.3)]">
@@ -873,7 +883,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-[12px] text-sage-500 font-bold uppercase tracking-wide mb-1.5">{label}</label>
+      <label className="block text-[12px] text-slate-500 font-bold uppercase tracking-wide mb-1.5">{label}</label>
       {children}
     </div>
   );

@@ -40,7 +40,7 @@ const STATUS_STYLES: Record<Prescription['status'], { label: string; bg: string;
   active:       { label: 'Active',    bg: 'bg-brand-100', text: 'text-brand-700',  ring: 'ring-brand-200',  dot: 'bg-brand-500' },
   paused:       { label: 'En pause',  bg: 'bg-amber-100', text: 'text-amber-700',  ring: 'ring-amber-200',  dot: 'bg-amber-500' },
   discontinued: { label: 'Arrêtée',   bg: 'bg-coral-50',  text: 'text-coral-600',  ring: 'ring-coral-200',  dot: 'bg-coral-500' },
-  completed:    { label: 'Terminée',  bg: 'bg-sage-100',  text: 'text-sage-500',   ring: 'ring-sage-200',   dot: 'bg-sage-400' },
+  completed:    { label: 'Terminée',  bg: 'bg-slate-100',  text: 'text-slate-500',   ring: 'ring-slate-200',   dot: 'bg-sage-400' },
 };
 
 const ACTION_LABELS: Record<PrescriptionAudit['action'], string> = {
@@ -54,8 +54,8 @@ const ACTION_LABELS: Record<PrescriptionAudit['action'], string> = {
 };
 
 // ── Shared form field styles ──────────────────────────────────────────────────
-const FIELD_BASE = 'w-full px-3 py-2 rounded-xl bg-sage-50 border border-sage-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 text-[13px] text-sage-900 focus:outline-none transition placeholder:text-sage-400';
-const LABEL_BASE = 'block text-[10.5px] uppercase tracking-wider text-sage-500 font-bold mb-1.5';
+const FIELD_BASE = 'w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 text-[13px] text-slate-900 focus:outline-none transition placeholder:text-slate-400';
+const LABEL_BASE = 'block text-[10.5px] uppercase tracking-wider text-slate-500 font-bold mb-1.5';
 
 // ── Modal overlay ─────────────────────────────────────────────────────────────
 function ModalOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
@@ -128,25 +128,25 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-2xl bg-white border border-sage-200 shadow-2xl flex flex-col">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sage-100 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
           <div>
-            <div className="text-[16px] font-bold text-sage-900 flex items-center gap-2">
+            <div className="text-[16px] font-bold text-slate-900 flex items-center gap-2">
               <Pill className="w-4.5 h-4.5 text-blue-600" />
               Nouvelle prescription
             </div>
-            <div className="text-[11.5px] text-sage-400 mt-0.5 font-medium">Patient : {patientName}</div>
+            <div className="text-[11.5px] text-slate-400 mt-0.5 font-medium">Patient : {patientName}</div>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-sage-100 flex items-center justify-center transition">
-            <X className="w-4 h-4 text-sage-500" />
+          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-slate-100 flex items-center justify-center transition">
+            <X className="w-4 h-4 text-slate-500" />
           </button>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* Drug library */}
-          <div className="w-[280px] border-r border-sage-100 flex flex-col shrink-0 bg-sage-50">
-            <div className="p-3 border-b border-sage-100">
+          <div className="w-[280px] border-r border-slate-100 flex flex-col shrink-0 bg-slate-50">
+            <div className="p-3 border-b border-slate-100">
               <input
                 type="text"
                 value={search}
@@ -157,18 +157,18 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
             </div>
             <div className="flex-1 overflow-y-auto">
               {filtered.length === 0 ? (
-                <div className="p-4 text-[12px] text-sage-400 text-center font-medium">Aucun résultat</div>
+                <div className="p-4 text-[12px] text-slate-400 text-center font-medium">Aucun résultat</div>
               ) : filtered.map((d, i) => (
                 <button
                   key={i}
                   onClick={() => handleSelect(d)}
                   className={cn(
-                    'w-full text-left px-3 py-2.5 border-b border-sage-100 transition',
+                    'w-full text-left px-3 py-2.5 border-b border-slate-100 transition',
                     selected?.drugName === d.drugName ? 'bg-blue-50 border-l-2 border-l-blue-500' : 'hover:bg-white'
                   )}
                 >
-                  <div className="text-[12.5px] font-bold text-sage-900">{d.drugName}</div>
-                  <div className="text-[10.5px] text-sage-400 mt-0.5 font-medium">{d.genericName}</div>
+                  <div className="text-[12.5px] font-bold text-slate-900">{d.drugName}</div>
+                  <div className="text-[10.5px] text-slate-400 mt-0.5 font-medium">{d.genericName}</div>
                   <div className="text-[10px] text-blue-600 font-semibold mt-0.5">{DRUG_CLASS_LABELS[d.drugClass]}</div>
                 </button>
               ))}
@@ -180,13 +180,13 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
             {!selected ? (
               <div className="h-full flex flex-col items-center justify-center text-center">
                 <Pill className="w-12 h-12 mb-3 text-sage-200" strokeWidth={1.5} />
-                <div className="text-[13px] text-sage-400 font-medium">Sélectionnez un médicament dans la liste</div>
+                <div className="text-[13px] text-slate-400 font-medium">Sélectionnez un médicament dans la liste</div>
               </div>
             ) : (
               <div className="space-y-4">
                 <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-100">
-                  <div className="text-[14px] font-bold text-sage-900">{selected.drugName}</div>
-                  <div className="text-[11.5px] text-sage-500 mt-0.5 font-medium">{selected.genericName} · {DRUG_CLASS_LABELS[selected.drugClass]}</div>
+                  <div className="text-[14px] font-bold text-slate-900">{selected.drugName}</div>
+                  <div className="text-[11.5px] text-slate-500 mt-0.5 font-medium">{selected.genericName} · {DRUG_CLASS_LABELS[selected.drugClass]}</div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
@@ -200,7 +200,7 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
                   </div>
                   <div>
                     <label className={LABEL_BASE}>Voie</label>
-                    <div className="px-3 py-2 rounded-xl bg-sage-100 border border-sage-200 text-[13px] text-sage-600 font-medium capitalize">{selected.route}</div>
+                    <div className="px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-[13px] text-slate-600 font-medium capitalize">{selected.route}</div>
                   </div>
                 </div>
 
@@ -245,13 +245,13 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-t border-sage-100 bg-sage-50 shrink-0">
-          <div className="flex items-center gap-1.5 text-[10.5px] text-sage-400 font-medium">
+        <div className="flex items-center justify-between px-6 py-3.5 border-t border-slate-100 bg-slate-50 shrink-0">
+          <div className="flex items-center gap-1.5 text-[10.5px] text-slate-400 font-medium">
             <Shield className="w-3 h-3 text-brand-600" />
             Prescription tracée · Signature SHA-256 · Conforme IEC 62304
           </div>
           <div className="flex gap-2">
-            <button onClick={onClose} className="px-4 py-2 rounded-xl text-[12.5px] text-sage-600 hover:bg-sage-200 transition font-semibold">
+            <button onClick={onClose} className="px-4 py-2 rounded-xl text-[12.5px] text-slate-600 hover:bg-slate-200 transition font-semibold">
               Annuler
             </button>
             <button
@@ -261,7 +261,7 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
                 'px-4 py-2 rounded-xl text-[12.5px] font-bold flex items-center gap-1.5 transition',
                 canSubmit && !submitting
                   ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-[0_2px_8px_rgba(37,99,235,0.3)]'
-                  : 'bg-sage-100 text-sage-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
               )}
             >
               <FileSignature className="w-3.5 h-3.5" />
@@ -304,14 +304,14 @@ function ModifyPrescriptionModal({ prescription, clinicianName, clinicianId, onC
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-2xl bg-white border border-sage-200 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-sage-100">
-          <div className="text-[15px] font-bold text-sage-900 flex items-center gap-2">
+      <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="text-[15px] font-bold text-slate-900 flex items-center gap-2">
             <Edit3 className="w-4 h-4 text-blue-600" />
             Modifier — {prescription.drugName}
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-sage-100 flex items-center justify-center transition">
-            <X className="w-4 h-4 text-sage-500" />
+          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-slate-100 flex items-center justify-center transition">
+            <X className="w-4 h-4 text-slate-500" />
           </button>
         </div>
 
@@ -323,7 +323,7 @@ function ModifyPrescriptionModal({ prescription, clinicianName, clinicianId, onC
                 {dose !== prescription.dose && <span className="ml-2 text-amber-600 normal-case font-bold">→ modifiée</span>}
               </label>
               <input type="number" min={0} step={0.1} value={dose} onChange={e => setDose(Number(e.target.value))} className={FIELD_BASE} />
-              <div className="text-[10px] text-sage-400 mt-1 font-medium">Avant : {prescription.dose}</div>
+              <div className="text-[10px] text-slate-400 mt-1 font-medium">Avant : {prescription.dose}</div>
             </div>
             <div>
               <label className={LABEL_BASE}>Timing</label>
@@ -337,7 +337,7 @@ function ModifyPrescriptionModal({ prescription, clinicianName, clinicianId, onC
               {frequency !== prescription.frequency && <span className="ml-2 text-amber-600 normal-case font-bold">→ modifiée</span>}
             </label>
             <input type="text" value={frequency} onChange={e => setFrequency(e.target.value)} className={FIELD_BASE} />
-            <div className="text-[10px] text-sage-400 mt-1 font-medium">Avant : {prescription.frequency}</div>
+            <div className="text-[10px] text-slate-400 mt-1 font-medium">Avant : {prescription.frequency}</div>
           </div>
 
           <div>
@@ -349,14 +349,14 @@ function ModifyPrescriptionModal({ prescription, clinicianName, clinicianId, onC
               placeholder="Ex : HbA1c à 8.2% malgré observance, augmentation dose basale…"
               className={cn(FIELD_BASE, 'resize-none')}
             />
-            <div className="text-[10px] text-sage-400 mt-1 font-medium">{reason.length}/10 minimum · Tracé dans l'audit</div>
+            <div className="text-[10px] text-slate-400 mt-1 font-medium">{reason.length}/10 minimum · Tracé dans l'audit</div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-5 py-3.5 border-t border-sage-100 bg-sage-50">
-          <div className="text-[10.5px] text-sage-400 font-medium">Version actuelle : v{prescription.version}</div>
+        <div className="flex items-center justify-between px-5 py-3.5 border-t border-slate-100 bg-slate-50">
+          <div className="text-[10.5px] text-slate-400 font-medium">Version actuelle : v{prescription.version}</div>
           <div className="flex gap-2">
-            <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-[12px] text-sage-600 hover:bg-sage-200 transition font-semibold">Annuler</button>
+            <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-[12px] text-slate-600 hover:bg-slate-200 transition font-semibold">Annuler</button>
             <button
               onClick={handleSubmit}
               disabled={!canSubmit || submitting}
@@ -364,7 +364,7 @@ function ModifyPrescriptionModal({ prescription, clinicianName, clinicianId, onC
                 'px-3 py-1.5 rounded-xl text-[12px] font-bold flex items-center gap-1.5 transition',
                 canSubmit && !submitting
                   ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-[0_2px_8px_rgba(37,99,235,0.3)]'
-                  : 'bg-sage-100 text-sage-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
               )}
             >
               <Check className="w-3.5 h-3.5" />
@@ -408,11 +408,11 @@ function StatusChangeModal({ prescription, action, clinicianName, clinicianId, o
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-2xl bg-white border border-sage-200 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-sage-100">
-          <div className="text-[15px] font-bold text-sage-900">{config.title} — {prescription.drugName}</div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-sage-100 flex items-center justify-center transition">
-            <X className="w-4 h-4 text-sage-500" />
+      <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="text-[15px] font-bold text-slate-900">{config.title} — {prescription.drugName}</div>
+          <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-slate-100 flex items-center justify-center transition">
+            <X className="w-4 h-4 text-slate-500" />
           </button>
         </div>
 
@@ -429,14 +429,14 @@ function StatusChangeModal({ prescription, action, clinicianName, clinicianId, o
           </div>
         </div>
 
-        <div className="flex items-center justify-end px-5 py-3.5 border-t border-sage-100 bg-sage-50 gap-2">
-          <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-[12px] text-sage-600 hover:bg-sage-200 transition font-semibold">Annuler</button>
+        <div className="flex items-center justify-end px-5 py-3.5 border-t border-slate-100 bg-slate-50 gap-2">
+          <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-[12px] text-slate-600 hover:bg-slate-200 transition font-semibold">Annuler</button>
           <button
             onClick={handleSubmit}
             disabled={reason.trim().length < 10 || submitting}
             className={cn(
               'px-3 py-1.5 rounded-xl text-[12px] font-bold text-white transition shadow-[0_2px_8px_rgba(0,0,0,0.15)]',
-              reason.trim().length >= 10 && !submitting ? config.btnClass : 'bg-sage-200 text-sage-400 cursor-not-allowed'
+              reason.trim().length >= 10 && !submitting ? config.btnClass : 'bg-slate-200 text-slate-400 cursor-not-allowed'
             )}
           >
             {submitting ? '…' : `Confirmer ${config.title.toLowerCase()}`}
@@ -487,16 +487,16 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
   return (
     <div className="bg-white rounded-2xl card-shadow overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-sage-100">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">
             <Pill className="w-4.5 h-4.5 text-blue-600" />
-            <span className="text-[14px] font-bold text-sage-900">Plan thérapeutique</span>
+            <span className="text-[14px] font-bold text-slate-900">Plan thérapeutique</span>
             <span className="px-1.5 py-0.5 rounded-full bg-brand-100 ring-1 ring-brand-200 text-[10px] font-bold text-brand-700">
               {activeCount} active{activeCount > 1 ? 's' : ''}
             </span>
           </div>
-          <div className="text-[10.5px] text-sage-400 mt-0.5 font-medium">
+          <div className="text-[10.5px] text-slate-400 mt-0.5 font-medium">
             {readOnly ? 'Vue patient (lecture seule)' : 'Édition réservée au clinicien'} · Audit automatique
           </div>
         </div>
@@ -511,7 +511,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-0.5 px-4 py-2 border-b border-sage-100 bg-sage-50">
+      <div className="flex items-center gap-0.5 px-4 py-2 border-b border-slate-100 bg-slate-50">
         {([
           { k: 'active', l: `Actives (${activeCount})` },
           { k: 'all',    l: `Tout l'historique (${totalCount})` },
@@ -522,7 +522,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
             onClick={() => setTab(t.k)}
             className={cn(
               'px-3 py-1.5 rounded-xl text-[11.5px] font-semibold transition',
-              tab === t.k ? 'bg-white text-sage-900 shadow-sm ring-1 ring-sage-200' : 'text-sage-500 hover:text-sage-800 hover:bg-white/60'
+              tab === t.k ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
             )}
           >
             {t.l}
@@ -536,21 +536,21 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
           visiblePrescriptions.length === 0 ? (
             <div className="text-center py-10">
               <Pill className="w-10 h-10 text-sage-200 mx-auto mb-3" strokeWidth={1.5} />
-              <div className="text-[13px] text-sage-500 font-semibold">Aucune prescription</div>
-              {!readOnly && <div className="text-[11px] text-sage-400 mt-1">Cliquez sur "Prescrire" pour ajouter un traitement.</div>}
+              <div className="text-[13px] text-slate-500 font-semibold">Aucune prescription</div>
+              {!readOnly && <div className="text-[11px] text-slate-400 mt-1">Cliquez sur "Prescrire" pour ajouter un traitement.</div>}
             </div>
           ) : (
             <div className="space-y-2">
               {visiblePrescriptions.map(rx => {
                 const style = STATUS_STYLES[rx.status];
                 return (
-                  <div key={rx.id} className="rounded-2xl bg-sage-50 border border-sage-200 p-4 hover:bg-white hover:border-sage-300 transition">
+                  <div key={rx.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4 hover:bg-white hover:border-sage-300 transition">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[14px] font-bold text-sage-900">{rx.drugName}</span>
+                          <span className="text-[14px] font-bold text-slate-900">{rx.drugName}</span>
                           {rx.genericName && rx.genericName !== rx.drugName && (
-                            <span className="text-[11px] text-sage-400 font-medium">({rx.genericName})</span>
+                            <span className="text-[11px] text-slate-400 font-medium">({rx.genericName})</span>
                           )}
                           <span className={cn('px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 ring-1', style.bg, style.text, style.ring)}>
                             <span className={cn('w-1.5 h-1.5 rounded-full', style.dot)} />
@@ -563,12 +563,12 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
                           )}
                         </div>
 
-                        <div className="text-[12px] text-sage-600 mt-1.5 flex items-center gap-3 flex-wrap font-medium">
-                          <span><strong className="text-sage-900 font-bold">{rx.dose} {rx.doseUnit}</strong> — {rx.frequency}</span>
+                        <div className="text-[12px] text-slate-600 mt-1.5 flex items-center gap-3 flex-wrap font-medium">
+                          <span><strong className="text-slate-900 font-bold">{rx.dose} {rx.doseUnit}</strong> — {rx.frequency}</span>
                           {rx.timing && <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{rx.timing}</span>}
                         </div>
 
-                        <div className="text-[11px] text-sage-400 mt-1 font-medium">{rx.indication}</div>
+                        <div className="text-[11px] text-slate-400 mt-1 font-medium">{rx.indication}</div>
 
                         {rx.warnings && rx.warnings.length > 0 && (
                           <div className="mt-2 flex items-start gap-1.5">
@@ -577,7 +577,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
                           </div>
                         )}
 
-                        <div className="flex items-center gap-3 mt-2 text-[10px] text-sage-400 font-medium">
+                        <div className="flex items-center gap-3 mt-2 text-[10px] text-slate-400 font-medium">
                           <span>Prescrit par {rx.prescribedBy}</span>
                           <span className="text-sage-200">·</span>
                           <span>{formatDate(rx.prescribedAt)}</span>
@@ -593,19 +593,19 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
                       {!readOnly && rx.status !== 'discontinued' && (
                         <div className="flex items-center gap-1 shrink-0">
                           <button onClick={() => setModifying(rx)} title="Modifier" className="w-8 h-8 rounded-xl hover:bg-blue-100 flex items-center justify-center transition group">
-                            <Edit3 className="w-3.5 h-3.5 text-sage-400 group-hover:text-blue-600" />
+                            <Edit3 className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600" />
                           </button>
                           {rx.status === 'active' ? (
                             <button onClick={() => setStatusChange({ rx, action: 'pause' })} title="Mettre en pause" className="w-8 h-8 rounded-xl hover:bg-amber-100 flex items-center justify-center transition group">
-                              <Pause className="w-3.5 h-3.5 text-sage-400 group-hover:text-amber-600" />
+                              <Pause className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-600" />
                             </button>
                           ) : (
                             <button onClick={() => setStatusChange({ rx, action: 'resume' })} title="Reprendre" className="w-8 h-8 rounded-xl hover:bg-brand-100 flex items-center justify-center transition group">
-                              <Play className="w-3.5 h-3.5 text-sage-400 group-hover:text-brand-600" />
+                              <Play className="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-600" />
                             </button>
                           )}
                           <button onClick={() => setStatusChange({ rx, action: 'discontinue' })} title="Arrêter" className="w-8 h-8 rounded-xl hover:bg-coral-50 flex items-center justify-center transition group">
-                            <X className="w-3.5 h-3.5 text-sage-400 group-hover:text-coral-600" />
+                            <X className="w-3.5 h-3.5 text-slate-400 group-hover:text-coral-600" />
                           </button>
                         </div>
                       )}
@@ -619,7 +619,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
           audit.length === 0 ? (
             <div className="text-center py-10">
               <History className="w-10 h-10 text-sage-200 mx-auto mb-3" strokeWidth={1.5} />
-              <div className="text-[13px] text-sage-500 font-semibold">Aucune action dans l'historique</div>
+              <div className="text-[13px] text-slate-500 font-semibold">Aucune action dans l'historique</div>
             </div>
           ) : (
             <div className="space-y-2">
@@ -627,49 +627,49 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
                 const isExpanded = expandedAudit === entry.id;
                 const rx         = prescriptions.find(p => p.id === entry.prescriptionId);
                 return (
-                  <div key={entry.id} className="rounded-2xl border border-sage-200 overflow-hidden">
+                  <div key={entry.id} className="rounded-2xl border border-slate-200 overflow-hidden">
                     <button
                       onClick={() => setExpandedAudit(isExpanded ? null : entry.id)}
-                      className="w-full flex items-center gap-3 p-3.5 hover:bg-sage-50 transition text-left"
+                      className="w-full flex items-center gap-3 p-3.5 hover:bg-slate-50 transition text-left"
                     >
                       <div className="w-9 h-9 rounded-xl bg-blue-100 ring-1 ring-blue-200 flex items-center justify-center shrink-0">
                         <Activity className="w-4 h-4 text-blue-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[12.5px] font-bold text-sage-900">{ACTION_LABELS[entry.action]}</span>
-                          <span className="text-[11.5px] text-sage-400 font-medium">— {rx?.drugName || 'Prescription supprimée'}</span>
+                          <span className="text-[12.5px] font-bold text-slate-900">{ACTION_LABELS[entry.action]}</span>
+                          <span className="text-[11.5px] text-slate-400 font-medium">— {rx?.drugName || 'Prescription supprimée'}</span>
                         </div>
-                        <div className="text-[10.5px] text-sage-400 mt-0.5 font-medium">
+                        <div className="text-[10.5px] text-slate-400 mt-0.5 font-medium">
                           {entry.performedBy} · {formatRelative(entry.performedAt)} · {formatDate(entry.performedAt)}
                         </div>
                       </div>
-                      <ChevronRight className={cn('w-4 h-4 text-sage-400 transition-transform shrink-0', isExpanded && 'rotate-90')} />
+                      <ChevronRight className={cn('w-4 h-4 text-slate-400 transition-transform shrink-0', isExpanded && 'rotate-90')} />
                     </button>
 
                     {isExpanded && (
-                      <div className="px-4 pb-4 space-y-3 border-t border-sage-100 bg-sage-50 pt-3">
+                      <div className="px-4 pb-4 space-y-3 border-t border-slate-100 bg-slate-50 pt-3">
                         <div>
-                          <div className="text-[10px] uppercase tracking-wider text-sage-400 font-bold mb-1">Justification</div>
-                          <div className="text-[12.5px] text-sage-700 italic font-medium">"{entry.reason}"</div>
+                          <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Justification</div>
+                          <div className="text-[12.5px] text-slate-700 italic font-medium">"{entry.reason}"</div>
                         </div>
                         {entry.before && entry.after && (
                           <div className="grid grid-cols-2 gap-2">
                             <div className="p-2.5 rounded-xl bg-coral-50 border border-coral-200">
                               <div className="text-[9.5px] uppercase tracking-wider text-coral-600 font-bold mb-1">Avant</div>
-                              <div className="text-[11px] text-sage-700 font-mono font-semibold">
+                              <div className="text-[11px] text-slate-700 font-mono font-semibold">
                                 {entry.before.dose} {entry.before.doseUnit} — {entry.before.frequency}
                               </div>
                             </div>
                             <div className="p-2.5 rounded-xl bg-brand-50 border border-brand-200">
                               <div className="text-[9.5px] uppercase tracking-wider text-brand-600 font-bold mb-1">Après</div>
-                              <div className="text-[11px] text-sage-700 font-mono font-semibold">
+                              <div className="text-[11px] text-slate-700 font-mono font-semibold">
                                 {entry.after.dose} {entry.after.doseUnit} — {entry.after.frequency}
                               </div>
                             </div>
                           </div>
                         )}
-                        <div className="flex items-center gap-1.5 text-[9.5px] text-sage-400 font-medium">
+                        <div className="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-medium">
                           <Shield className="w-2.5 h-2.5 text-brand-500" />
                           <span className="font-mono">SHA-256 : {entry.signature}</span>
                         </div>

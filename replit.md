@@ -31,13 +31,22 @@ Configured as a static site deployment:
 - **Build:** `cd MedAICare_V.3_10Patients && npm run build`
 - **Public Dir:** `MedAICare_V.3_10Patients/dist`
 
-## Design System — Thème Naturel (mySugr-inspired)
-Complete light/warm redesign as of v4.0.0:
-- **Brand palette:** brand-green (#4a8a35), sage (#f4f6ef), coral (#e8441f), amber — all defined as CSS custom properties in `index.css`
-- **Design primitives:** `src/components/ui/primitives.tsx` — Card, StatTile, Badge, TimeRangeSelector
-- All dark `bg-white/[0.x]` / `text-white/x` classes replaced with light sage/white equivalents
-- Components fully converted: `DoctorDashboard`, `PatientDashboard`, `Messaging`, `AuditLog`, `DevicesView`, `TreatmentEditor`, `LabReportTimeline`, `LabReportScanner`, `LandingPage`, `ClinicalRecommendationCard`, `TimeRangeSelector`
-- Engine/auth files intentionally untouched
+## Design System — Premium Healthtech v5.0 (Linear/Notion-level polish)
+Full UI/UX transformation as of v5.0 — minimaliste, lumineux, sobre, rassurant:
+- **Body background:** neutral slate-50 (#f8fafc) — no green tint
+- **Brand palette:** brand-green (#4a8a35/#3a6e28), coral (#e8441f), amber — unchanged brand colors
+- **Slate neutrals:** all text/borders/backgrounds use slate-* tokens for neutral feel
+- **Card shadows:** neutral rgba(15,23,42,...) shadow system (not green-tinted)
+- **Tabs:** underline-style (border-b-2) across all views — no pill containers
+- **Zero emojis:** all navigation, dashboard tabs, quick actions use Lucide icons
+- **Design primitives v5:** `src/components/ui/primitives.tsx` — TabBar, StatTile, Card with slate-100 border
+- **Landing page v5:** mySugr-inspired hero with CSS phone mockup, App Store badges, 3 pillars
+- **AuthModal v5:** premium form, uppercase tracking labels, input-premium class
+- **App.tsx sidebar v5:** square icon containers, active=brand-50+left indicator, no emoji in nav
+- **PatientDashboard v5:** underline tabs (Activity/BookOpen/BarChart3/FlaskConical/Stethoscope), Lucide QuickActions, clean greeting banner
+- **DoctorDashboard v5:** underline ClinicianTabs, premium ClinicalKPI cards with accent colors
+- All secondary views (Messaging, AuditLog, DevicesView) fully converted to slate-* neutrals
+- Demo credentials: patient@demo.fr / clinicien@demo.fr (Demo1234!)
 
 ## Key Features
 - Patient and clinician dashboards with role-based views

@@ -1,5 +1,10 @@
+// ============================================================================
+// AUTH MODAL v5.0 — MediAI Care · Premium Healthtech
+// Formulaire clair, hiérarchie forte, accessible, rassurant
+// ============================================================================
+
 import { useState, useEffect } from 'react';
-import { X, Shield, User, Stethoscope, ArrowRight, Loader2, AlertCircle, CheckCircle2, Heart } from 'lucide-react';
+import { X, Shield, User, Stethoscope, ArrowRight, Loader2, AlertCircle, CheckCircle2, Lock } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { UserRole } from '../auth/authService';
 
@@ -14,9 +19,7 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
   const { login, register } = useAuth();
   const [isLogin, setIsLogin] = useState(defaultMode === 'login');
 
-  useEffect(() => {
-    setIsLogin(defaultMode === 'login');
-  }, [defaultMode, isOpen]);
+  useEffect(() => { setIsLogin(defaultMode === 'login'); }, [defaultMode, isOpen]);
 
   const [email,     setEmail]     = useState('');
   const [password,  setPassword]  = useState('');
@@ -33,7 +36,6 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
     setLoading(true);
     setError('');
     setSuccess('');
-
     try {
       if (isLogin) {
         const result = await login(email, password);
@@ -67,64 +69,54 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
   };
 
   const isPatient = type === 'patient';
-  const accentBg = isPatient ? 'bg-brand-600' : 'bg-blue-600';
-  const accentText = isPatient ? 'text-brand-700' : 'text-blue-700';
-  const accentBorder = isPatient ? 'border-brand-200 focus:ring-brand-400/30' : 'border-blue-200 focus:ring-blue-400/30';
-  const accentBtn = isPatient
-    ? 'bg-brand-600 hover:bg-brand-700 shadow-[0_2px_10px_rgba(58,110,40,0.3)]'
-    : 'bg-blue-600 hover:bg-blue-700 shadow-[0_2px_10px_rgba(37,99,235,0.25)]';
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-sage-900/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-[0_20px_80px_rgba(30,46,26,0.2)] overflow-hidden">
+      <div className="relative w-full max-w-[420px] bg-white rounded-2xl card-shadow-lg overflow-hidden animate-fade-in-up">
 
-        {/* Top accent bar */}
-        <div className={`h-1.5 ${accentBg}`} />
+        {/* Color strip top */}
+        <div className={`h-1 ${isPatient ? 'bg-brand-600' : 'bg-blue-600'}`} />
 
         {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-sage-400 hover:text-sage-700 transition p-1 rounded-lg hover:bg-sage-50"
-        >
-          <X className="w-5 h-5" />
+        <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+          <X className="w-4.5 h-4.5" />
         </button>
 
         <div className="p-7">
-
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-6">
-            <div className={`w-12 h-12 rounded-2xl ${isPatient ? 'bg-brand-100' : 'bg-blue-100'} flex items-center justify-center mb-3`}>
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center mb-3 ${
+              isPatient ? 'bg-brand-100' : 'bg-blue-100'
+            }`}>
               {isPatient
-                ? <User className={`w-6 h-6 ${accentText}`} />
-                : <Stethoscope className={`w-6 h-6 ${accentText}`} />
+                ? <User className="w-5.5 h-5.5 text-brand-700" />
+                : <Stethoscope className="w-5.5 h-5.5 text-blue-700" />
               }
             </div>
-            <h2 className="text-[21px] font-black text-sage-900 tracking-tight">
+            <h2 className="text-[20px] font-bold text-slate-900 tracking-tight">
               {isPatient
-                ? isLogin ? 'Mon Espace Patient'       : 'Créer mon espace'
-                : isLogin ? 'Espace Professionnel'      : 'Accès clinique'}
+                ? isLogin ? 'Connexion patient'     : 'Créer mon espace'
+                : isLogin ? 'Accès professionnel'   : 'Compte clinicien'}
             </h2>
-            <p className="text-[13px] text-sage-500 mt-1 max-w-[260px]">
-              {isPatient
-                ? 'Accès sécurisé à vos données de santé'
-                : 'Réservé aux professionnels de santé'}
+            <p className="text-[12.5px] text-slate-400 mt-1 font-medium">
+              {isPatient ? 'Accès sécurisé à vos données de santé' : 'Réservé aux professionnels de santé habilités'}
             </p>
           </div>
 
           {/* Alerts */}
           {error && (
-            <div className="mb-4 px-4 py-3 rounded-xl bg-coral-50 border border-coral-200 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-coral-500 flex-shrink-0 mt-0.5" />
-              <span className="text-[12.5px] text-coral-700 font-medium">{error}</span>
+            <div className="mb-5 px-4 py-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+              <span className="text-[12.5px] text-red-700 font-medium">{error}</span>
             </div>
           )}
           {success && (
-            <div className="mb-4 px-4 py-3 rounded-xl bg-brand-50 border border-brand-200 flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-5 px-4 py-3 rounded-xl bg-brand-50 border border-brand-200 flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
               <span className="text-[12.5px] text-brand-700 font-semibold">{success}</span>
             </div>
           )}
@@ -133,85 +125,86 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-[12px] font-bold text-sage-700 mb-1.5">Nom complet</label>
+                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Nom complet</label>
                 <input
                   type="text" required value={name} onChange={e => setName(e.target.value)}
-                  placeholder={isPatient ? 'Alexandre Petit' : 'Dr. Sarah Martin'}
-                  className={`w-full px-4 py-2.5 bg-sage-50 border rounded-xl text-[14px] text-sage-900 placeholder-sage-400 transition ${accentBorder}`}
+                  placeholder={isPatient ? 'Alexandre Martin' : 'Dr. Sarah Dupont'}
+                  className="input-premium"
                 />
               </div>
             )}
 
             {type === 'doctor' && !isLogin && (
               <div>
-                <label className="block text-[12px] font-bold text-sage-700 mb-1.5">Spécialité & RPPS</label>
+                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Spécialité & RPPS</label>
                 <input
                   type="text" required value={specialty} onChange={e => setSpecialty(e.target.value)}
                   placeholder="Ex. Endocrinologie / 10100567890"
-                  className={`w-full px-4 py-2.5 bg-sage-50 border rounded-xl text-[14px] text-sage-900 placeholder-sage-400 transition ${accentBorder}`}
+                  className="input-premium"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-[12px] font-bold text-sage-700 mb-1.5">Adresse email</label>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Adresse email</label>
               <input
                 type="email" required value={email} onChange={e => setEmail(e.target.value)}
                 placeholder="votre@email.com"
-                className={`w-full px-4 py-2.5 bg-sage-50 border rounded-xl text-[14px] text-sage-900 placeholder-sage-400 transition ${accentBorder}`}
+                className="input-premium"
               />
             </div>
 
             <div>
-              <label className="block text-[12px] font-bold text-sage-700 mb-1.5">Mot de passe</label>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Mot de passe</label>
               <input
                 type="password" required value={password} onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••" minLength={8}
-                className={`w-full px-4 py-2.5 bg-sage-50 border rounded-xl text-[14px] text-sage-900 placeholder-sage-400 transition ${accentBorder}`}
+                className="input-premium"
               />
               {!isLogin && (
-                <p className="text-[11px] text-sage-400 mt-1.5">8 caractères minimum avec majuscule, minuscule et chiffre</p>
+                <p className="text-[11px] text-slate-400 mt-1.5 font-medium">8 caractères min. — majuscule, minuscule et chiffre requis</p>
               )}
             </div>
 
             <button
               type="submit" disabled={loading}
-              className={`w-full mt-2 py-3 rounded-xl text-white font-bold text-[14px] flex items-center justify-center gap-2 transition ${accentBtn} disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full mt-1 py-3 rounded-xl text-white font-bold text-[14px] flex items-center justify-center gap-2 transition-all ${
+                isPatient
+                  ? 'bg-brand-600 hover:bg-brand-700 shadow-[0_2px_12px_rgba(58,110,40,0.3)]'
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-[0_2px_12px_rgba(37,99,235,0.25)]'
+              } disabled:opacity-40 disabled:cursor-not-allowed`}
             >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  {isLogin ? 'Se connecter' : 'Créer mon compte'}
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
+              {loading
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <>{isLogin ? 'Se connecter' : 'Créer mon compte'}<ArrowRight className="w-4 h-4" /></>
+              }
             </button>
           </form>
 
-          {/* Demo */}
+          {/* Demo access */}
           <div className="mt-3">
             <button
               onClick={fillDemo}
-              className="w-full py-2.5 rounded-xl bg-sage-50 hover:bg-sage-100 border border-sage-200 text-[12.5px] text-sage-600 hover:text-sage-900 font-semibold transition"
+              className="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[12.5px] text-slate-600 hover:text-slate-900 font-semibold transition flex items-center justify-center gap-2"
             >
-              🚀 Utiliser le compte démo
+              <span className="text-brand-600">→</span>
+              Utiliser le compte démonstration
             </button>
           </div>
 
           {/* Footer */}
-          <div className="mt-5 pt-4 border-t border-sage-100 flex flex-col items-center gap-3">
+          <div className="mt-5 pt-4 border-t border-slate-100 flex flex-col items-center gap-3">
             <button
               onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); }}
-              className={`text-[12.5px] font-semibold ${accentText} hover:underline transition`}
+              className={`text-[12.5px] font-semibold ${isPatient ? 'text-brand-700 hover:text-brand-800' : 'text-blue-700 hover:text-blue-800'} hover:underline transition`}
             >
               {isLogin
-                ? isPatient ? "Pas de compte ? Créer mon espace →" : "Pas d'accès ? Demander un compte pro →"
-                : "Déjà un compte ? Se connecter →"}
+                ? isPatient ? "Pas de compte ? Créer mon espace" : "Demander un accès professionnel"
+                : "Déjà un compte ? Se connecter"}
             </button>
-            <div className="flex items-center gap-1.5 text-[11px] text-sage-400">
-              <Shield className="w-3.5 h-3.5 text-brand-500" />
-              Authentification PBKDF2 · Conforme HDS
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
+              <Lock className="w-3 h-3 text-brand-500" />
+              Authentification PBKDF2 · Hébergement HDS France
             </div>
           </div>
         </div>
