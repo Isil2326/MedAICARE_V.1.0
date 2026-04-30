@@ -641,10 +641,10 @@ export default function Messaging({ compact = false }: MessagingProps) {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-sage-50">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-50">
           {filteredThreads.length === 0 ? (
             <div className="p-8 text-center">
-              <MessageSquare className="w-8 h-8 text-sage-200 mx-auto mb-2" strokeWidth={1.5} />
+              <MessageSquare className="w-8 h-8 text-slate-200 mx-auto mb-2" strokeWidth={1.5} />
               <div className="text-[12px] text-slate-400 font-medium">
                 {searchQuery ? 'Aucun résultat' : 'Aucune conversation'}
               </div>

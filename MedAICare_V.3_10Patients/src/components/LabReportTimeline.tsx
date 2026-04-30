@@ -28,9 +28,9 @@ export default function LabReportTimeline({
 
   if (reports.length === 0) {
     return (
-      <div className="text-center py-10 px-4 rounded-2xl border border-dashed border-sage-200 bg-sage-50">
-        <FileText className="w-8 h-8 text-sage-300 mx-auto mb-2" />
-        <p className="text-[13px] text-sage-400 font-medium">{emptyMessage}</p>
+      <div className="text-center py-10 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50">
+        <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <p className="text-[13px] text-slate-400 font-medium">{emptyMessage}</p>
       </div>
     );
   }
@@ -57,13 +57,13 @@ export default function LabReportTimeline({
             key={report.id}
             className={cn(
               'rounded-2xl border overflow-hidden transition-all',
-              isExpanded ? 'border-brand-200 ring-1 ring-brand-100' : 'border-sage-200 hover:border-sage-300'
+              isExpanded ? 'border-brand-200 ring-1 ring-brand-100' : 'border-slate-200 hover:border-slate-300'
             )}
           >
             {/* Header cliquable */}
             <button
               onClick={() => setExpandedId(isExpanded ? null : report.id)}
-              className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-sage-50 transition text-left"
+              className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left"
             >
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className={cn(
@@ -76,23 +76,23 @@ export default function LabReportTimeline({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-[13.5px] text-sage-900 font-bold">{report.payload.laboratory.name}</p>
+                    <p className="text-[13.5px] text-slate-900 font-bold">{report.payload.laboratory.name}</p>
                     {idx === 0 && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-brand-100 ring-1 ring-brand-200 text-brand-700 font-bold">
                         DERNIER
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-sage-400 font-medium">
+                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 font-medium">
                     <Calendar className="w-3 h-3" />
                     <span>
                       {new Date(report.payload.reportDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
-                    <span className="text-sage-200">·</span>
+                    <span className="text-slate-200">·</span>
                     <span>{report.payload.results.length} analyses</span>
                     {anomaliesCount > 0 && (
                       <>
-                        <span className="text-sage-200">·</span>
+                        <span className="text-slate-200">·</span>
                         <span className="text-amber-700 flex items-center gap-1 font-bold">
                           <AlertTriangle className="w-3 h-3" />
                           {anomaliesCount} anomalie{anomaliesCount > 1 ? 's' : ''}
@@ -102,12 +102,12 @@ export default function LabReportTimeline({
                   </div>
                 </div>
               </div>
-              <ChevronRight className={cn('w-4 h-4 text-sage-400 transition-transform shrink-0 ml-2', isExpanded && 'rotate-90')} />
+              <ChevronRight className={cn('w-4 h-4 text-slate-400 transition-transform shrink-0 ml-2', isExpanded && 'rotate-90')} />
             </button>
 
             {/* Contenu déplié */}
             {isExpanded && (
-              <div className="px-4 pb-4 border-t border-sage-100 pt-3 space-y-3">
+              <div className="px-4 pb-4 border-t border-slate-100 pt-3 space-y-3">
                 {/* Indicateurs clés */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <KeyMetric label="HbA1c"        value={summary.hba1c}          unit="%"      previous={previousSummary?.hba1c}          targetMax={7}   inverse={false} />
@@ -117,16 +117,16 @@ export default function LabReportTimeline({
                 </div>
 
                 {/* Tableau résultats */}
-                <div className="rounded-xl border border-sage-200 overflow-hidden">
-                  <div className="max-h-56 overflow-y-auto divide-y divide-sage-100">
+                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="max-h-56 overflow-y-auto divide-y divide-slate-100">
                     {report.payload.results.map(r => <ResultRow key={r.code} result={r} />)}
                   </div>
                 </div>
 
                 {/* Métadonnées + actions */}
-                <div className="flex items-center justify-between pt-1 text-[11px] text-sage-400 font-medium">
+                <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400 font-medium">
                   <div className="flex items-center gap-3">
-                    <span>Trace : <code className="text-sage-600 font-mono">{report.traceId}</code></span>
+                    <span>Trace : <code className="text-slate-600 font-mono">{report.traceId}</code></span>
                     {report.appliedToPredictions && (
                       <span className="flex items-center gap-1 text-brand-700 font-semibold">
                         <CheckCircle2 className="w-3 h-3" /> Intégré aux prédictions
@@ -165,9 +165,9 @@ function KeyMetric({ label, value, unit, previous, targetMax, targetMin, inverse
 }) {
   if (value === undefined) {
     return (
-      <div className="p-2.5 rounded-xl bg-sage-50 border border-sage-100">
-        <p className="text-[10px] text-sage-400 uppercase tracking-wider font-bold">{label}</p>
-        <p className="text-[13px] text-sage-300 mt-1 font-bold">—</p>
+      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+        <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">{label}</p>
+        <p className="text-[13px] text-slate-300 mt-1 font-bold">—</p>
       </div>
     );
   }
@@ -207,7 +207,7 @@ function KeyMetric({ label, value, unit, previous, targetMax, targetMin, inverse
         {trend && previous !== undefined && (
           <div className={cn(
             'flex items-center gap-0.5 text-[10px] font-bold',
-            trend === 'same' ? 'text-sage-400' : trendGood ? 'text-brand-600' : 'text-coral-600'
+            trend === 'same' ? 'text-slate-400' : trendGood ? 'text-brand-600' : 'text-coral-600'
           )}>
             <TrendIcon className="w-2.5 h-2.5" />
             <span className="tabular-nums">
@@ -233,15 +233,15 @@ function ResultRow({ result }: { result: LabResult }) {
   const fc = flagConfig[flag] ?? flagConfig['normal'];
 
   return (
-    <div className={cn('px-3 py-2 flex items-center justify-between text-[12px] hover:bg-sage-50 transition', fc.bg)}>
+    <div className={cn('px-3 py-2 flex items-center justify-between text-[12px] hover:bg-slate-50 transition', fc.bg)}>
       <div className="min-w-0 flex-1">
-        <p className="text-sage-800 font-medium truncate">{result.label}</p>
-        <p className="text-sage-400 text-[10px] font-medium">
+        <p className="text-slate-800 font-medium truncate">{result.label}</p>
+        <p className="text-slate-400 text-[10px] font-medium">
           {result.refRange.text ?? `${result.refRange.low ?? '—'} – ${result.refRange.high ?? '—'} ${result.unit}`}
         </p>
       </div>
       <p className={cn('tabular-nums ml-2 font-bold', fc.text)}>
-        {result.value} <span className="text-sage-400 font-normal">{result.unit}</span>
+        {result.value} <span className="text-slate-400 font-normal">{result.unit}</span>
       </p>
     </div>
   );

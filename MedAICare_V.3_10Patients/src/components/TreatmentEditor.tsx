@@ -40,7 +40,7 @@ const STATUS_STYLES: Record<Prescription['status'], { label: string; bg: string;
   active:       { label: 'Active',    bg: 'bg-brand-100', text: 'text-brand-700',  ring: 'ring-brand-200',  dot: 'bg-brand-500' },
   paused:       { label: 'En pause',  bg: 'bg-amber-100', text: 'text-amber-700',  ring: 'ring-amber-200',  dot: 'bg-amber-500' },
   discontinued: { label: 'Arrêtée',   bg: 'bg-coral-50',  text: 'text-coral-600',  ring: 'ring-coral-200',  dot: 'bg-coral-500' },
-  completed:    { label: 'Terminée',  bg: 'bg-slate-100',  text: 'text-slate-500',   ring: 'ring-slate-200',   dot: 'bg-sage-400' },
+  completed:    { label: 'Terminée',  bg: 'bg-slate-100',  text: 'text-slate-500',   ring: 'ring-slate-200',   dot: 'bg-slate-400' },
 };
 
 const ACTION_LABELS: Record<PrescriptionAudit['action'], string> = {
@@ -60,7 +60,7 @@ const LABEL_BASE = 'block text-[10.5px] uppercase tracking-wider text-slate-500 
 // ── Modal overlay ─────────────────────────────────────────────────────────────
 function ModalOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-sage-900/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" onClick={onClose}>
       <div onClick={e => e.stopPropagation()} className="relative">
         {children}
       </div>
@@ -179,7 +179,7 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
           <div className="flex-1 overflow-y-auto p-5">
             {!selected ? (
               <div className="h-full flex flex-col items-center justify-center text-center">
-                <Pill className="w-12 h-12 mb-3 text-sage-200" strokeWidth={1.5} />
+                <Pill className="w-12 h-12 mb-3 text-slate-200" strokeWidth={1.5} />
                 <div className="text-[13px] text-slate-400 font-medium">Sélectionnez un médicament dans la liste</div>
               </div>
             ) : (
@@ -535,7 +535,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
         {tab !== 'audit' ? (
           visiblePrescriptions.length === 0 ? (
             <div className="text-center py-10">
-              <Pill className="w-10 h-10 text-sage-200 mx-auto mb-3" strokeWidth={1.5} />
+              <Pill className="w-10 h-10 text-slate-200 mx-auto mb-3" strokeWidth={1.5} />
               <div className="text-[13px] text-slate-500 font-semibold">Aucune prescription</div>
               {!readOnly && <div className="text-[11px] text-slate-400 mt-1">Cliquez sur "Prescrire" pour ajouter un traitement.</div>}
             </div>
@@ -544,7 +544,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
               {visiblePrescriptions.map(rx => {
                 const style = STATUS_STYLES[rx.status];
                 return (
-                  <div key={rx.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4 hover:bg-white hover:border-sage-300 transition">
+                  <div key={rx.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4 hover:bg-white hover:border-slate-300 transition">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -579,11 +579,11 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
 
                         <div className="flex items-center gap-3 mt-2 text-[10px] text-slate-400 font-medium">
                           <span>Prescrit par {rx.prescribedBy}</span>
-                          <span className="text-sage-200">·</span>
+                          <span className="text-slate-200">·</span>
                           <span>{formatDate(rx.prescribedAt)}</span>
                           {rx.lastModifiedAt && (
                             <>
-                              <span className="text-sage-200">·</span>
+                              <span className="text-slate-200">·</span>
                               <span className="text-amber-600 font-semibold">Modifié {formatRelative(rx.lastModifiedAt)}</span>
                             </>
                           )}
@@ -618,7 +618,7 @@ export default function TreatmentEditor({ patientId, patientName, readOnly = fal
         ) : (
           audit.length === 0 ? (
             <div className="text-center py-10">
-              <History className="w-10 h-10 text-sage-200 mx-auto mb-3" strokeWidth={1.5} />
+              <History className="w-10 h-10 text-slate-200 mx-auto mb-3" strokeWidth={1.5} />
               <div className="text-[13px] text-slate-500 font-semibold">Aucune action dans l'historique</div>
             </div>
           ) : (

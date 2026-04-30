@@ -139,7 +139,7 @@ export default function DevicesView() {
                 className={cn(
                   'group text-left rounded-2xl border transition-all p-4',
                   'bg-white hover:shadow-md',
-                  isSel ? 'border-brand-300 ring-1 ring-brand-200 shadow-md' : 'border-slate-200 hover:border-sage-300'
+                  isSel ? 'border-brand-300 ring-1 ring-brand-200 shadow-md' : 'border-slate-200 hover:border-slate-300'
                 )}
               >
                 <div className="flex items-start justify-between mb-3">

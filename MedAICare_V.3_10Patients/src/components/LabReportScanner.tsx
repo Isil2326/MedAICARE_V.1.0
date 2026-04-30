@@ -36,8 +36,8 @@ interface FormLine {
   unit: string;
 }
 
-const INPUT_CLS = 'w-full px-3 py-2 rounded-xl bg-sage-50 border border-sage-200 text-sage-900 text-[12.5px] placeholder:text-sage-400 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 transition';
-const LABEL_CLS = 'text-[11px] text-sage-500 font-bold uppercase tracking-wider block mb-1';
+const INPUT_CLS = 'w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-[12.5px] placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 transition';
+const LABEL_CLS = 'text-[11px] text-slate-500 font-bold uppercase tracking-wider block mb-1';
 
 export default function LabReportScanner({ patientId, patientName, onClose, onSaved }: Props) {
   const [step, setStep]               = useState<Step>('choose');
@@ -253,23 +253,23 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
   const availableAnalyses = ALL_ANALYSES.filter(a => !formLines.some(l => l.code === a.code));
 
   return (
-    <div className="fixed inset-0 z-50 bg-sage-900/60 backdrop-blur-md flex items-center justify-center p-4" onClick={onClose}>
-      <div className="relative w-full max-w-2xl bg-white border border-sage-200 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+      <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sage-100 shrink-0 bg-white">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0 bg-white">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-100 ring-1 ring-brand-200 flex items-center justify-center">
               <ScanLine className="w-5 h-5 text-brand-700" />
             </div>
             <div>
-              <h2 className="text-[15px] font-bold text-sage-900">Scanner un bilan biologique</h2>
-              <p className="text-[11px] text-sage-400 font-medium">
+              <h2 className="text-[15px] font-bold text-slate-900">Scanner un bilan biologique</h2>
+              <p className="text-[11px] text-slate-400 font-medium">
                 {step === 'assisted' ? 'Saisie assistée — complétez les résultats' : 'Tout QR code accepté · 11 biomarqueurs diabète'}
               </p>
             </div>
           </div>
-          <button onClick={() => { stopCamera(); onClose(); }} className="w-8 h-8 rounded-xl bg-sage-100 hover:bg-sage-200 flex items-center justify-center text-sage-500 hover:text-sage-900 transition">
+          <button onClick={() => { stopCamera(); onClose(); }} className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 transition">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -291,7 +291,7 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
           {/* ── STEP: Choix du mode ── */}
           {step === 'choose' && (
             <div className="space-y-5">
-              <p className="text-[13px] text-sage-500 font-medium mb-3">Choisissez un mode d'acquisition :</p>
+              <p className="text-[13px] text-slate-500 font-medium mb-3">Choisissez un mode d'acquisition :</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { Icon: Upload,  color: 'blue',   title: 'Importer une photo',  sub: 'Photo du QR code',           onClick: () => fileRef.current?.click() },
@@ -313,8 +313,8 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                       color === 'violet' && 'text-purple-600',
                       color === 'amber'  && 'text-amber-600',
                     )} />
-                    <div className="text-[13px] font-bold text-sage-900">{title}</div>
-                    <div className="text-[11px] text-sage-400 mt-1 font-medium">{sub}</div>
+                    <div className="text-[13px] font-bold text-slate-900">{title}</div>
+                    <div className="text-[11px] text-slate-400 mt-1 font-medium">{sub}</div>
                   </button>
                 ))}
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); if (e.target) e.target.value = ''; }} />
@@ -322,17 +322,17 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
 
               {/* Séparateur */}
               <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-sage-200" />
-                <span className="text-[10px] text-sage-400 uppercase tracking-wider font-bold">ou testez</span>
-                <div className="flex-1 h-px bg-sage-200" />
+                <div className="flex-1 h-px bg-slate-200" />
+                <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">ou testez</span>
+                <div className="flex-1 h-px bg-slate-200" />
               </div>
 
               {/* QR exemple */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-brand-50 to-blue-50 border border-sage-200">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-brand-50 to-blue-50 border border-slate-200">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <p className="text-[13px] font-bold text-sage-900 mb-1">QR code d'exemple MediAI</p>
-                    <p className="text-[11px] text-sage-500 leading-relaxed font-medium">
+                    <p className="text-[13px] font-bold text-slate-900 mb-1">QR code d'exemple MediAI</p>
+                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
                       Générez un QR au format MediAI pour tester le pipeline complet.
                     </p>
                     <div className="flex flex-wrap gap-2 mt-3">
@@ -351,21 +351,21 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                           </button>
                         </>
                       )}
-                      <button onClick={handleDemo} className="flex items-center gap-1.5 px-3 py-2 text-[12px] rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-700 font-semibold transition">
+                      <button onClick={handleDemo} className="flex items-center gap-1.5 px-3 py-2 text-[12px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
                         Charger directement
                       </button>
                     </div>
                   </div>
                   {qrImageUrl && (
                     <div className="shrink-0">
-                      <img src={qrImageUrl} alt="QR Code" className="w-28 h-28 rounded-xl border border-sage-200 shadow-sm" />
+                      <img src={qrImageUrl} alt="QR Code" className="w-28 h-28 rounded-xl border border-slate-200 shadow-sm" />
                     </div>
                   )}
                 </div>
               </div>
 
               {scanAttempts > 0 && (
-                <p className="text-[11px] text-sage-400 text-center font-medium">
+                <p className="text-[11px] text-slate-400 text-center font-medium">
                   {scanAttempts} tentative{scanAttempts > 1 ? 's' : ''} effectuée{scanAttempts > 1 ? 's' : ''}
                 </p>
               )}
@@ -381,11 +381,11 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                   value={manualJson}
                   onChange={e => setManualJson(e.target.value)}
                   placeholder={'Accepte tout format :\n• JSON MediAI\n• JSON générique\n• URL avec paramètres\n• Texte clé: valeur\n• Tout autre contenu'}
-                  className="w-full h-40 p-3 rounded-2xl bg-sage-50 border border-sage-200 text-sage-900 text-[12px] font-mono placeholder:text-sage-400 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 resize-none transition"
+                  className="w-full h-40 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 text-[12px] font-mono placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 resize-none transition"
                 />
               </div>
               <div className="flex gap-3">
-                <button onClick={() => { setStep('choose'); setManualJson(''); setError(null); }} className="flex-1 px-4 py-2.5 rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-700 text-[13px] font-semibold transition">
+                <button onClick={() => { setStep('choose'); setManualJson(''); setError(null); }} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-semibold transition">
                   Retour
                 </button>
                 <button onClick={handleManualSubmit} className="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition">
@@ -426,20 +426,20 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className={LABEL_CLS}>Résultats d'analyses</label>
-                  <span className="text-[10px] text-sage-400 font-medium">{formLines.filter(l => l.value.trim()).length}/{formLines.length} rempli(s)</span>
+                  <span className="text-[10px] text-slate-400 font-medium">{formLines.filter(l => l.value.trim()).length}/{formLines.length} rempli(s)</span>
                 </div>
 
                 <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                   {formLines.map(line => (
-                    <div key={line.id} className="flex items-center gap-2 p-2.5 rounded-xl bg-sage-50 border border-sage-200">
+                    <div key={line.id} className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                       <div className="flex-1 min-w-0">
-                        <p className="text-[12px] text-sage-800 font-semibold truncate">{line.label}</p>
-                        <p className="text-[10px] text-sage-400 font-medium">{line.code}</p>
+                        <p className="text-[12px] text-slate-800 font-semibold truncate">{line.label}</p>
+                        <p className="text-[10px] text-slate-400 font-medium">{line.code}</p>
                       </div>
                       <input type="number" step="any" value={line.value} onChange={e => updateFormValue(line.id, e.target.value)} placeholder="—"
-                        className="w-24 px-2 py-1.5 rounded-lg bg-white border border-sage-200 text-sage-900 text-[13px] text-center tabular-nums focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/20 transition" />
-                      <span className="text-[11px] text-sage-400 w-16 text-right font-medium">{line.unit}</span>
-                      <button onClick={() => removeFormLine(line.id)} className="w-7 h-7 rounded-lg flex items-center justify-center text-sage-300 hover:text-coral-600 hover:bg-coral-50 transition">
+                        className="w-24 px-2 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-[13px] text-center tabular-nums focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/20 transition" />
+                      <span className="text-[11px] text-slate-400 w-16 text-right font-medium">{line.unit}</span>
+                      <button onClick={() => removeFormLine(line.id)} className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-300 hover:text-coral-600 hover:bg-coral-50 transition">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -449,11 +449,11 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                 {availableAnalyses.length > 0 && (
                   <div className="mt-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <PlusCircle className="w-3.5 h-3.5 text-sage-400" />
-                      <span className="text-[11px] text-sage-400 font-medium">Ajouter :</span>
+                      <PlusCircle className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="text-[11px] text-slate-400 font-medium">Ajouter :</span>
                       {availableAnalyses.map(a => (
                         <button key={a.code} onClick={() => addFormLine(a.code)}
-                          className="text-[10px] px-2 py-1 rounded-full bg-sage-100 hover:bg-sage-200 text-sage-600 hover:text-sage-900 border border-sage-200 transition font-semibold">
+                          className="text-[10px] px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 transition font-semibold">
                           + {a.label}
                         </button>
                       ))}
@@ -464,15 +464,15 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
 
               {parseResult?.rawText && parseResult.rawText !== '[image sans QR détecté]' && (
                 <details className="group">
-                  <summary className="text-[11px] text-sage-400 cursor-pointer hover:text-sage-600 transition font-medium">Voir les données brutes du QR</summary>
-                  <pre className="mt-2 p-3 rounded-xl bg-sage-50 border border-sage-200 text-[10px] text-sage-600 font-mono overflow-x-auto max-h-32 overflow-y-auto">
+                  <summary className="text-[11px] text-slate-400 cursor-pointer hover:text-slate-600 transition font-medium">Voir les données brutes du QR</summary>
+                  <pre className="mt-2 p-3 rounded-xl bg-slate-50 border border-slate-200 text-[10px] text-slate-600 font-mono overflow-x-auto max-h-32 overflow-y-auto">
                     {parseResult.rawText}
                   </pre>
                 </details>
               )}
 
               <div className="flex gap-3 pt-1">
-                <button onClick={() => { setStep('choose'); setFormLines([]); setParseResult(null); setError(null); }} className="flex-1 px-4 py-2.5 rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-700 text-[13px] font-semibold transition">Retour</button>
+                <button onClick={() => { setStep('choose'); setFormLines([]); setParseResult(null); setError(null); }} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-semibold transition">Retour</button>
                 <button onClick={submitAssistedForm} className="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition flex items-center justify-center gap-2">
                   <CheckCircle2 className="w-4 h-4" /> Valider les résultats
                 </button>
@@ -483,7 +483,7 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
           {/* ── STEP: Caméra ── */}
           {step === 'camera' && (
             <div className="space-y-4">
-              <div className="relative rounded-2xl overflow-hidden border border-sage-200 bg-sage-900 aspect-[4/3]">
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 aspect-[4/3]">
                 <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
                 <canvas ref={canvasRef} className="hidden" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -501,7 +501,7 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                 </div>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => { stopCamera(); setStep('choose'); }} className="flex-1 px-4 py-2.5 rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-700 text-[13px] font-semibold transition">Retour</button>
+                <button onClick={() => { stopCamera(); setStep('choose'); }} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-semibold transition">Retour</button>
                 <button onClick={() => { stopCamera(); fileRef.current?.click(); }} className="flex-1 px-4 py-2.5 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-800 text-[13px] font-semibold transition">
                   <Upload className="w-3.5 h-3.5 inline mr-1.5" /> Importer une photo
                 </button>
@@ -514,8 +514,8 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
           {step === 'processing' && (
             <div className="flex flex-col items-center justify-center py-16">
               <Loader2 className="w-8 h-8 text-brand-600 animate-spin mb-3" />
-              <p className="text-[13px] text-sage-700 font-semibold">Analyse en cours…</p>
-              <p className="text-[10px] text-sage-400 mt-1 font-medium">Décodage · Détection du format · Extraction</p>
+              <p className="text-[13px] text-slate-700 font-semibold">Analyse en cours…</p>
+              <p className="text-[10px] text-slate-400 mt-1 font-medium">Décodage · Détection du format · Extraction</p>
             </div>
           )}
 
@@ -527,25 +527,25 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
             return (
               <div className="space-y-4">
                 {/* Infos labo */}
-                <div className="p-4 rounded-2xl bg-sage-50 border border-sage-200">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <p className="text-[14px] font-bold text-sage-900">{payload.laboratory.name}</p>
-                      {payload.laboratory.accreditation && <p className="text-[11px] text-sage-400 font-medium">{payload.laboratory.accreditation}</p>}
+                      <p className="text-[14px] font-bold text-slate-900">{payload.laboratory.name}</p>
+                      {payload.laboratory.accreditation && <p className="text-[11px] text-slate-400 font-medium">{payload.laboratory.accreditation}</p>}
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] text-sage-400 font-bold uppercase">Rapport</p>
-                      <p className="text-[11px] text-sage-700 font-mono">{payload.reportId}</p>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">Rapport</p>
+                      <p className="text-[11px] text-slate-700 font-mono">{payload.reportId}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-[12px]">
                     <div>
-                      <p className="text-sage-400 font-medium">Patient</p>
-                      <p className="text-sage-800 font-semibold">{payload.patient.firstName} {payload.patient.lastName}</p>
+                      <p className="text-slate-400 font-medium">Patient</p>
+                      <p className="text-slate-800 font-semibold">{payload.patient.firstName} {payload.patient.lastName}</p>
                     </div>
                     <div>
-                      <p className="text-sage-400 font-medium">Prélèvement</p>
-                      <p className="text-sage-800 font-semibold">{new Date(payload.collectionDate).toLocaleDateString('fr-FR')}</p>
+                      <p className="text-slate-400 font-medium">Prélèvement</p>
+                      <p className="text-slate-800 font-semibold">{new Date(payload.collectionDate).toLocaleDateString('fr-FR')}</p>
                     </div>
                   </div>
                 </div>
@@ -579,15 +579,15 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
                 )}
 
                 {/* Résultats */}
-                <div className="max-h-56 overflow-y-auto rounded-2xl border border-sage-200 divide-y divide-sage-100">
+                <div className="max-h-56 overflow-y-auto rounded-2xl border border-slate-200 divide-y divide-slate-100">
                   {payload.results.map(r => (
-                    <div key={r.code} className="px-4 py-2.5 flex items-center justify-between hover:bg-sage-50 transition">
+                    <div key={r.code} className="px-4 py-2.5 flex items-center justify-between hover:bg-slate-50 transition">
                       <div className="min-w-0 flex-1">
-                        <p className="text-[13px] text-sage-800 font-semibold truncate">{r.label}</p>
-                        <p className="text-[10px] text-sage-400 font-medium">Réf : {r.refRange.low ?? '—'} – {r.refRange.high ?? '—'} {r.unit}</p>
+                        <p className="text-[13px] text-slate-800 font-semibold truncate">{r.label}</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Réf : {r.refRange.low ?? '—'} – {r.refRange.high ?? '—'} {r.unit}</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[13px] font-bold text-sage-900 tabular-nums">{r.value} {r.unit}</span>
+                        <span className="text-[13px] font-bold text-slate-900 tabular-nums">{r.value} {r.unit}</span>
                         <FlagBadge flag={r.flag} />
                       </div>
                     </div>
@@ -596,7 +596,7 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
 
                 {/* Actions */}
                 <div className="flex gap-3 pt-1">
-                  <button onClick={() => { setPayload(null); setStep('choose'); }} className="flex-1 px-4 py-2.5 rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-700 text-[13px] font-semibold transition">Annuler</button>
+                  <button onClick={() => { setPayload(null); setStep('choose'); }} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-semibold transition">Annuler</button>
                   <button onClick={handleConfirm} className="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[13px] transition flex items-center justify-center gap-2">
                     <CheckCircle2 className="w-4 h-4" /> Enregistrer dans mon dossier
                   </button>
@@ -611,11 +611,11 @@ export default function LabReportScanner({ patientId, patientName, onClose, onSa
               <div className="w-16 h-16 rounded-2xl bg-brand-100 ring-1 ring-brand-200 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="w-8 h-8 text-brand-600" />
               </div>
-              <h3 className="text-[17px] font-black text-sage-900 mb-1">Bilan enregistré avec succès</h3>
-              <p className="text-[13px] text-sage-500 mb-5 max-w-sm mx-auto font-medium">
+              <h3 className="text-[17px] font-black text-slate-900 mb-1">Bilan enregistré avec succès</h3>
+              <p className="text-[13px] text-slate-500 mb-5 max-w-sm mx-auto font-medium">
                 Les résultats ont été ajoutés à votre dossier et seront intégrés dans vos prochaines prédictions.
               </p>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-sage-100 border border-sage-200 text-[11px] text-sage-600 mb-6 font-medium">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-[11px] text-slate-600 mb-6 font-medium">
                 <Eye className="w-3 h-3" /> Trace : <code className="text-brand-700 font-mono font-bold">{savedReport.traceId}</code>
               </div>
               <div>

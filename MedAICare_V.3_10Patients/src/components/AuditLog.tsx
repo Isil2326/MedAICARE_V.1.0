@@ -186,9 +186,9 @@ export default function AuditLog() {
                           <div className="text-[11px] text-slate-500 mt-0.5 truncate">{log.details}</div>
                           <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400 font-medium">
                             <span className="font-mono">{log.traceId}</span>
-                            <span className="text-sage-200">·</span>
+                            <span className="text-slate-200">·</span>
                             <span>{log.module}</span>
-                            <span className="text-sage-200">·</span>
+                            <span className="text-slate-200">·</span>
                             <span>{log.user}</span>
                             <span className="ml-auto tabular-nums">{formatRelative(log.timestamp)}</span>
                           </div>
@@ -279,7 +279,7 @@ export default function AuditLog() {
                         <div className="text-[10px] text-slate-400 mt-0.5 font-medium">{step.sub}</div>
                       </div>
                       {i < arr.length - 1 && (
-                        <div className="hidden md:block absolute top-1/2 -right-1.5 w-3 h-0.5 bg-sage-300 rounded" />
+                        <div className="hidden md:block absolute top-1/2 -right-1.5 w-3 h-0.5 bg-slate-300 rounded" />
                       )}
                     </div>
                   );

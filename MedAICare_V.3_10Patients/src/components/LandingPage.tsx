@@ -356,7 +356,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => openAuth('doctor', 'register')} className="w-full py-3.5 rounded-2xl bg-white text-sage-900 hover:bg-sage-50 font-bold text-[14px] transition-all">
+              <button onClick={() => openAuth('doctor', 'register')} className="w-full py-3.5 rounded-2xl bg-white text-slate-900 hover:bg-slate-50 font-bold text-[14px] transition-all">
                 Accès professionnel
               </button>
             </motion.div>
@@ -400,12 +400,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <p className="text-[14px] text-sage-500 font-medium">Chiffrement AES-256 · Hébergement HDS France · Conforme RGPD & IEC 62304</p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {['HDS', 'RGPD', 'HL7 FHIR', 'IEC 62304', 'ISO 13485'].map(t => (
-                    <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-sage-100 text-sage-600 font-bold">{t}</span>
+                    <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold">{t}</span>
                   ))}
                 </div>
               </div>
             </div>
-            <button onClick={() => onNavigate('audit')} className="shrink-0 px-5 py-2.5 rounded-full bg-sage-900 hover:bg-sage-800 text-white font-bold text-[13px] transition whitespace-nowrap">
+            <button onClick={() => onNavigate('audit')} className="shrink-0 px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-[13px] transition whitespace-nowrap">
               Voir les logs d'audit →
             </button>
           </motion.div>
@@ -465,9 +465,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </footer>
 
       {/* Auth modal */}
-      {authType && (
-        <AuthModal role={authType} mode={authMode} onClose={() => setAuthType(null)} />
-      )}
+      <AuthModal
+        isOpen={!!authType}
+        type={authType ?? 'patient'}
+        defaultMode={authMode}
+        onClose={() => setAuthType(null)}
+      />
     </div>
   );
 }
@@ -477,7 +480,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 function AppStoreBadge({ store, dark }: { store: 'apple' | 'google'; dark?: boolean }) {
   const base = dark
     ? 'flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 transition cursor-pointer'
-    : 'flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-sage-900 hover:bg-sage-800 border border-sage-800 transition cursor-pointer';
+    : 'flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 transition cursor-pointer';
   const textPrimary   = 'text-[15px] font-black text-white';
   const textSecondary = 'text-[10px] text-white/60 font-medium';
 

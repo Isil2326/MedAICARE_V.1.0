@@ -247,10 +247,10 @@ export default function DoctorDashboard() {
                         <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.02} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e8eee2" vertical={false} />
-                    <XAxis dataKey="d" tick={{ fill: '#8a9e87', fontSize: 9 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: '#8a9e87', fontSize: 9 }} axisLine={false} tickLine={false} domain={[40, 90]} />
-                    <Tooltip contentStyle={{ background: '#fff', border: '1px solid #d0dcc5', borderRadius: 10, fontSize: 11, color: '#1c2b1a' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                    <XAxis dataKey="d" tick={{ fill: '#94a3b8', fontSize: 9 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: '#94a3b8', fontSize: 9 }} axisLine={false} tickLine={false} domain={[40, 90]} />
+                    <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 11, color: '#1e293b' }} />
                     <Area type="monotone" dataKey="t" stroke="#4a8a35" strokeWidth={2} fill="url(#cohortTir)" />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -296,7 +296,7 @@ export default function DoctorDashboard() {
                   <ResponsiveContainer width="100%" height="100%">
                     <RadialBarChart innerRadius="65%" outerRadius="100%" data={[{ name: 'F1', value: m.f1Score * 100, fill: accentColors.gauge }]} startAngle={210} endAngle={-30}>
                       <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
-                      <RadialBar dataKey="value" cornerRadius={10} background={{ fill: '#e8eee2' }} />
+                      <RadialBar dataKey="value" cornerRadius={10} background={{ fill: '#f1f5f9' }} />
                     </RadialBarChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none -mt-2">
@@ -463,9 +463,9 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
               </div>
               <div className="flex items-center gap-3 mt-1 text-[12.5px] text-slate-400 font-medium flex-wrap">
                 <span>{patient.age} ans · {patient.gender === 'M' ? 'Homme' : 'Femme'}</span>
-                <span className="text-sage-200">·</span>
+                <span className="text-slate-200">·</span>
                 <span>{patient.diabetesType}</span>
-                <span className="text-sage-200">·</span>
+                <span className="text-slate-200">·</span>
                 <span>Suivi depuis {patient.diagnosisDate || 'N/A'}</span>
               </div>
             </div>
@@ -537,10 +537,10 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                       <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.03} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e8eee2" />
-                  <XAxis dataKey="hour" tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={h => `${h}h`} />
-                  <YAxis tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
-                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid #d0dcc5', borderRadius: 10, fontSize: 11, color: '#1c2b1a' }} labelFormatter={h => `${h}h00`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={h => `${h}h`} />
+                  <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
+                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 11, color: '#1e293b' }} labelFormatter={h => `${h}h00`} />
                   <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="3 3" />
                   <Area type="monotone" dataKey="p95" stroke="rgba(59,130,246,0.2)" strokeWidth={1} fill="none" />
                   <Area type="monotone" dataKey="p75" stroke="none" fill="url(#agpDoc)" />
@@ -556,10 +556,10 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                       <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e8eee2" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis
                     dataKey="timestamp"
-                    tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false}
+                    tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false}
                     tickFormatter={ts => {
                       const d = new Date(ts);
                       if (range.durationMs <= 24 * 60 * 60 * 1000) return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -567,9 +567,9 @@ function PatientFile({ patient, onBack }: { patient: Patient; onBack: () => void
                     }}
                     minTickGap={30}
                   />
-                  <YAxis tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
+                  <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid #d0dcc5', borderRadius: 10, fontSize: 11, color: '#1c2b1a' }}
+                    contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 11, color: '#1e293b' }}
                     labelFormatter={ts => new Date(ts as number).toLocaleString('fr-FR')}
                     formatter={(v: any) => [`${v} mg/dL`, 'Glycémie']}
                   />
@@ -806,7 +806,7 @@ function DecisionCard({ decision, onAction }: {
             <div className="flex items-center gap-2 mt-1 text-[10.5px] text-slate-400 font-medium">
               <Clock className="w-2.5 h-2.5" />
               <span>il y a {ageMin} min</span>
-              <span className="text-sage-200">·</span>
+              <span className="text-slate-200">·</span>
               <span>expire dans {expiresInH}h</span>
             </div>
           </div>

@@ -273,12 +273,12 @@ export default function PatientDashboard() {
                       <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e8eee2" vertical={false} />
-                  <XAxis dataKey="time" tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
-                  <YAxis tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 280]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="time" tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
+                  <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 280]} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid #d0dcc5', borderRadius: 12, fontSize: 12, color: '#1c2b1a', boxShadow: '0 4px 20px rgba(30,46,26,0.12)' }}
-                    labelStyle={{ color: '#6b8459', fontWeight: 600 }}
+                    contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, fontSize: 12, color: '#1e293b', boxShadow: '0 4px 20px rgba(30,46,26,0.12)' }}
+                    labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
                     formatter={(value: any) => [`${value} mg/dL`, 'Glycémie']}
                   />
                   <ReferenceArea y1={carePlan.glucoseTargetMin} y2={carePlan.glucoseTargetMax} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="4 3" />
@@ -489,11 +489,11 @@ export default function PatientDashboard() {
                       <stop offset="100%" stopColor="#4a8a35" stopOpacity={0.03} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e8eee2" />
-                  <XAxis dataKey="hour" tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={h => `${h}h`} />
-                  <YAxis tick={{ fill: '#8a9e87', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={h => `${h}h`} />
+                  <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} tickLine={false} domain={[40, 300]} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid #d0dcc5', borderRadius: 10, fontSize: 12, color: '#1c2b1a' }}
+                    contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 12, color: '#1e293b' }}
                     labelFormatter={h => `${h}h00`}
                   />
                   <ReferenceArea y1={70} y2={180} fill="rgba(74,138,53,0.06)" stroke="rgba(74,138,53,0.2)" strokeDasharray="4 3" />
@@ -780,11 +780,11 @@ function LogEventModal({ type, onClose, onSubmit }: {
   const [intensity, setIntensity]     = useState<'low' | 'moderate' | 'high'>('moderate');
   const [noteText, setNoteText]       = useState('');
 
-  const titles = {
-    meal:     '🍽️ Enregistrer un repas',
-    insulin:  '💉 Dose d\'insuline',
-    activity: '🏃 Activité physique',
-    note:     '📝 Ajouter une note',
+  const titles: Record<typeof type, { label: string; Icon: React.ComponentType<{ className?: string }>; color: string }> = {
+    meal:     { label: 'Enregistrer un repas', Icon: Utensils,   color: 'text-brand-600 bg-brand-100' },
+    insulin:  { label: "Dose d'insuline",      Icon: Syringe,    color: 'text-coral-600 bg-coral-50'  },
+    activity: { label: 'Activité physique',    Icon: Footprints,  color: 'text-amber-700 bg-amber-50'  },
+    note:     { label: 'Ajouter une note',     Icon: PenLine,    color: 'text-blue-700 bg-blue-50'    },
   };
 
   const handleSubmit = () => {
@@ -797,10 +797,17 @@ function LogEventModal({ type, onClose, onSubmit }: {
   const inputCls = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[14px] text-slate-900 focus:ring-2 focus:ring-brand-400/25 focus:border-brand-300 transition';
   const selectCls = inputCls;
 
+  const { label: modalTitle, Icon: ModalIcon, color: modalColor } = titles[type];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-sage-900/30 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-[0_20px_80px_rgba(30,46,26,0.2)] p-6" onClick={e => e.stopPropagation()}>
-        <div className="text-[17px] font-black text-slate-900 mb-5">{titles[type]}</div>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/30 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-2xl card-shadow-lg p-6" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center gap-3 mb-5">
+          <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', modalColor)}>
+            <ModalIcon className="w-5 h-5" />
+          </div>
+          <div className="text-[17px] font-bold text-slate-900 tracking-tight">{modalTitle}</div>
+        </div>
 
         {type === 'meal' && (
           <div className="space-y-3">
@@ -824,7 +831,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
                     className={cn('flex-1 px-3 py-2.5 rounded-xl text-[13px] font-bold transition',
                       insulinType === t ? 'bg-coral-100 text-coral-700 ring-1 ring-coral-300' : 'bg-slate-50 text-slate-500 border border-slate-200'
                     )}>
-                    {t === 'rapid' ? 'Rapide ⚡' : 'Basale 🌙'}
+                    {t === 'rapid' ? 'Rapide' : 'Basale'}
                   </button>
                 ))}
               </div>
@@ -852,7 +859,7 @@ function LogEventModal({ type, onClose, onSubmit }: {
                     className={cn('flex-1 px-3 py-2.5 rounded-xl text-[13px] font-bold transition',
                       intensity === i ? 'bg-amber-100 text-amber-700 ring-1 ring-amber-300' : 'bg-slate-50 text-slate-500 border border-slate-200'
                     )}>
-                    {i === 'low' ? '🚶 Faible' : i === 'moderate' ? '🚴 Modérée' : '🏃 Intense'}
+                    {i === 'low' ? 'Faible' : i === 'moderate' ? 'Modérée' : 'Intense'}
                   </button>
                 ))}
               </div>
@@ -871,8 +878,8 @@ function LogEventModal({ type, onClose, onSubmit }: {
           <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[14px] font-bold border border-slate-200 transition">
             Annuler
           </button>
-          <button onClick={handleSubmit} className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[14px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.3)]">
-            Enregistrer ✓
+          <button onClick={handleSubmit} className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[14px] font-bold transition shadow-[0_2px_8px_rgba(58,110,40,0.3)] flex items-center justify-center gap-2">
+            <CheckCircle2 className="w-4 h-4" /> Enregistrer
           </button>
         </div>
       </div>
