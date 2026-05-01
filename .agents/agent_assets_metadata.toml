@@ -1,8 +1,19 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "VvNpmB0Rcm59YEKMFkyuJ"
 uri = "file://MedAICare_V.3_10Patients/public/logo-mark.png"
 type = "image"
 title = "mediai care water drop stethoscope logo"
+
+[[outputs]]
+id = "HLooCL7kS-FOhh4w5fv1p"
+uri = "file://MedAICare_V.3_10Patients/RAPPORT_COMMISSION_AUDIT_PLURIDISCIPLINAIRE.md"
+type = "text"
+title = "Rapport — Commission d'Audit Pluridisciplinaire"
+
+[[outputs]]
+id = "pMbbea0IVnax4fHlbDjDP"
+uri = "file://MedAICare_V.3_10Patients/RAPPORT_JURY_ACADEMIQUE_EXPERTS.md"
+type = "text"
+title = "Rapport — Jury Académique et d'Experts"
