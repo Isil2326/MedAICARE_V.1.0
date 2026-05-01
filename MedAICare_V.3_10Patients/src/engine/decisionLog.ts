@@ -75,6 +75,12 @@ export function logDecision(input: Omit<DecisionLogEntry, 'traceId' | 'timestamp
     timestamp: Date.now(),
   };
   const persisted = safeAppend(entry);
+  // Notify same-tab listeners (storage event only fires cross-tab).
+  if (persisted && typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(new CustomEvent('mediai:decisionlog', { detail: { entry } }));
+    } catch { /* ignore */ }
+  }
   return persisted
     ? { entry, persisted: true }
     : { entry, persisted: false, error: 'Écriture journal locale impossible (quota ou navigation privée).' };

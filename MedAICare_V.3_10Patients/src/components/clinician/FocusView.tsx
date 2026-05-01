@@ -1,119 +1,95 @@
 // ============================================================================
-// ALERT CENTER v1.0 — MediAI Care · Centre d'alerte clinique immersif
-// Inspiré V3-Dark "Salle de Contrôle" — change de mode cognitif (revue → action)
-// Conforme SaMD : décision rapide, justifiée par XAI, traçable
+// FocusView · Patient + décision unique en mode "Salle de contrôle" V3-Dark
+// Refactor de l'ancien AlertCenter — accepte maintenant patientId + onBack
 // ============================================================================
 
 import { useState, useMemo, useEffect } from 'react';
-import type { PendingClinicalDecision } from '../types/medical';
-import { getSimulatedPatients } from '../engine/simulator';
-import { getPendingDecisions } from '../engine/patient-data';
-import { logDecision, getLatestActionFor, DECISION_LOG_STORAGE_KEY, type DecisionAction, type DecisionLogEntry } from '../engine/decisionLog';
-import { useAuth } from '../auth/AuthContext';
+import type { PendingClinicalDecision } from '../../types/medical';
+import { getSimulatedPatients } from '../../engine/simulator';
+import {
+  logDecision, getLatestActionFor,
+  DECISION_LOG_STORAGE_KEY,
+  type DecisionAction, type DecisionLogEntry,
+} from '../../engine/decisionLog';
+import { getActivePendingDecisions } from './alertQueue';
+import { useAuth } from '../../auth/AuthContext';
+import {
+  BG, SURFACE, BORDER, AMBER, AMBER_DIM, CYAN, VIOLET, GREEN, RED, MUTED, BRIGHT,
+  RISK_COLOR, initials, formatCountdown, timeAgo,
+} from './v3DarkTheme';
 
-// ── Palette V3-Dark ─────────────────────────────────────────────────────────
-const BG       = '#07090F';
-const SURFACE  = '#0E1118';
-const BORDER   = 'rgba(255,255,255,0.07)';
-const AMBER    = '#FFAB00';
-const AMBER_DIM = 'rgba(255,171,0,0.12)';
-const CYAN     = '#00E5FF';
-const VIOLET   = '#BF5AF2';
-const GREEN    = '#30D158';
-const RED      = '#EF4444';
-const MUTED    = 'rgba(255,255,255,0.40)';
-const BRIGHT   = '#FFFFFF';
-
-// XAI card colors by importance order
 const XAI_COLORS = [
   { color: CYAN,   glow: 'rgba(0,229,255,0.15)',   icon: '↓' },
   { color: VIOLET, glow: 'rgba(191,90,242,0.12)',  icon: '⚡' },
   { color: GREEN,  glow: 'rgba(48,209,88,0.10)',   icon: '◉' },
 ];
-
-// Risk → color
-const RISK_COLOR: Record<string, string> = {
-  CRITICAL: RED,
-  HIGH:     AMBER,
-  MODERATE: '#F59E0B',
-  LOW:      GREEN,
-};
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
-function initials(name: string): string {
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-}
-
-function formatCountdown(ms: number): { mm: string; ss: string } {
-  if (ms <= 0) return { mm: '00', ss: '00' };
-  const totalSec = Math.floor(ms / 1000);
-  const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
-  const ss = String(totalSec % 60).padStart(2, '0');
-  return { mm, ss };
-}
-
-function timeAgo(ts: number): string {
-  const diff = Date.now() - ts;
-  const min = Math.floor(diff / 60000);
-  if (min < 1)  return 'à l\'instant';
-  if (min < 60) return `il y a ${min} min`;
-  const h = Math.floor(min / 60);
-  return `il y a ${h}h${min % 60 ? min % 60 + 'm' : ''}`;
-}
-
-// XAI weights heuristic: importance decays with order
 const XAI_WEIGHTS = [42, 33, 25, 18];
 
-// ============================================================================
-// MAIN
-// ============================================================================
-export default function AlertCenter() {
-  const allPatients = useMemo(() => getSimulatedPatients(), []);
+export interface FocusViewProps {
+  patientId: string;
+  onBack: () => void;
+  onSelectPatient: (patientId: string) => void;
+}
 
-  // Patients with pending decisions (alert candidates)
+export default function FocusView({ patientId, onBack, onSelectPatient }: FocusViewProps) {
+  const allPatients = useMemo(() => getSimulatedPatients(), []);
+  const [logVersion, setLogVersion] = useState(0);
+
+  // Active alert queue (excludes already-arbitrated decisions)
   const alertPatients = useMemo(() =>
     allPatients
-      .map(p => ({ patient: p, decisions: getPendingDecisions(p.id) }))
+      .map(p => ({ patient: p, decisions: getActivePendingDecisions(p.id) }))
       .filter(x => x.decisions.length > 0)
       .sort((a, b) => {
         const order = { CRITICAL: 0, HIGH: 1, MODERATE: 2, LOW: 3 };
         return order[a.decisions[0].riskLevel] - order[b.decisions[0].riskLevel];
       }),
-    [allPatients]
+    [allPatients, logVersion]
   );
 
   const { user } = useAuth();
-  const [selectedId, setSelectedId] = useState<string>(alertPatients[0]?.patient.id ?? '');
   const [persistedAction, setPersistedAction] = useState<DecisionLogEntry | null>(null);
   const [persistError, setPersistError] = useState<string | null>(null);
   const [now, setNow] = useState<number>(Date.now());
 
-  // Tick every second so the countdown is live
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  const current = alertPatients.find(x => x.patient.id === selectedId) ?? alertPatients[0];
+  // Resolve current patient: STRICT match by prop. No silent fallback.
+  // If the requested patient has no active decision, we render an explicit empty state
+  // for that exact patient (so we never show data for the wrong person).
+  const requestedPatient = useMemo(
+    () => allPatients.find(p => p.id === patientId) ?? null,
+    [allPatients, patientId]
+  );
+  const currentMatch = alertPatients.find(x => x.patient.id === patientId);
+  const current = currentMatch ?? null;
   const currentPatientId = current?.patient.id;
   const currentDecisionId = current?.decisions[0]?.id;
 
-  // Re-read latest persisted action whenever the selected (patient, decision) changes
   useEffect(() => {
     setPersistError(null);
     if (!currentPatientId || !currentDecisionId) { setPersistedAction(null); return; }
     setPersistedAction(getLatestActionFor(currentPatientId, currentDecisionId));
   }, [currentPatientId, currentDecisionId]);
 
-  // Cross-tab sync: refresh persisted action when another tab writes
+  // Listen for cross-tab + same-tab decision log changes.
   useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key !== DECISION_LOG_STORAGE_KEY) return;
-      if (!currentPatientId || !currentDecisionId) return;
-      setPersistedAction(getLatestActionFor(currentPatientId, currentDecisionId));
+    const onChange = (e: Event) => {
+      if (e instanceof StorageEvent && e.key && e.key !== DECISION_LOG_STORAGE_KEY) return;
+      setLogVersion(v => v + 1);
+      if (currentPatientId && currentDecisionId) {
+        setPersistedAction(getLatestActionFor(currentPatientId, currentDecisionId));
+      }
     };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    window.addEventListener('storage', onChange);
+    window.addEventListener('mediai:decisionlog', onChange as EventListener);
+    return () => {
+      window.removeEventListener('storage', onChange);
+      window.removeEventListener('mediai:decisionlog', onChange as EventListener);
+    };
   }, [currentPatientId, currentDecisionId]);
 
   const decisionStatus: 'pending' | DecisionAction = persistedAction?.action ?? 'pending';
@@ -134,73 +110,205 @@ export default function AlertCenter() {
       setPersistedAction(result.entry);
       setPersistError(null);
     } else {
-      // Échec de persistance : pas de banner "tracée", on signale l'erreur
       setPersistError(result.error ?? 'Persistance impossible');
     }
   };
 
-  if (!current) {
+  // ── Empty state #1 : aucun patient n'a d'alerte active ──────────────────
+  if (alertPatients.length === 0) {
     return (
-      <div style={{ background: BG, minHeight: 'calc(100vh - 56px)', margin: '-16px' }}
-           className="sm:!-m-5 lg:!-m-7 flex items-center justify-center">
-        <div className="text-center">
-          <div style={{ fontSize: 56 }} className="mb-4">✓</div>
-          <div style={{ color: BRIGHT, fontSize: 20, fontWeight: 700 }}>Aucune alerte active</div>
-          <div style={{ color: MUTED, fontSize: 13, marginTop: 6 }}>Toutes les décisions cliniques sont à jour</div>
+      <div style={{
+        background: BG, flex: 1,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexDirection: 'column', gap: 18,
+      }}>
+        <div style={{ fontSize: 56 }}>✓</div>
+        <div style={{ color: BRIGHT, fontSize: 20, fontWeight: 700 }}>Aucune alerte active</div>
+        <div style={{ color: MUTED, fontSize: 13 }}>
+          Toutes les décisions cliniques sont à jour
+        </div>
+        <button onClick={onBack} style={{
+          marginTop: 20, padding: '10px 22px', borderRadius: 9,
+          background: AMBER, border: 'none', color: '#07090F',
+          fontSize: 13, fontWeight: 800, cursor: 'pointer',
+          boxShadow: `0 0 16px ${AMBER}33`,
+        }}>
+          ← Retour à la file
+        </button>
+      </div>
+    );
+  }
+
+  // ── Empty state #2 : ce patient précis n'a pas d'alerte (mais d'autres oui) ─
+  // CRUCIAL : on affiche l'IDENTITÉ DU PATIENT DEMANDÉ (pas de fallback silencieux
+  // vers un autre patient). Si patientId est invalide, requestedPatient sera null.
+  if (!currentMatch) {
+    return (
+      <div style={{
+        background: BG, flex: 1,
+        display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        fontFamily: "'Inter', system-ui, sans-serif", color: BRIGHT, fontSize: 13,
+      }}>
+        {/* Sub-header avec retour */}
+        <div style={{
+          height: 44, padding: '0 24px',
+          display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0,
+          borderBottom: `1px solid ${BORDER}`, background: SURFACE,
+        }}>
+          <button onClick={onBack} style={{
+            background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`,
+            borderRadius: 7, padding: '6px 14px', cursor: 'pointer',
+            color: BRIGHT, fontSize: 12, fontWeight: 600,
+          }}>
+            ← Retour à la file
+          </button>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
+          {/* Patient strip — toujours dispo pour switcher */}
+          <div style={{
+            width: 60, flexShrink: 0,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            padding: '16px 0', gap: 10,
+            borderRight: `1px solid ${BORDER}`, background: SURFACE,
+            overflowY: 'auto',
+          }}>
+            <div style={{
+              fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.30)',
+              textTransform: 'uppercase', letterSpacing: '0.10em',
+              textAlign: 'center', lineHeight: 1.4,
+            }}>
+              {alertPatients.length}<br />pts
+            </div>
+            {alertPatients.map(({ patient: p, decisions }) => {
+              const riskCol = RISK_COLOR[decisions[0].riskLevel] ?? AMBER;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => onSelectPatient(p.id)}
+                  aria-label={`Ouvrir l'alerte de ${p.name}, niveau ${decisions[0].riskLevel}`}
+                  title={`${p.name} · ${decisions[0].riskLevel}`}
+                  style={{
+                    width: 38, height: 38, borderRadius: '50%', cursor: 'pointer',
+                    background: 'rgba(255,255,255,0.04)',
+                    border: `1.5px solid ${riskCol}55`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 10, fontWeight: 800, color: MUTED,
+                    boxShadow: `0 0 6px ${riskCol}22`,
+                  }}
+                >
+                  {initials(p.name)}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Empty state body */}
+          <div style={{
+            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexDirection: 'column', gap: 14, padding: 32,
+          }}>
+            {requestedPatient ? (
+              <>
+                <div style={{
+                  width: 72, height: 72, borderRadius: '50%',
+                  background: `${GREEN}15`, border: `2px solid ${GREEN}50`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 22, fontWeight: 800, color: GREEN,
+                  boxShadow: `0 0 24px ${GREEN}30`,
+                }}>
+                  {initials(requestedPatient.name)}
+                </div>
+                <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em', textAlign: 'center' }}>
+                  {requestedPatient.name}
+                </div>
+                <div style={{ fontSize: 13, color: MUTED, textAlign: 'center' }}>
+                  {requestedPatient.id} · {requestedPatient.diabetesType} · {requestedPatient.age} ans
+                </div>
+                <div style={{
+                  marginTop: 6, padding: '10px 16px', borderRadius: 8,
+                  background: `${GREEN}12`, border: `1px solid ${GREEN}30`,
+                  color: GREEN, fontSize: 12, fontWeight: 700,
+                }}>
+                  ✓ Aucune décision IA en attente pour ce patient
+                </div>
+                <div style={{ fontSize: 12, color: MUTED, maxWidth: 380, textAlign: 'center', lineHeight: 1.5 }}>
+                  Sélectionne un autre patient dans la barre de gauche pour traiter une alerte active,
+                  ou retourne à la file.
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize: 48 }}>?</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: BRIGHT }}>
+                  Patient introuvable
+                </div>
+                <div style={{ fontSize: 12, color: MUTED }}>
+                  L'identifiant <code style={{ color: AMBER }}>{patientId}</code> n'existe pas dans la cohorte.
+                </div>
+              </>
+            )}
+            <button onClick={onBack} style={{
+              marginTop: 12, padding: '10px 22px', borderRadius: 9,
+              background: AMBER, border: 'none', color: '#07090F',
+              fontSize: 13, fontWeight: 800, cursor: 'pointer',
+              boxShadow: `0 0 16px ${AMBER}33`,
+            }}>
+              ← Retour à la file
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
-  const patient = current.patient;
-  const decision: PendingClinicalDecision = current.decisions[0];
+  // Past the empty-state guards above, currentMatch is guaranteed non-null.
+  const patient = currentMatch.patient;
+  const decision: PendingClinicalDecision = currentMatch.decisions[0];
   const ctx = decision.contextSnapshot;
 
-  // Countdown to expiration (live, ticking via `now` state)
   const remainingMs = decision.expiresAt - now;
   const { mm, ss } = formatCountdown(remainingMs);
   const expired = remainingMs <= 0 && decisionStatus === 'pending';
 
-  // Build XAI cards from reasoning array
   const xaiCards = decision.reasoning.slice(0, 3).map((reason, i) => ({
     ...XAI_COLORS[i],
-    label: reason.split(' ').slice(0, 4).join(' '),
     val: reason,
     pct: XAI_WEIGHTS[i] ?? 15,
   }));
 
-  // Trend arrow
   const trendArrow = ctx.glucoseTrend === 'falling' ? '↘' : ctx.glucoseTrend === 'rising' ? '↗' : '→';
 
   return (
-    <div
-      style={{
-        background: BG,
-        minHeight: 'calc(100vh - 56px)',
-        margin: '-16px',
-        fontFamily: "'Inter', system-ui, sans-serif",
-        color: BRIGHT,
-        fontSize: 13,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-      className="sm:!-m-5 lg:!-m-7"
-    >
+    <div style={{
+      background: BG, flex: 1,
+      fontFamily: "'Inter', system-ui, sans-serif", color: BRIGHT, fontSize: 13,
+      display: 'flex', flexDirection: 'column', overflow: 'hidden',
+    }}>
 
-      {/* ── Sub-header (mode banner) ───────────────────────────────── */}
+      {/* ── Sub-header (mode banner + back) ─────────────────────────── */}
       <div style={{
-        height: 40, padding: '0 24px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0,
+        height: 44, padding: '0 24px',
+        display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0,
         borderBottom: `1px solid ${BORDER}`, background: SURFACE,
       }}>
+        <button onClick={onBack} style={{
+          background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`,
+          borderRadius: 7, padding: '6px 14px', cursor: 'pointer',
+          color: BRIGHT, fontSize: 12, fontWeight: 600,
+          display: 'flex', alignItems: 'center', gap: 6,
+        }}>
+          ← Retour à la file
+        </button>
         <span style={{
           fontSize: 9, fontWeight: 800, color: AMBER, background: AMBER_DIM,
           border: '1px solid rgba(255,171,0,0.25)', borderRadius: 4, padding: '3px 9px',
           letterSpacing: '0.12em', textTransform: 'uppercase',
         }}>
-          ⚡ Mode Action · Centre d'alerte
+          ⚡ Mode focus · Décision IA
         </span>
         <span style={{ fontSize: 11, color: MUTED }}>
-          Décision en attente · Justifiée par IA explicable
+          Justifiée par IA explicable · Tracée pour audit
         </span>
         <div style={{ flex: 1 }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -211,14 +319,16 @@ export default function AlertCenter() {
         </div>
       </div>
 
-      {/* ── Layout: patient strip + focus ──────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 600 }}>
+      {/* ── Layout: patient strip + focus ────────────────────────── */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
 
         {/* PATIENT STRIP */}
         <div style={{
-          width: 60, flexShrink: 0, display: 'flex', flexDirection: 'column',
-          alignItems: 'center', padding: '16px 0', gap: 10,
+          width: 60, flexShrink: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          padding: '16px 0', gap: 10,
           borderRight: `1px solid ${BORDER}`, background: SURFACE,
+          overflowY: 'auto',
         }}>
           <div style={{
             fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.30)',
@@ -234,7 +344,9 @@ export default function AlertCenter() {
             return (
               <button
                 key={p.id}
-                onClick={() => setSelectedId(p.id)}
+                onClick={() => onSelectPatient(p.id)}
+                aria-label={`${active ? 'Patient affiché : ' : 'Ouvrir l\'alerte de '}${p.name}, niveau ${decisions[0].riskLevel}`}
+                aria-current={active ? 'true' : undefined}
                 title={`${p.name} · ${decisions[0].riskLevel}`}
                 style={{
                   width: 38, height: 38, borderRadius: '50%', cursor: 'pointer',
@@ -246,8 +358,7 @@ export default function AlertCenter() {
                   boxShadow: active
                     ? `0 0 0 4px ${AMBER_DIM}, 0 0 14px ${AMBER_DIM}`
                     : `0 0 6px ${riskCol}22`,
-                  position: 'relative',
-                  padding: 0,
+                  position: 'relative', padding: 0, flexShrink: 0,
                 }}
               >
                 {initials(p.name)}
@@ -263,7 +374,7 @@ export default function AlertCenter() {
         </div>
 
         {/* FOCUS ZONE */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
 
           {/* ALERT HEADER */}
           <div style={{
@@ -271,8 +382,8 @@ export default function AlertCenter() {
             background: `linear-gradient(135deg, rgba(255,171,0,0.08) 0%, rgba(255,171,0,0.03) 100%)`,
             borderBottom: '1px solid rgba(255,171,0,0.15)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24,
+            flexWrap: 'wrap',
           }}>
-            {/* Identity */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0, flex: 1 }}>
               <div style={{
                 width: 46, height: 46, borderRadius: '50%', flexShrink: 0,
@@ -301,7 +412,6 @@ export default function AlertCenter() {
               </div>
             </div>
 
-            {/* Countdown */}
             <div style={{ textAlign: 'center', flexShrink: 0 }}>
               <div style={{
                 fontSize: 9, fontWeight: 700, color: MUTED,
@@ -322,7 +432,6 @@ export default function AlertCenter() {
               </div>
             </div>
 
-            {/* Actions */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 180, flexShrink: 0 }}>
               <button
                 onClick={() => handleAction('applied')}
@@ -412,11 +521,10 @@ export default function AlertCenter() {
             </div>
 
             {/* SUGGESTION + DECISION */}
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
 
-              {/* AI Suggestion */}
               <div style={{
-                flex: 1, background: SURFACE, borderRadius: 14,
+                flex: '1 1 380px', background: SURFACE, borderRadius: 14,
                 border: `1px solid ${AMBER}25`, padding: '16px 20px',
                 boxShadow: `0 0 24px rgba(255,171,0,0.06)`,
               }}>
@@ -433,7 +541,6 @@ export default function AlertCenter() {
                   {decision.aiRecommendation}
                 </div>
 
-                {/* Alternatives */}
                 {decision.alternativeOptions && decision.alternativeOptions.length > 0 && (
                   <div>
                     <div style={{
@@ -455,8 +562,7 @@ export default function AlertCenter() {
                             <span style={{
                               fontSize: 9, fontWeight: 700, color: riskC,
                               background: `${riskC}15`, border: `1px solid ${riskC}30`,
-                              borderRadius: 4, padding: '2px 6px',
-                              flexShrink: 0,
+                              borderRadius: 4, padding: '2px 6px', flexShrink: 0,
                             }}>{riskLabel}</span>
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ fontSize: 12, color: BRIGHT, fontWeight: 600 }}>{alt.label}</div>
@@ -470,7 +576,6 @@ export default function AlertCenter() {
                 )}
               </div>
 
-              {/* Decision panel */}
               <div style={{ width: 200, display: 'flex', flexDirection: 'column', gap: 10, flexShrink: 0 }}>
                 <div style={{
                   fontSize: 9, fontWeight: 700, color: MUTED,
@@ -558,17 +663,8 @@ export default function AlertCenter() {
                   <div style={{ fontSize: 13, fontWeight: 800, color: c.color }}>{c.val}</div>
                 </div>
               ))}
-              <div style={{ flex: 1 }} />
-              <button style={{
-                padding: '6px 14px', borderRadius: 8,
-                border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.04)',
-                fontSize: 11, fontWeight: 600, color: MUTED, cursor: 'pointer',
-              }}>
-                Dossier complet →
-              </button>
             </div>
 
-            {/* Persistence-failure banner (honest: no false "tracée" claim) */}
             {persistError && (
               <div style={{
                 background: `${RED}15`, border: `1px solid ${RED}40`,
@@ -583,7 +679,6 @@ export default function AlertCenter() {
               </div>
             )}
 
-            {/* Expired banner (no action taken in time) */}
             {expired && (
               <div style={{
                 background: `${RED}15`, border: `1px solid ${RED}40`,
@@ -598,7 +693,6 @@ export default function AlertCenter() {
               </div>
             )}
 
-            {/* Status banner if decision persisted */}
             {persistedAction && (
               <div style={{
                 background: persistedAction.action === 'applied' ? `${GREEN}15` : persistedAction.action === 'modified' ? `${AMBER}15` : `${MUTED}15`,

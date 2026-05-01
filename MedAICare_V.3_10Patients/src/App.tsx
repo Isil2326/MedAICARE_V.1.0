@@ -1,30 +1,27 @@
 // ============================================================================
-// APP v5.0 — MediAI Care · Premium Healthtech
-// Sidebar épurée · Navigation fluide · Mobile premium
+// APP v6.0 — MediAI Care · Architecture B (Triage → Focus pour cliniciens)
+// Patient: sidebar + dashboards (inchangé). Clinicien: ClinicianHub plein écran.
 // ============================================================================
 
 import { useState, useCallback, useEffect } from 'react';
 import {
-  LayoutDashboard, Stethoscope, Wifi, FileText,
-  LogOut, AlertTriangle, MessageSquare, Activity,
-  Bell, ChevronRight, Lock,
+  LayoutDashboard, Wifi, LogOut, AlertTriangle,
+  MessageSquare, Bell, ChevronRight, Lock,
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import LandingPage from './components/LandingPage';
 import PatientDashboard from './components/PatientDashboard';
-import DoctorDashboard from './components/DoctorDashboard';
-import AuditLog from './components/AuditLog';
+import ClinicianHub from './components/clinician/ClinicianHub';
 import DevicesView from './components/DevicesView';
 import Messaging, { seedDemoData as seedMessagingDemo } from './components/Messaging';
 import { cn } from './utils/cn';
 import type { ViewMode } from './types/medical';
 
-const allNavItems = [
-  { key: 'patient'  as ViewMode, label: 'Tableau de bord', short: 'Accueil',    icon: LayoutDashboard, roles: ['patient'] },
-  { key: 'messages' as ViewMode, label: 'Messages',         short: 'Messages',   icon: MessageSquare,   roles: ['patient', 'clinician'] },
-  { key: 'devices'  as ViewMode, label: 'Mes appareils',    short: 'Appareils',  icon: Wifi,            roles: ['patient'] },
-  { key: 'doctor'   as ViewMode, label: 'Espace clinique',  short: 'Clinique',   icon: Stethoscope,     roles: ['clinician'] },
-  { key: 'audit'    as ViewMode, label: 'Audit & logs',     short: 'Audit',      icon: FileText,        roles: ['clinician'] },
+// Patient-only navigation. Clinician navigation lives entirely inside ClinicianHub.
+const patientNavItems = [
+  { key: 'patient'  as ViewMode, label: 'Tableau de bord', short: 'Accueil',  icon: LayoutDashboard },
+  { key: 'messages' as ViewMode, label: 'Messages',         short: 'Messages', icon: MessageSquare },
+  { key: 'devices'  as ViewMode, label: 'Mes appareils',    short: 'Appareils', icon: Wifi },
 ];
 
 // ─── Inner App ────────────────────────────────────────────────────────────────
@@ -40,6 +37,9 @@ function AppContent() {
     if (user.role === 'patient' || user.role === 'clinician') {
       try { seedMessagingDemo(user.id, user.role); } catch (e) { console.warn('Seed messaging failed', e); }
     }
+    // Only the patient shell displays the unread badge — skip the polling for
+    // clinicians (whose ClinicianHub doesn't show it) to avoid wasted ticks.
+    if (user.role !== 'patient') return;
     const updateUnread = () => {
       try {
         const msgs: any[] = JSON.parse(localStorage.getItem('mediai_messages_v1') || '[]');
@@ -52,34 +52,34 @@ function AppContent() {
     return () => { window.removeEventListener('mediai:messages:updated', updateUnread); clearInterval(interval); };
   }, [user]);
 
-  const navItems = user ? allNavItems.filter(item => item.roles.includes(user.role)) : [];
-
-  const canAccess = useCallback((view: ViewMode): boolean => {
-    if (!user) return false;
-    const item = allNavItems.find(i => i.key === view);
-    if (!item) return true;
-    return item.roles.includes(user.role);
-  }, [user]);
-
   const navigate = useCallback((view: ViewMode) => {
-    if (view !== 'landing' && user && !canAccess(view)) {
-      setAccessDenied(`Accès réservé ${user.role === 'patient' ? 'aux cliniciens' : 'aux patients'}.`);
+    // Patients must never reach 'doctor' (clinician shell). Block explicitly.
+    if (user?.role === 'patient' && view === 'doctor') {
+      setAccessDenied("Cet onglet n'est pas disponible pour ce rôle.");
+      setTimeout(() => setAccessDenied(null), 3500);
+      return;
+    }
+    // For clinicians, App's navigate is mostly unused (ClinicianHub handles its own
+    // navigation). Only landing and 'doctor' (the post-login route) are valid.
+    if (user?.role === 'clinician' && view !== 'landing' && view !== 'doctor') {
+      setAccessDenied("Cet onglet n'est pas disponible pour ce rôle.");
       setTimeout(() => setAccessDenied(null), 3500);
       return;
     }
     setActiveView(view);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [user, canAccess]);
+  }, [user]);
 
+  // After login, route to the right shell based on role
   useEffect(() => {
-    if (user && activeView === 'landing') setActiveView(user.role === 'patient' ? 'patient' : 'doctor');
+    if (user && activeView === 'landing') {
+      setActiveView(user.role === 'patient' ? 'patient' : 'doctor');
+    }
   }, [user, activeView]);
 
   useEffect(() => {
     if (!loading && !user && activeView !== 'landing') setActiveView('landing');
   }, [user, loading, activeView]);
-
-  const handleLogout = () => { logout(); setActiveView('landing'); };
 
   if (loading) {
     return (
@@ -96,15 +96,20 @@ function AppContent() {
     return <LandingPage onNavigate={(v) => navigate(v as ViewMode)} />;
   }
 
+  // ── Clinician: full-bleed V3-Dark hub. No App sidebar. ──────────────────
+  if (user.role === 'clinician') {
+    return <ClinicianHub />;
+  }
+
+  // ── Patient: classic sidebar shell ───────────────────────────────────────
   const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const firstName = user.name.split(' ')[0];
-  const isPatient = user.role === 'patient';
-  const currentNav = allNavItems.find(n => n.key === activeView);
+  const currentNav = patientNavItems.find(n => n.key === activeView);
+  const handleLogout = () => { logout(); setActiveView('landing'); };
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
 
-      {/* ── Toast accès refusé ── */}
       {accessDenied && (
         <div className="fixed top-5 right-5 z-[100] max-w-sm animate-fade-in-up">
           <div className="bg-white border border-amber-200 rounded-2xl p-4 card-shadow-md flex items-start gap-3">
@@ -119,12 +124,11 @@ function AppContent() {
         </div>
       )}
 
-      {/* ── Sidebar desktop ── */}
+      {/* ── Sidebar desktop (patient seulement) ── */}
       <aside className="hidden lg:flex w-[248px] shrink-0 flex-col bg-white border-r border-slate-200/80 min-h-screen sticky top-0 h-screen">
 
-        {/* Logo */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100">
-          <button onClick={() => navigate(isPatient ? 'patient' : 'doctor')} className="flex items-center gap-3 w-full group">
+          <button onClick={() => navigate('patient')} className="flex items-center gap-3 w-full group">
             <img src="/logo-mark.png" alt="MediAI Care" className="w-9 h-9 shrink-0" />
             <div className="text-left">
               <div className="flex items-baseline leading-none">
@@ -133,19 +137,15 @@ function AppContent() {
                 <span className="text-[10px] font-bold text-slate-400 tracking-wide ml-1.5 self-center">CARE</span>
               </div>
               <div className="text-[7.5px] text-slate-300 font-bold mt-[3px] uppercase tracking-[0.18em]">
-                {isPatient ? 'Espace patient' : 'Console clinique'}
+                Espace patient
               </div>
             </div>
           </button>
         </div>
 
-        {/* User profile */}
         <div className="px-3 pt-4 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-50 border border-slate-100">
-            <div className={cn(
-              'w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-bold shrink-0',
-              isPatient ? 'bg-brand-100 text-brand-700' : 'bg-blue-100 text-blue-700'
-            )}>
+            <div className="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center text-[11px] font-bold shrink-0">
               {initials}
             </div>
             <div className="flex-1 min-w-0">
@@ -156,10 +156,9 @@ function AppContent() {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold px-3 mb-3">Navigation</p>
-          {navItems.map(({ key, label, icon: Icon }) => {
+          {patientNavItems.map(({ key, label, icon: Icon }) => {
             const isActive = activeView === key;
             const badge = key === 'messages' ? unreadMessages : 0;
             return (
@@ -192,7 +191,6 @@ function AppContent() {
           })}
         </nav>
 
-        {/* Sidebar footer */}
         <div className="px-3 pb-4 pt-3 border-t border-slate-100 space-y-1">
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-100">
             <Lock className="w-3 h-3 text-brand-600 shrink-0" />
@@ -208,11 +206,9 @@ function AppContent() {
       {/* ── Main Content ── */}
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
 
-        {/* Header */}
         <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-[0_1px_0_rgba(15,23,42,0.05)]">
           <div className="flex items-center justify-between px-5 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              {/* Mobile logo */}
               <img src="/logo-mark.png" alt="MediAI Care" className="lg:hidden w-7 h-7 shrink-0" />
               <div>
                 <h1 className="text-[14px] font-bold text-slate-900 tracking-tight">
@@ -244,24 +240,17 @@ function AppContent() {
           </div>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 p-4 sm:p-5 lg:p-7">
           <div className="max-w-[1360px] mx-auto">
-            {activeView === 'patient'  && user.role === 'patient'   && <PatientDashboard />}
-            {activeView === 'doctor'   && user.role === 'clinician' && <DoctorDashboard />}
-            {activeView === 'devices'  && user.role === 'patient'   && <DevicesView />}
-            {activeView === 'messages'                              && <Messaging />}
-            {activeView === 'audit'    && user.role === 'clinician' && <AuditLog />}
-
-            {activeView === 'patient'  && user.role !== 'patient'   && <AccessDeniedBlock message="Réservé aux patients." />}
-            {activeView === 'doctor'   && user.role !== 'clinician' && <AccessDeniedBlock message="Réservé aux cliniciens." />}
-            {activeView === 'audit'    && user.role !== 'clinician' && <AccessDeniedBlock message="Journal d'audit réservé aux cliniciens." />}
+            {activeView === 'patient'  && <PatientDashboard />}
+            {activeView === 'devices'  && <DevicesView />}
+            {activeView === 'messages' && <Messaging />}
           </div>
         </main>
 
         {/* Bottom nav mobile */}
         <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-around px-1 pt-1 pb-safe z-40 shadow-[0_-4px_24px_rgba(15,23,42,0.08)]" style={{ paddingBottom: 'max(4px, env(safe-area-inset-bottom, 4px))' }}>
-          {navItems.map(({ key, icon: Icon, short }) => {
+          {patientNavItems.map(({ key, icon: Icon, short }) => {
             const isActive = activeView === key;
             const badge = key === 'messages' ? unreadMessages : 0;
             return (
@@ -289,32 +278,15 @@ function AppContent() {
           </button>
         </nav>
 
-        {/* Footer desktop */}
         <footer className="hidden lg:block border-t border-slate-100 bg-white/60 px-6 py-3">
           <div className="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-2 text-[10.5px] text-slate-400 font-medium">
             <span className="flex items-center gap-1.5">
               <ChevronRight className="w-3 h-3" />
               MediAI Care · {user.name}
             </span>
-            <span>IEC 62304 · ISO 13485 · RGPD · HDS · v5.0.0</span>
+            <span>IEC 62304 · ISO 13485 · RGPD · HDS · v6.0.0</span>
           </div>
         </footer>
-      </div>
-    </div>
-  );
-}
-
-// ─── Access Denied ────────────────────────────────────────────────────────────
-
-function AccessDeniedBlock({ message }: { message: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] gap-5">
-      <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center">
-        <AlertTriangle className="w-7 h-7 text-amber-500" />
-      </div>
-      <div className="text-center">
-        <div className="text-[16px] font-bold text-slate-900 mb-1.5">Accès restreint</div>
-        <div className="text-[13px] text-slate-500 font-medium">{message}</div>
       </div>
     </div>
   );
