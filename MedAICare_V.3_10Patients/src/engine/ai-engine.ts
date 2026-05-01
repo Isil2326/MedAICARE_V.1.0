@@ -157,7 +157,7 @@ function predictGlycemicTrend(vitals: PatientVitals): GlycemicTrend {
   };
 }
 
-function buildRecommendationRationale(vitals: PatientVitals, trend: GlycemicTrend): RecommendationRationale {
+function buildRecommendationRationale(vitals: PatientVitals, _trend: GlycemicTrend): RecommendationRationale {
   const dataPoints: RecommendationRationale['dataPoints'] = [
     { name: 'Glycémie', value: `${vitals.glucose} mg/dL`, status: vitals.glucose < 70 || vitals.glucose > 180 ? 'warning' : 'normal' },
   ];
@@ -165,7 +165,7 @@ function buildRecommendationRationale(vitals: PatientVitals, trend: GlycemicTren
   let trigger: 'prediction' | 'alert' | 'routine' = 'routine';
   let triggerDetails = 'Surveillance de routine';
   let reasoning = 'Paramètres stables.';
-  let alternativeActions: string[] = [];
+  const alternativeActions: string[] = [];
   let evidenceLevel: 'A' | 'B' | 'C' = 'C';
 
   if (vitals.glucose < 70) {

@@ -12,8 +12,9 @@ import type { ViewMode } from '../types/medical';
 import AuthModal from './AuthModal';
 
 // ── Animation variants ────────────────────────────────────────────────────────
-const fade  = (delay = 0) => ({ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { delay, duration: 0.55, ease: [0.22, 1, 0.36, 1] } } });
-const fadeX = (dir: 1 | -1, delay = 0) => ({ hidden: { opacity: 0, x: dir * 40 }, visible: { opacity: 1, x: 0, transition: { delay, duration: 0.65, ease: [0.22, 1, 0.36, 1] } } });
+const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
+const fade  = (delay = 0) => ({ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { delay, duration: 0.55, ease: EASE_OUT_EXPO } } });
+const fadeX = (dir: 1 | -1, delay = 0) => ({ hidden: { opacity: 0, x: dir * 40 }, visible: { opacity: 1, x: 0, transition: { delay, duration: 0.65, ease: EASE_OUT_EXPO } } });
 
 interface LandingPageProps { onNavigate: (view: ViewMode) => void; }
 
@@ -366,10 +367,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="text-[12px] font-bold text-brand-300 uppercase tracking-widest mb-2">Cliniciens</div>
               <h3 className="text-[26px] font-black text-white leading-tight mb-3">Décidez mieux, plus vite.</h3>
               <p className="text-[14px] text-white/60 leading-relaxed mb-6 font-medium">
-                Vue unifiée sur votre cohorte, recommandations IA validées cliniquement, et messagerie sécurisée HDS.
+                Vue unifiée sur votre cohorte, recommandations IA explicables, journal d&apos;activité tracé localement.
               </p>
               <ul className="space-y-2.5 mb-8">
-                {['Triage intelligent de la cohorte', 'Recommandations IA explicables SHAP', 'Prescriptions avec audit trail', 'Messagerie sécurisée HDS'].map(it => (
+                {['Triage intelligent de la cohorte', 'Recommandations IA expliquées', 'Prescriptions tracées (démo)', 'Messagerie patient ↔ clinicien'].map(it => (
                   <li key={it} className="flex items-center gap-2.5 text-[13.5px] text-white/80 font-medium">
                     <div className="w-4 h-4 rounded-full bg-brand-600 flex items-center justify-center shrink-0">
                       <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
@@ -418,13 +419,18 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <Shield className="w-6 h-6 text-brand-600" />
               </div>
               <div>
-                <h3 className="text-[20px] font-black text-slate-900 mb-1">Vos données vous appartiennent.</h3>
-                <p className="text-[14px] text-slate-500 font-medium">Chiffrement AES-256 · Hébergement HDS France · Conforme RGPD & IEC 62304</p>
+                <h3 className="text-[20px] font-black text-slate-900 mb-1">Prototype académique — données simulées.</h3>
+                <p className="text-[14px] text-slate-500 font-medium">
+                  Authentification PBKDF2-SHA256 · Stockage local navigateur · Aucune donnée transmise
+                </p>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {['HDS', 'RGPD', 'HL7 FHIR', 'IEC 62304', 'ISO 13485'].map(t => (
-                    <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold">{t}</span>
+                  {['Démo', 'Données simulées', 'Mémoire de Master', 'Non certifié'].map(t => (
+                    <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold">{t}</span>
                   ))}
                 </div>
+                <p className="text-[11.5px] text-slate-400 font-medium mt-3 italic">
+                  Une version commerciale viserait l&apos;ensemble HDS, RGPD opérationnel, IEC 62304, ISO 13485, HL7 FHIR. Aucune de ces certifications n&apos;est obtenue à ce stade.
+                </p>
               </div>
             </div>
             <button onClick={() => onNavigate('audit')} className="shrink-0 px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-[13px] transition whitespace-nowrap">

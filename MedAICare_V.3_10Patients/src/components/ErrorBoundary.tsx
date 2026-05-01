@@ -69,8 +69,8 @@ export default class ErrorBoundary extends Component<Props, State> {
                     <AlertTriangle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-bold text-white">Erreur Système Détectée</h1>
-                    <p className="text-xs text-red-100">Dispositif Médical Logiciel — Mode Sécurisé</p>
+                    <h1 className="text-lg font-bold text-white">Erreur système détectée</h1>
+                    <p className="text-xs text-red-100">Prototype académique — Mode dégradé</p>
                   </div>
                 </div>
               </div>
@@ -80,8 +80,8 @@ export default class ErrorBoundary extends Component<Props, State> {
                 <div className="mb-5">
                   <h2 className="text-sm font-semibold text-slate-900 mb-2">Une erreur inattendue s'est produite</h2>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    Conformément aux normes IEC 62304, le système est passé en mode sécurisé. 
-                    Aucune donnée patient n'a été compromise. L'incident a été journalisé pour audit.
+                    Le prototype est passé en mode dégradé pour éviter tout comportement imprévu.
+                    Les données simulées du navigateur n&apos;ont pas été modifiées. Détail consigné ci-dessous.
                   </p>
                 </div>
 
@@ -134,7 +134,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 <div className="mt-5 pt-4 border-t border-slate-100">
                   <div className="flex items-center justify-between text-[10px] text-slate-400">
                     <span>Erreur ID: ERR-{Date.now().toString(36).toUpperCase()}</span>
-                    <span>ISO 13485 · IEC 62304</span>
+                    <span>Prototype académique · v1.0.0-prototype</span>
                   </div>
                 </div>
               </div>

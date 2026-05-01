@@ -1,7 +1,7 @@
 # MediAI Care - Medical Dashboard
 
 ## Overview
-MediAI Care (v3.3.2) is a specialized medical dashboard and decision-support system for managing diabetic patients. It is a Master's Thesis project in Biomedical Informatics integrating IoMT data with Explainable AI (XAI) to provide therapeutic recommendations.
+MediAI Care (v1.0.0-prototype) is a specialized medical dashboard and decision-support system for managing diabetic patients. It is a Master's Thesis project in Biomedical Informatics integrating IoMT data with Explainable AI (XAI) to provide therapeutic recommendations. **Status: academic prototype — not destined for clinical use. No regulatory certification (MDR, IEC 62304, ISO 13485, HDS, operational GDPR).** See `MedAICare_V.3_10Patients/LIMITATIONS.md` for the full scope of intentional limits.
 
 ## Tech Stack
 - **Framework:** React 19 with TypeScript
@@ -85,3 +85,4 @@ Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant. Vivid & s
 - QR code scanning for lab report import
 - Prescription management with full audit trail
 - **Hub clinicien V3-Dark (v6.0)** — voir section "Architecture clinicien v6.0" plus haut. Triage (file priorisée) → Focus (patient + décision IA + XAI) avec persistance audit-trail via `engine/decisionLog.ts` (localStorage append-only, traceID v4-like, sync multi-onglet via `storage` event, banner honnête "Tracée dans le journal local" / "Décision non tracée"). Note SaMD : journal local non-autoritaire (démo).
+- **Infrastructure d'évaluation XAI (Vague 5, objectif O4)** — `engine/evaluationService.ts` capture des réponses Likert post-décision avec assignation A/B (cohorte A = explications visibles, cohorte B = sans). E-mails cliniciens hashés (FNV-1a `h_xxxxxxxx`) — aucune PII en clair dans `localStorage` (clé `mediai_evaluation_v1`). `EvaluationPanel` s'affiche après arbitrage dans `FocusView` ; bouton "Reprendre l'évaluation" si reportée ; `EvaluationExportButton` dans le menu profil de `ClinicianHub` permet l'export JSON normalisé + reset. Posture honnête : outil de mesure prêt, étude utilisateur IRB-compliant à conduire ensuite.

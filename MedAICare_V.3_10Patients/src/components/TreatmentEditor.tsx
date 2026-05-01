@@ -248,7 +248,7 @@ function NewPrescriptionModal({ patientId, patientName, clinicianName, clinician
         <div className="flex items-center justify-between px-6 py-3.5 border-t border-slate-100 bg-slate-50 shrink-0">
           <div className="flex items-center gap-1.5 text-[10.5px] text-slate-400 font-medium">
             <Shield className="w-3 h-3 text-brand-600" />
-            Prescription tracée · Signature SHA-256 · Conforme IEC 62304
+            Prescription tracée localement · Prototype non certifié
           </div>
           <div className="flex gap-2">
             <button onClick={onClose} className="px-4 py-2 rounded-xl text-[12.5px] text-slate-600 hover:bg-slate-200 transition font-semibold">

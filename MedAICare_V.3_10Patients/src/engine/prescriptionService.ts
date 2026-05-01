@@ -1,10 +1,13 @@
 // ============================================================================
-// PRESCRIPTION SERVICE v3.4.0
+// PRESCRIPTION SERVICE — Prototype académique
 // Gestion des prescriptions, plans de traitement, audit thérapeutique
 // • Persistance localStorage avec versioning
-// • Signature SHA-256 pour intégrité
-// • Audit trail complet (chaque modification tracée)
-// • Conformité IEC 62304 · Traçabilité ISO 13485
+// • Signature SHA-256 pour intégrité (côté client uniquement, démo)
+// • Audit trail local (NON immuable au sens réglementaire)
+//
+// LIMITES : voir LIMITATIONS.md. Une vraie traçabilité IEC 62304 / ISO 13485
+// exigerait un backend append-only signé et une gestion documentée du cycle
+// de vie logiciel. Le présent service est une démonstration pédagogique.
 // ============================================================================
 
 import type {

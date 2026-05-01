@@ -17,6 +17,12 @@ import {
   BG, SURFACE, BORDER, AMBER, AMBER_DIM, CYAN, VIOLET, GREEN, RED, MUTED, BRIGHT,
   RISK_COLOR, initials, formatCountdown, timeAgo,
 } from './v3DarkTheme';
+import EvaluationPanel from './EvaluationPanel';
+import {
+  getEffectiveCohort,
+  hasEvaluationForActor,
+  EVALUATION_CHANGE_EVENT,
+} from '../../engine/evaluationService';
 
 const XAI_COLORS = [
   { color: CYAN,   glow: 'rgba(0,229,255,0.15)',   icon: '↓' },
@@ -93,6 +99,29 @@ export default function FocusView({ patientId, onBack, onSelectPatient }: FocusV
   }, [currentPatientId, currentDecisionId]);
 
   const decisionStatus: 'pending' | DecisionAction = persistedAction?.action ?? 'pending';
+
+  // ── O4 evaluation infrastructure (XAI A/B + Likert questionnaire) ─────────
+  const cohort = useMemo(() => getEffectiveCohort(user?.email), [user?.email]);
+  const showXAIVisible = cohort === 'A';
+  const [evaluationDone, setEvaluationDone] = useState(false);
+  const [evaluationDismissed, setEvaluationDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!currentDecisionId || !user?.email) {
+      setEvaluationDone(false);
+      setEvaluationDismissed(false);
+      return;
+    }
+    setEvaluationDone(hasEvaluationForActor(user.email, currentDecisionId));
+    setEvaluationDismissed(false);
+    const refresh = () => {
+      if (currentDecisionId && user?.email) {
+        setEvaluationDone(hasEvaluationForActor(user.email, currentDecisionId));
+      }
+    };
+    window.addEventListener(EVALUATION_CHANGE_EVENT, refresh);
+    return () => window.removeEventListener(EVALUATION_CHANGE_EVENT, refresh);
+  }, [currentDecisionId, user?.email]);
 
   const handleAction = (action: DecisionAction) => {
     if (!current || !user || persistedAction) return;
@@ -470,13 +499,14 @@ export default function FocusView({ patientId, onBack, onSelectPatient }: FocusV
             display: 'flex', flexDirection: 'column', gap: 14,
           }}>
 
-            {/* XAI CARDS */}
+            {/* XAI CARDS — masquées en cohorte B (étude A/B objectif O4) */}
+            {showXAIVisible ? (
             <div>
               <div style={{
                 fontSize: 9, fontWeight: 700, color: MUTED,
                 textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 10,
               }}>
-                Pourquoi l'IA prédit ce risque — {xaiCards.length} signaux combinés
+                Pourquoi l'IA prédit ce risque — {xaiCards.length} signaux combinés · cohorte A
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${xaiCards.length}, 1fr)`, gap: 10 }}>
                 {xaiCards.map((c, i) => (
@@ -519,6 +549,33 @@ export default function FocusView({ patientId, onBack, onSelectPatient }: FocusV
                 ))}
               </div>
             </div>
+            ) : (
+              <div style={{
+                background: SURFACE,
+                border: `1px solid ${BORDER}`,
+                borderRadius: 12,
+                padding: '14px 18px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 8,
+                  background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 16, color: MUTED,
+                }}>◔</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 12, color: BRIGHT, fontWeight: 600, marginBottom: 3 }}>
+                    Mode contrôle (cohorte B) — explications IA masquées
+                  </div>
+                  <div style={{ fontSize: 11, color: MUTED, lineHeight: 1.5 }}>
+                    Vous voyez la recommandation IA sans les justifications détaillées.
+                    Étape de l'étude utilisateur (objectif O4) pour mesurer l'apport des explications.
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* SUGGESTION + DECISION */}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -541,7 +598,7 @@ export default function FocusView({ patientId, onBack, onSelectPatient }: FocusV
                   {decision.aiRecommendation}
                 </div>
 
-                {decision.alternativeOptions && decision.alternativeOptions.length > 0 && (
+                {showXAIVisible && decision.alternativeOptions && decision.alternativeOptions.length > 0 && (
                   <div>
                     <div style={{
                       fontSize: 9, fontWeight: 700, color: MUTED,
@@ -714,6 +771,71 @@ export default function FocusView({ patientId, onBack, onSelectPatient }: FocusV
                     Trace ID · {persistedAction.traceId}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {persistedAction && user && !evaluationDone && !evaluationDismissed && (
+              <EvaluationPanel
+                decisionId={persistedAction.decisionId}
+                decisionAction={persistedAction.action}
+                cohort={cohort}
+                actorEmail={user.email}
+                actorSpecialty={user.specialty}
+                onSubmitted={() => setEvaluationDone(true)}
+                onSkip={() => setEvaluationDismissed(true)}
+              />
+            )}
+
+            {persistedAction && user && !evaluationDone && evaluationDismissed && (
+              <div style={{
+                background: 'rgba(255,171,0,0.08)',
+                border: '1px solid rgba(255,171,0,0.30)',
+                borderRadius: 10,
+                padding: '10px 14px',
+                fontSize: 12,
+                color: BRIGHT,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+              }}>
+                <span>
+                  Évaluation reportée — vous pouvez encore la compléter pour cette décision.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setEvaluationDismissed(false)}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid rgba(255,171,0,0.45)',
+                    color: AMBER,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: '6px 12px',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                  }}
+                >
+                  Reprendre l'évaluation
+                </button>
+              </div>
+            )}
+
+            {evaluationDone && (
+              <div style={{
+                background: `${GREEN}15`,
+                border: `1px solid ${GREEN}40`,
+                borderRadius: 10,
+                padding: '10px 16px',
+                fontSize: 12,
+                color: BRIGHT,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+              }}>
+                <span style={{ fontSize: 14, color: GREEN }}>✓</span>
+                <span>Évaluation enregistrée pour cette décision (cohorte {cohort}).</span>
               </div>
             )}
 

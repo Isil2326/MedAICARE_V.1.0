@@ -6,6 +6,90 @@
 
 ---
 
+## [v1.0.0-prototype] — 2026-05-01 — 🎓 ALIGNEMENT HONNÊTE PROTOTYPE
+
+> 📄 Audits : [`RAPPORT_COMMISSION_AUDIT_PLURIDISCIPLINAIRE.md`](./RAPPORT_COMMISSION_AUDIT_PLURIDISCIPLINAIRE.md) · [`RAPPORT_JURY_ACADEMIQUE_EXPERTS.md`](./RAPPORT_JURY_ACADEMIQUE_EXPERTS.md) · [`LIMITATIONS.md`](./LIMITATIONS.md)
+
+### 🔬 Vague 5 — Infrastructure d'évaluation XAI (action 9 de l'audit, objectif O4)
+- Création du service `src/engine/evaluationService.ts` — **outil de mesure prêt, étude utilisateur à conduire ensuite**.
+  - **Anonymisation renforcée (post-review)** : la clé interne du dictionnaire `actors` est désormais le **hash FNV-1a (`h_xxxxxxxx`)** de l'e-mail, et plus l'e-mail en clair. Aucune PII ne traîne dans `localStorage`.
+  - Pseudonyme stable par clinicien (`anon_<uuid>`), e-mail jamais persisté ni dans les entrées ni comme clé.
+  - Assignation de cohorte A/B équilibrée (alternance pair/impair sur l'ordre d'enregistrement).
+  - Override manuel de cohorte (utile pour démonstration / soutenance).
+  - 5 questions Likert (1-5) : `trustAI`, `explanationClarity`, `usefulness`, `timeToDecide`, `wouldUseInPractice` + commentaire libre.
+  - Stockage `localStorage` clé `mediai_evaluation_v1`, jamais transmis à un serveur.
+  - Évènement `mediai:evaluation` pour rafraîchir l'UI.
+  - Garde-fou anti-doublon : (acteur, décision) unique.
+  - **`hasEvaluationForActor(email, decisionId)` (post-review)** : nouvelle fonction par-acteur — l'ancien `hasEvaluationFor` (global) ne pilote plus l'UI ; deux cliniciens distincts peuvent désormais évaluer indépendamment la même décision.
+  - Export JSON normalisé (`schemaVersion`, `exportedAt`, `cohortOverride`, `entries`, `stats`).
+- Composants cliniciens :
+  - `EvaluationPanel.tsx` — panneau Likert affiché après arbitrage d'une décision dans `FocusView`. Le panneau adopte la cohorte effective et masque/affiche les rappels XAI selon le bras de l'étude.
+  - `EvaluationExportButton.tsx` — bouton export JSON avec stats agrégées par cohorte + sélecteur d'override + reset, intégré dans le menu profil de `ClinicianHub`.
+- Intégration `FocusView` :
+  - Les **cartes XAI** (Top contributions, Pourquoi pas autre chose) **ET le bloc « Alternatives évaluées »** (post-review) sont conditionnellement masqués pour la cohorte B, avec un bandeau honnête « Cohorte B — Évaluation IA sans explications visibles ». L'isolement « sans explication » est désormais strict.
+  - Après arbitrage (Apply / Modify / Dismiss), le panneau d'évaluation s'affiche automatiquement sous le bandeau de confirmation.
+  - **« Plus tard » réouvrable (post-review)** : si le clinicien clique « Passer », un bandeau ambré « Évaluation reportée » apparaît avec un bouton **« Reprendre l'évaluation »** ; ce n'est plus un dismiss définitif.
+- Tests `evaluationService.test.ts` (14 tests) : création d'acteur stable et anonyme, équilibrage de cohorte, **vérification stricte d'absence de PII en clair dans le storage** (post-review), override A/B/null, validations Likert, rejet decisionId vide, persistance correcte, anti-doublon, **isolation par acteur de `hasEvaluationForActor`** (post-review), statistiques par cohorte, export JSON, reset.
+- **Posture honnête** : libellés UI rappellent qu'il s'agit d'un **prototype académique** — la collecte sert à préparer une étude IRB-compliant ultérieure ; aucune conclusion d'efficacité clinique n'est dérivée à ce stade.
+- **Acceptance** : 50 tests verts (vs 36 avant Vague 5), `tsc --noEmit` vert, lint 0 erreur, build 11.8 s, panneau fonctionnel et données exportables, 4 correctifs de revue intégrés (PII, multi-acteur, masquage XAI strict cohorte B, « Plus tard » réouvrable).
+
+### 🧱 Vague 4 — Refactor PatientDashboard (action 8 de l'audit)
+- Éclatement du monolithe `PatientDashboard.tsx` (**928 → 240 lignes**, ~74 % de réduction) en sous-composants thématiques sous `src/components/patient/`.
+- Nouveaux modules :
+  - `formatters.ts` — utilitaires (`formatTime`, `formatDateRelative`, `EVENT_ICONS`, type `Tab`).
+  - `PatientTabs.tsx` (40 lignes) — barre d'onglets.
+  - `QuickAction.tsx` (28) — bouton d'action rapide.
+  - `EventRow.tsx` (56) — ligne d'évènement (repas/insuline/activité/note/glycémie).
+  - `TIRBar.tsx` (46) — barre Time in Range stratifiée.
+  - `LogEventModal.tsx` (200) — modale d'enregistrement d'évènement (repas/insuline/activité/note).
+  - `TodayTab.tsx` (345) — onglet Aujourd'hui (hero glycémie, chart, actions rapides, recommandation IA + panneau XAI).
+  - `JournalTab.tsx` (43) — historique évènements.
+  - `TrendsTab.tsx` (185) — KPI + TIR + AGP.
+  - `TreatmentTab.tsx` (118) — objectifs, médicaments, note médecin.
+  - `BilansTab.tsx` (77) — bilans biologiques + scanner.
+- `PatientDashboard.tsx` ne conserve que l'orchestration : état, effets, fetch, bandeau salutation, alerte critique, routing onglet, modales globales.
+- Correctifs TS au passage : cast `unknown` → `Record<string, unknown>` dans `authService.test.ts` ; type formatter recharts assoupli.
+- **Acceptance** : `tsc --noEmit` vert, `npm run lint` 0 erreur, 36 tests verts, build 13 s, preview rendu identique.
+
+### 🧪 Vague 3 — Tests unitaires (action 4 de l'audit)
+- Installation **Vitest 4** + **@testing-library/react** + **jsdom** + `@vitest/coverage-v8`.
+- Configuration `vitest.config.ts` (jsdom, alias `@`, setup file, coverage v8 ciblée sur les 3 services testés).
+- Setup `src/test/setup.ts` : reset `localStorage`/`sessionStorage` entre tests, polyfill `crypto.subtle` via `node:crypto.webcrypto` si absent.
+- **Tests `authService.test.ts`** (16 tests) : validations register (champs, email, mot de passe), unicité email case-insensitive, RBAC (patient/clinician), login (succès, casse email, identifiants invalides), session (logout, getCurrentUser), `getAllUsers` sans hash/salt.
+- **Tests `decisionLog.test.ts`** (10 tests) : append + traceId unique, persistance dans la clé `mediai.decisionLog.v1`, dispatch `mediai:decisionlog`, gestion erreur quota, ordre tri (newest first), isolation `(patientId, decisionId)`, latest action.
+- **Tests `alertQueue.test.ts`** (10 tests) : `getActivePendingDecisions` initial / après arbitrage / isolation cross-patient, `buildAlertQueue` (taille = nb patients, tri par risque, decisions exposées), `getActiveAlertCount` (cohérence avec la queue, décrément après arbitrage complet, invariance après arbitrage partiel).
+- Nouveaux scripts npm : `test`, `test:watch`, `test:coverage`.
+- CI : étape `npm test` ajoutée à `.github/workflows/ci.yml`.
+- **Acceptance** : 36 tests passants en 4.3 s.
+
+### 🛠 Vague 2 — Outillage qualité (actions 3, 7 de l'audit)
+- Ajout d'**ESLint 9** (config flat moderne) avec `typescript-eslint`, `eslint-plugin-react-hooks` v6, `eslint-plugin-react-refresh`. Fichier : `eslint.config.js`.
+- Ajout de **Prettier 3** + `eslint-config-prettier`. Fichiers : `.prettierrc.json`, `.prettierignore`.
+- Nouveaux scripts npm : `typecheck`, `lint`, `lint:fix`, `format`, `format:check`.
+- Pipeline **GitHub Actions** : `.github/workflows/ci.yml` (typecheck → lint → prettier-check (informatif) → build) sur push/PR `main`/`master`.
+- Correction lint réelle : regex inutilement échappée dans `labReportService.ts` (séparateur `\/`).
+- **Décision lucide-react** : conservation de `^1.8.0`. Vérification npm : la branche `1.x` est officielle (latest `1.14.0`, 666 versions publiées). L'observation initiale de l'audit (« version anormale ») se révèle inexacte — pas de migration nécessaire.
+- 30 warnings restants (purity/set-state-in-effect React 19, no-explicit-any, no-useless-assignment) volontairement non bloquants pour un prototype ; ils documentent les chantiers futurs sans empêcher le CI de passer.
+- **Acceptance** : `npm run typecheck`, `npm run lint`, `npm run build` exit 0.
+
+### 🔧 Vague 1 — Honnêteté & cohérence (actions 1, 2, 5, 6, 10 de l'audit)
+- Renommage projet : `react-vite-tailwind` → **`mediai-care`**, version `0.0.0` → **`1.0.0-prototype`** (alignement `package.json` ↔ `replit.md`).
+- Nouveau bandeau permanent **`PrototypeBanner`** affiché en haut de chaque écran (dismiss local), assorti de `utils/prototypeNotice.ts` (constantes `APP_VERSION`, `APP_STATUS_LABEL`, `APP_DISCLAIMER`, `TECH_FACTS`).
+- Création de **`LIMITATIONS.md`** (10 sections) : architecture, sécurité, données, IA/XAI, conformité, qualité, accessibilité, cohérence UI, roadmap, engagements honnêtes.
+- **Requalification systématique** des revendications de conformité dans l'UI :
+  - `App.tsx` (footer / sidebar) : suppression `Session sécurisée AES-256` et `IEC 62304 · ISO 13485 · RGPD · HDS · v6.0.0`.
+  - `LandingPage.tsx` : bloc cliniciens et section sécurité requalifiés (« version commerciale viserait… »).
+  - `AuditLog.tsx` : référentiels étiquetés **`Non implémenté`** + pipeline renommé « architecture cible ».
+  - `AuthModal.tsx`, `DevicesView.tsx`, `ErrorBoundary.tsx` : badges HDS / RGPD / IEC retirés.
+  - `Messaging.tsx` (3 endroits) : « chiffrement E2E · HDS » → « démo · stockage navigateur (non chiffré) ».
+  - `TreatmentEditor.tsx` : « Signature SHA-256 · IEC 62304 » → « Prototype non certifié ».
+  - Commentaires en-tête de `authService.ts`, `prescriptionService.ts`, `types/medical.ts`, `Messaging.tsx` : limites explicitées.
+  - `simulator.ts` : log « Conformité RGPD » → « Export démo ».
+- Corrections TypeScript résiduelles : `LandingPage` (Framer `EASE_OUT_EXPO as const`), `AuditLog` (import `Clock` retiré), `AuthModal` (import `Shield` retiré), `ai-engine` (`trend` → `_trend`).
+- **Acceptance** : `npx tsc --noEmit` vert, plus aucune revendication HDS/AES/E2E/conformité non requalifiée dans `src/`.
+
+---
+
 ## [v3.3.0] — 2025-07-10 — 💬 MESSAGERIE + AUDIT PRODUIT
 > 📄 Audit : [`AUDIT_REPORT_v3.3.0.md`](./AUDIT_REPORT_v3.3.0.md) · Rectifications : [`RECTIFICATION_REPORT_v3.3.0.md`](./RECTIFICATION_REPORT_v3.3.0.md)
 

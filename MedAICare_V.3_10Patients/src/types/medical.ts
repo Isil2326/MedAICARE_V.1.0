@@ -1,5 +1,6 @@
 // ============================================================================
-// TYPES & INTERFACES — Architecture Documentée ISO 13485 / IEC 62304
+// TYPES & INTERFACES — Architecture des données du prototype
+// (Modèles inspirés des bonnes pratiques ISO 13485 / IEC 62304 — non certifié)
 // ============================================================================
 
 export interface PatientVitals {

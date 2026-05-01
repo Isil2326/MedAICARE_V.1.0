@@ -100,7 +100,7 @@ function matchCode(label: string): string | undefined {
 function extractNumbersFromText(text: string): ExtractedValue[] {
   const values: ExtractedValue[] = [];
   // Pattern: "Label : 7.2 %" or "Label = 142 mg/dL" or "Label 89 mL/min"
-  const regex = /([A-Za-zÀ-ÿ\s\-()]{3,})\s*[:=\-–]\s*([\d.,]+)\s*([A-Za-z/%²µ·.\/]+)?/g;
+  const regex = /([A-Za-zÀ-ÿ\s\-()]{3,})\s*[:=\-–]\s*([\d.,]+)\s*([A-Za-z/%²µ·.]+)?/g;
   let match;
   while ((match = regex.exec(text)) !== null) {
     const label = match[1].trim();

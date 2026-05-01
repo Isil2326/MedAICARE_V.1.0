@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import {
   FileText, Search, Download, ShieldCheck, Database,
   Brain, Wifi, Bell, KeyRound, FileCheck, GitBranch,
-  AlertTriangle, AlertCircle, Info, XCircle, Filter, Clock,
+  AlertTriangle, AlertCircle, Info, XCircle, Filter,
 } from 'lucide-react';
 import type { AuditLogEntry } from '../types/medical';
 import { generateAuditLogs } from '../engine/simulator';
@@ -31,11 +31,11 @@ const MODULE_META: Record<string, { icon: React.ComponentType<{ className?: stri
 };
 
 const PIPELINE_STEPS = [
-  { label: 'Capteur IoMT', sub: 'Donnée brute',             icon: Wifi,       bg: 'bg-blue-100',    text: 'text-blue-700' },
-  { label: 'Gateway',      sub: 'Validation + chiffrement', icon: ShieldCheck,bg: 'bg-brand-100',   text: 'text-brand-700' },
-  { label: 'Inférence IA', sub: 'Modèle versionné',         icon: Brain,      bg: 'bg-violet-100',  text: 'text-violet-700' },
-  { label: 'XAI',          sub: 'Explication SHAP',         icon: FileCheck,  bg: 'bg-amber-100',   text: 'text-amber-700' },
-  { label: 'Décision',     sub: 'Recommandation tracée',    icon: FileText,   bg: 'bg-teal-100',    text: 'text-teal-700' },
+  { label: 'Capteur IoMT', sub: 'Donnée simulée',           icon: Wifi,       bg: 'bg-blue-100',    text: 'text-blue-700' },
+  { label: 'Gateway',      sub: 'Validation locale',        icon: ShieldCheck,bg: 'bg-brand-100',   text: 'text-brand-700' },
+  { label: 'Moteur',       sub: 'Règles déterministes',     icon: Brain,      bg: 'bg-violet-100',  text: 'text-violet-700' },
+  { label: 'XAI',          sub: 'Texte explicatif (démo)',  icon: FileCheck,  bg: 'bg-amber-100',   text: 'text-amber-700' },
+  { label: 'Décision',     sub: 'Tracée localement',        icon: FileText,   bg: 'bg-teal-100',    text: 'text-teal-700' },
 ];
 
 function formatTime(ts: number): string {
@@ -84,7 +84,7 @@ export default function AuditLog() {
         <StatTile label="Événements (24h)" value={stats.total}    icon={Database}   accent="blue"   hint="Tracés et signés" />
         <StatTile label="Critiques"         value={stats.critical} icon={AlertCircle}accent="amber"  hint={stats.critical > 0 ? 'Investigation requise' : 'RAS'} />
         <StatTile label="Erreurs"           value={stats.errors}   icon={XCircle}    accent="coral"  hint="Échecs techniques" />
-        <StatTile label="Conformité"        value="100%"           icon={ShieldCheck} accent="green" hint="IEC 62304 · ISO 13485" />
+        <StatTile label="Statut prototype"  value="DÉMO"            icon={ShieldCheck} accent="green" hint="Référentiels cités à titre indicatif" />
       </div>
 
       {/* === Tabs + Export === */}
@@ -260,8 +260,8 @@ export default function AuditLog() {
           {/* Pipeline */}
           <Card className="lg:col-span-2">
             <CardHeader
-              title="Chaîne de traçabilité décisionnelle"
-              subtitle="Du capteur à la décision clinique — chaque étape est signée et auditable"
+              title="Chaîne décisionnelle (architecture cible)"
+              subtitle="Étapes prévues du capteur à la décision — implémentation actuelle simplifiée et locale"
               icon={GitBranch}
               accent="violet"
             />
@@ -285,30 +285,36 @@ export default function AuditLog() {
                   );
                 })}
               </div>
-              <div className="mt-4 p-3 rounded-xl bg-brand-50 border border-brand-100 flex items-center gap-2 text-[11.5px] text-brand-800 font-medium">
-                <ShieldCheck className="w-4 h-4 text-brand-600 shrink-0" />
-                Chaque transition est horodatée, signée (SHA-256) et conserve un trace ID unique pour audit régulateur.
+              <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2 text-[11.5px] text-amber-800 font-medium">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Prototype académique :</strong> les transitions sont horodatées localement avec un trace ID, mais le journal est stocké dans le navigateur (localStorage) et n&apos;est pas immuable. Une vraie traçabilité réglementaire exigerait un backend append-only signé.
+                </span>
               </div>
             </div>
           </Card>
 
-          {/* Référentiels */}
+          {/* Référentiels — citation pédagogique uniquement */}
           <Card>
-            <CardHeader title="Référentiels appliqués" subtitle="Conformité réglementaire et sécurité" icon={ShieldCheck} accent="emerald" />
+            <CardHeader title="Référentiels visés (cible)" subtitle="Cités à titre pédagogique — non implémentés" icon={ShieldCheck} accent="emerald" />
             <div className="px-5 pb-5 space-y-2">
+              <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-800 font-semibold flex items-start gap-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                <span>Prototype académique. Les référentiels ci-dessous décrivent la <em>cible</em> qu&apos;un produit certifié devrait atteindre, pas l&apos;état actuel de l&apos;application.</span>
+              </div>
               {[
-                { code: 'IEC 62304', label: 'Cycle de vie logiciel — dispositifs médicaux', class: 'Classe B' },
-                { code: 'ISO 13485', label: 'Système de management qualité',                class: 'Compatible' },
-                { code: 'ISO 14971', label: 'Gestion des risques',                          class: 'AMDEC à jour' },
-                { code: 'RGPD',      label: 'Protection des données personnelles',          class: 'Pseudonymisation' },
-                { code: 'HL7 FHIR', label: 'Interopérabilité des données de santé',        class: 'R5' },
+                { code: 'IEC 62304', label: 'Cycle de vie logiciel — dispositifs médicaux', class: 'Non implémenté' },
+                { code: 'ISO 13485', label: 'Système de management qualité',                class: 'Non implémenté' },
+                { code: 'ISO 14971', label: 'Gestion des risques',                          class: 'Non implémenté' },
+                { code: 'RGPD',      label: 'Protection des données personnelles',          class: 'Non implémenté' },
+                { code: 'HL7 FHIR', label: 'Interopérabilité des données de santé',         class: 'Non implémenté' },
               ].map(r => (
                 <div key={r.code} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                   <div>
                     <div className="text-[12.5px] font-bold text-slate-900">{r.code}</div>
                     <div className="text-[10.5px] text-slate-400 font-medium">{r.label}</div>
                   </div>
-                  <Badge variant="success" size="xs" dot>{r.class}</Badge>
+                  <Badge variant="warning" size="xs" dot>{r.class}</Badge>
                 </div>
               ))}
             </div>

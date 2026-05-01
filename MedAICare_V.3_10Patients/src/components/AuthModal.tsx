@@ -4,7 +4,7 @@
 // ============================================================================
 
 import { useState, useEffect } from 'react';
-import { X, Shield, User, Stethoscope, ArrowRight, Loader2, AlertCircle, CheckCircle2, Lock } from 'lucide-react';
+import { X, User, Stethoscope, ArrowRight, Loader2, AlertCircle, CheckCircle2, Lock } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { UserRole } from '../auth/authService';
 
@@ -204,7 +204,7 @@ export default function AuthModal({ isOpen, onClose, type, defaultMode = 'login'
             </button>
             <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
               <Lock className="w-3 h-3 text-brand-500" />
-              Authentification PBKDF2 · Hébergement HDS France
+              PBKDF2-SHA256 · Stockage local navigateur (prototype)
             </div>
           </div>
         </div>

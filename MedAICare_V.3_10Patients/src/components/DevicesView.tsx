@@ -235,9 +235,9 @@ export default function DevicesView() {
                   <ShieldCheck className="w-4 h-4 text-brand-600" />
                 </div>
                 <div>
-                  <div className="text-[12.5px] font-bold text-slate-900">Transmission sécurisée</div>
+                  <div className="text-[12.5px] font-bold text-slate-900">Communication appareil — démo</div>
                   <div className="text-[11px] text-slate-500 mt-0.5 leading-relaxed font-medium">
-                    Données chiffrées AES-256 en transit, MQTT/TLS 1.3, signature device·gateway, pseudonymisation conforme RGPD.
+                    Prototype académique : aucun appairage réel. Données simulées localement. Une version certifiée viserait MQTT/TLS, signature device·gateway et pseudonymisation conforme RGPD.
                   </div>
                 </div>
               </div>

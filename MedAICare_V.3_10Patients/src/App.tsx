@@ -14,6 +14,8 @@ import PatientDashboard from './components/PatientDashboard';
 import ClinicianHub from './components/clinician/ClinicianHub';
 import DevicesView from './components/DevicesView';
 import Messaging, { seedDemoData as seedMessagingDemo } from './components/Messaging';
+import { PrototypeBanner } from './components/PrototypeBanner';
+import { APP_VERSION, APP_STATUS_LABEL, TECH_FACTS } from './utils/prototypeNotice';
 import { cn } from './utils/cn';
 import type { ViewMode } from './types/medical';
 
@@ -194,7 +196,7 @@ function AppContent() {
         <div className="px-3 pb-4 pt-3 border-t border-slate-100 space-y-1">
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-100">
             <Lock className="w-3 h-3 text-brand-600 shrink-0" />
-            <span className="text-[10.5px] text-slate-500 font-semibold">Session sécurisée · AES-256</span>
+            <span className="text-[10.5px] text-slate-500 font-semibold" title={TECH_FACTS.passwordHashing}>Session locale · {APP_STATUS_LABEL}</span>
           </div>
           <button onClick={handleLogout} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[12.5px] text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all font-medium">
             <LogOut className="w-3.5 h-3.5" />
@@ -284,7 +286,7 @@ function AppContent() {
               <ChevronRight className="w-3 h-3" />
               MediAI Care · {user.name}
             </span>
-            <span>IEC 62304 · ISO 13485 · RGPD · HDS · v6.0.0</span>
+            <span>{APP_STATUS_LABEL} · Données simulées · Stockage local · v{APP_VERSION}</span>
           </div>
         </footer>
       </div>
@@ -295,6 +297,7 @@ function AppContent() {
 export default function App() {
   return (
     <AuthProvider>
+      <PrototypeBanner />
       <AppContent />
     </AuthProvider>
   );

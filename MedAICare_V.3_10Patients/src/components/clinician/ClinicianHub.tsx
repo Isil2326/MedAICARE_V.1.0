@@ -14,6 +14,7 @@ import FocusView from './FocusView';
 import CohortView from './CohortView';
 import Messaging from '../Messaging';
 import AuditLog from '../AuditLog';
+import EvaluationExportButton from './EvaluationExportButton';
 import {
   BG, SURFACE, BORDER, AMBER, AMBER_DIM, RED, MUTED, MUTED_2, BRIGHT,
 } from './v3DarkTheme';
@@ -223,7 +224,7 @@ export default function ClinicianHub() {
               <div style={{
                 position: 'absolute', top: 'calc(100% + 6px)', right: 0,
                 background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 10,
-                minWidth: 220, padding: 6, zIndex: 11,
+                minWidth: 260, padding: 6, zIndex: 11,
                 boxShadow: '0 12px 32px rgba(0,0,0,0.45)',
               }}>
                 <div style={{ padding: '10px 12px', borderBottom: `1px solid ${BORDER}` }}>
@@ -238,6 +239,9 @@ export default function ClinicianHub() {
                       {user.specialty}
                     </div>
                   )}
+                </div>
+                <div style={{ padding: '8px 8px 4px' }}>
+                  <EvaluationExportButton />
                 </div>
                 <button
                   onClick={() => { setProfileOpen(false); logout(); }}
