@@ -7,13 +7,12 @@ import { useState, useCallback, useEffect } from 'react';
 import {
   LayoutDashboard, Stethoscope, Wifi, FileText,
   LogOut, AlertTriangle, MessageSquare, Activity,
-  Bell, ChevronRight, Lock, Zap,
+  Bell, ChevronRight, Lock,
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import LandingPage from './components/LandingPage';
 import PatientDashboard from './components/PatientDashboard';
 import DoctorDashboard from './components/DoctorDashboard';
-import AlertCenter from './components/AlertCenter';
 import AuditLog from './components/AuditLog';
 import DevicesView from './components/DevicesView';
 import Messaging, { seedDemoData as seedMessagingDemo } from './components/Messaging';
@@ -24,7 +23,6 @@ const allNavItems = [
   { key: 'patient'  as ViewMode, label: 'Tableau de bord', short: 'Accueil',    icon: LayoutDashboard, roles: ['patient'] },
   { key: 'messages' as ViewMode, label: 'Messages',         short: 'Messages',   icon: MessageSquare,   roles: ['patient', 'clinician'] },
   { key: 'devices'  as ViewMode, label: 'Mes appareils',    short: 'Appareils',  icon: Wifi,            roles: ['patient'] },
-  { key: 'alerts'   as ViewMode, label: 'Centre d\'alerte',  short: 'Alertes',    icon: Zap,             roles: ['clinician'] },
   { key: 'doctor'   as ViewMode, label: 'Espace clinique',  short: 'Clinique',   icon: Stethoscope,     roles: ['clinician'] },
   { key: 'audit'    as ViewMode, label: 'Audit & logs',     short: 'Audit',      icon: FileText,        roles: ['clinician'] },
 ];
@@ -74,7 +72,7 @@ function AppContent() {
   }, [user, canAccess]);
 
   useEffect(() => {
-    if (user && activeView === 'landing') setActiveView(user.role === 'patient' ? 'patient' : 'alerts');
+    if (user && activeView === 'landing') setActiveView(user.role === 'patient' ? 'patient' : 'doctor');
   }, [user, activeView]);
 
   useEffect(() => {
@@ -126,7 +124,7 @@ function AppContent() {
 
         {/* Logo */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100">
-          <button onClick={() => navigate(isPatient ? 'patient' : 'alerts')} className="flex items-center gap-3 w-full group">
+          <button onClick={() => navigate(isPatient ? 'patient' : 'doctor')} className="flex items-center gap-3 w-full group">
             <img src="/logo-mark.png" alt="MediAI Care" className="w-9 h-9 shrink-0" />
             <div className="text-left">
               <div className="flex items-baseline leading-none">
@@ -250,14 +248,12 @@ function AppContent() {
         <main className="flex-1 p-4 sm:p-5 lg:p-7">
           <div className="max-w-[1360px] mx-auto">
             {activeView === 'patient'  && user.role === 'patient'   && <PatientDashboard />}
-            {activeView === 'alerts'   && user.role === 'clinician' && <AlertCenter />}
             {activeView === 'doctor'   && user.role === 'clinician' && <DoctorDashboard />}
             {activeView === 'devices'  && user.role === 'patient'   && <DevicesView />}
             {activeView === 'messages'                              && <Messaging />}
             {activeView === 'audit'    && user.role === 'clinician' && <AuditLog />}
 
             {activeView === 'patient'  && user.role !== 'patient'   && <AccessDeniedBlock message="Réservé aux patients." />}
-            {activeView === 'alerts'   && user.role !== 'clinician' && <AccessDeniedBlock message="Centre d'alerte réservé aux cliniciens." />}
             {activeView === 'doctor'   && user.role !== 'clinician' && <AccessDeniedBlock message="Réservé aux cliniciens." />}
             {activeView === 'audit'    && user.role !== 'clinician' && <AccessDeniedBlock message="Journal d'audit réservé aux cliniciens." />}
           </div>
