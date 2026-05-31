@@ -4,11 +4,14 @@ Prototype académique — aide à la décision OPEN-LOOP — non certifié.
 """
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.api.v1.router import api_router
 from app.core.config import settings
+from app.core.database import get_db
 
 app = FastAPI(
     title=settings.app_name,
@@ -41,6 +44,23 @@ async def security_headers(request, call_next):
 @app.get("/health", tags=["meta"])
 def health():
     return {"status": "ok", "version": settings.app_version, "environment": settings.environment}
+
+
+@app.get("/ready", tags=["meta"])
+def ready(db: Session = Depends(get_db)):
+    """Sonde de readiness : DB joignable + table critique accessible.
+
+    Renvoie 200 {"status": "ready"} si OK, 503 sinon.
+    """
+    try:
+        db.execute(text("SELECT 1"))
+        db.execute(text("SELECT 1 FROM users LIMIT 1"))
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="not ready",
+        )
+    return {"status": "ready"}
 
 
 @app.get("/", tags=["meta"])

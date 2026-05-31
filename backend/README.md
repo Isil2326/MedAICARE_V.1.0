@@ -72,14 +72,27 @@ python -m app.seed       # rôles + comptes démo + données simulées
 
 | Rôle | Email | Mot de passe |
 |---|---|---|
-| Patient | `patient@demo.fr` | `Demo1234!` |
-| Clinicien | `clinicien@demo.fr` | `Demo1234!` |
+| Patient | `patient@demo.fr` | `DemoMediAI2026!` |
+| Clinicien | `clinicien@demo.fr` | `DemoMediAI2026!` |
 
 ### Points d'entrée utiles
 
-- `GET /health` — état du service
-- `GET /docs` — documentation OpenAPI interactive (Swagger UI)
+- `GET /health` — état du service (liveness)
+- `GET /ready` — readiness : DB joignable + table critique accessible (`200 ready` / `503 not ready`)
+- `GET /docs` — documentation OpenAPI interactive (Swagger UI), avec exemples de payloads
 - `GET /` — bannière + disclaimer
+
+### Smoke test PostgreSQL (schéma réel)
+
+Les tests unitaires tournent sur SQLite jetable. Pour vérifier le schéma sur la
+base **PostgreSQL réelle** (tables, index temporels `(patient_id, ts)`,
+contraintes d'unicité audit) après migration :
+
+```bash
+cd backend
+alembic upgrade head
+python -m scripts.smoke_postgres
+```
 
 ## Migrations (Alembic)
 
@@ -140,6 +153,15 @@ open-loop d'approbation/rejet.
   stocké** ; rotation à chaque usage ; la réutilisation d'un token déjà tourné
   déclenche la révocation de toute la famille de sessions (signal de
   compromission) et une entrée d'audit.
+- **Rate limiting** : `POST /login` et `POST /refresh` sont limités par IP
+  (fenêtre glissante en mémoire ; défauts 5/60 s et 10/60 s, configurables via
+  `RATE_LIMIT_*`). Au-delà : `429 Too Many Requests` + en-tête `Retry-After`.
+  Redis-ready (voir `app/core/rate_limit.py`) pour un déploiement multi-instances.
+- **Politique mot de passe** : min 12 caractères + lettre + chiffre + caractère
+  spécial (validation serveur, `422` sinon). Détail et limites :
+  `docs/security/PASSWORD_POLICY.md`.
+- **Concurrence audit** : verrou applicatif léger + contraintes d'unicité DB
+  (`sequence`, `entry_hash`). Détail et limites : `docs/security/AUDIT_CONCURRENCY.md`.
 - **RBAC côté serveur** : les autorisations ne dépendent jamais du client.
 - **Audit append-only chaîné** : chaque entrée référence le hash de la
   précédente. Toute altération devient **détectable** via `/verify`. ⚠️ Il

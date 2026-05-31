@@ -42,6 +42,12 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "15"))
     refresh_token_expire_days: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
+    # --- Rate limiting (login/refresh) ---
+    rate_limit_login_max: int = int(os.getenv("RATE_LIMIT_LOGIN_MAX", "5"))
+    rate_limit_login_window: int = int(os.getenv("RATE_LIMIT_LOGIN_WINDOW", "60"))
+    rate_limit_refresh_max: int = int(os.getenv("RATE_LIMIT_REFRESH_MAX", "10"))
+    rate_limit_refresh_window: int = int(os.getenv("RATE_LIMIT_REFRESH_WINDOW", "60"))
+
     # --- CORS (clinicien web / mobile Expo plus tard) ---
     # Liste d'origines autorisées, séparées par des virgules, lue depuis l'env.
     # Vide => défaut localhost en dev ; refus strict en production (pas de `*`).

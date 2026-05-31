@@ -1,1 +1,1 @@
-- [Backend foundation](backend-foundation.md) — FastAPI+Postgres socle under `backend/`, runs on port 8000 (separate from React app on 5000); open-loop, synthetic data only.
+- [Schema verification on PostgreSQL](pg-schema-introspection.md) — `unique=True` on a column surfaces as a unique *index*, not a unique constraint, when introspecting PG; check `get_indexes`, and never `set()` `get_unique_constraints()` (returns unhashable dicts).

@@ -123,4 +123,4 @@ curl -s localhost:8000/health
 
 Documentation interactive : `http://localhost:8000/docs`.
 Comptes démo : `patient@demo.fr` / `clinicien@demo.fr` (mot de passe
-`Demo1234!`).
+`DemoMediAI2026!`).

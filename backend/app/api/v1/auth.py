@@ -16,10 +16,23 @@ from app.schemas.auth import (
     TokenPair,
     UserPublic,
 )
+from app.core.config import settings
+from app.core.rate_limit import rate_limiter
 from app.services import auth_service
 from app.services.auth_service import AuthError
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+login_rate_limit = rate_limiter(
+    bucket="login",
+    max_attempts=settings.rate_limit_login_max,
+    window_seconds=settings.rate_limit_login_window,
+)
+refresh_rate_limit = rate_limiter(
+    bucket="refresh",
+    max_attempts=settings.rate_limit_refresh_max,
+    window_seconds=settings.rate_limit_refresh_window,
+)
 
 
 def _to_public(user: User) -> UserPublic:
@@ -50,7 +63,7 @@ def register_clinician(data: ClinicianRegister, request: Request, db: Session = 
     return _to_public(user)
 
 
-@router.post("/login", response_model=TokenPair)
+@router.post("/login", response_model=TokenPair, dependencies=[Depends(login_rate_limit)])
 def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     try:
         return auth_service.login(
@@ -60,7 +73,7 @@ def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, e.message)
 
 
-@router.post("/refresh", response_model=TokenPair)
+@router.post("/refresh", response_model=TokenPair, dependencies=[Depends(refresh_rate_limit)])
 def refresh(data: RefreshRequest, request: Request, db: Session = Depends(get_db)):
     try:
         return auth_service.refresh(

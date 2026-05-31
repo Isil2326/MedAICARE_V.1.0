@@ -80,7 +80,7 @@ Full UI/UX transformation — minimaliste, lumineux, sobre, rassurant. Vivid & s
 - **DoctorDashboard:** Tab bar double-border removed (inner `border-b` eliminated, outer card border sufficient)
 - **App.tsx:** Mobile bottom nav has text labels (short: Accueil/Messages/Appareils/Clinique/Audit/Quitter) under each icon
 - **AuthModal:** Bug fixed — LandingPage now passes correct props (isOpen/type/defaultMode)
-- Demo credentials: patient@demo.fr / clinicien@demo.fr (Demo1234!)
+- Demo credentials: patient@demo.fr / clinicien@demo.fr (DemoMediAI2026!)
 
 ## Key Features
 - Patient and clinician dashboards with role-based views

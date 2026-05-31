@@ -31,7 +31,7 @@ ROLES = [
     ("admin", "Administrateur technique"),
 ]
 
-DEMO_PASSWORD = "Demo1234!"
+DEMO_PASSWORD = "DemoMediAI2026!"
 
 
 def seed_roles(db) -> dict[str, Role]:

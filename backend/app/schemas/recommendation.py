@@ -27,3 +27,12 @@ class RecommendationPublic(BaseModel):
 
 class ReviewRequest(BaseModel):
     note: str | None = Field(default=None, max_length=1000)
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {"note": "Validé : cohérent avec la tendance glycémique et le contexte patient."},
+                {"note": "Rejeté : donnée CGM probablement erronée, à recontrôler."},
+            ]
+        }
+    }

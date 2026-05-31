@@ -50,6 +50,16 @@ def db_session():
         Base.metadata.drop_all(engine)
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    """Réinitialise le limiteur en mémoire entre les tests (isolation)."""
+    from app.core.rate_limit import limiter
+
+    limiter.reset()
+    yield
+    limiter.reset()
+
+
 @pytest.fixture()
 def client(db_session):
     _, TestingSessionLocal = db_session
@@ -67,7 +77,7 @@ def client(db_session):
     app.dependency_overrides.clear()
 
 
-def register_and_login(client, *, role="patient", email=None, password="Strong123!"):
+def register_and_login(client, *, role="patient", email=None, password="Strong1234!@"):
     email = email or f"{role}@test.fr"
     payload = {
         "email": email,

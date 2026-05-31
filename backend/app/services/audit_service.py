@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import threading
 import uuid
 from datetime import datetime, timezone
 
@@ -22,6 +23,12 @@ from app.models import AuditLog
 from app.repositories import audit_repo
 
 GENESIS_HASH = "0" * 64
+
+# Verrou applicatif léger : sérialise le calcul de `sequence` + l'append au sein
+# d'un même processus (cas mono-instance Replit), évitant une course sur le
+# numéro de séquence. Voir docs/security/AUDIT_CONCURRENCY.md pour les limites
+# (multi-processus) et la garantie dure complémentaire (contraintes d'unicité DB).
+_append_lock = threading.Lock()
 
 
 def _compute_hash(
@@ -66,37 +73,38 @@ def record(
 ) -> AuditLog:
     """Ajoute une entrée chaînée. Ne lève jamais d'exception silencieuse :
     l'appelant est responsable du commit de la transaction."""
-    last = audit_repo.get_last_entry(db)
-    prev_hash = last.entry_hash if last else GENESIS_HASH
-    sequence = (last.sequence + 1) if last else 1
-    created_at = datetime.now(timezone.utc)
-    created_at_iso = created_at.isoformat()
+    with _append_lock:
+        last = audit_repo.get_last_entry(db)
+        prev_hash = last.entry_hash if last else GENESIS_HASH
+        sequence = (last.sequence + 1) if last else 1
+        created_at = datetime.now(timezone.utc)
+        created_at_iso = created_at.isoformat()
 
-    entry_hash = _compute_hash(
-        sequence=sequence,
-        actor_user_id=str(actor_user_id) if actor_user_id else None,
-        action=action,
-        resource_type=resource_type,
-        resource_id=resource_id,
-        event_metadata=event_metadata,
-        created_at_iso=created_at_iso,
-        prev_hash=prev_hash,
-    )
+        entry_hash = _compute_hash(
+            sequence=sequence,
+            actor_user_id=str(actor_user_id) if actor_user_id else None,
+            action=action,
+            resource_type=resource_type,
+            resource_id=resource_id,
+            event_metadata=event_metadata,
+            created_at_iso=created_at_iso,
+            prev_hash=prev_hash,
+        )
 
-    entry = AuditLog(
-        actor_user_id=actor_user_id,
-        action=action,
-        resource_type=resource_type,
-        resource_id=resource_id,
-        event_metadata=event_metadata,
-        ip_address=ip_address,
-        user_agent=user_agent,
-        prev_hash=prev_hash,
-        entry_hash=entry_hash,
-        sequence=sequence,
-        created_at=created_at,
-    )
-    return audit_repo.add_entry(db, entry)
+        entry = AuditLog(
+            actor_user_id=actor_user_id,
+            action=action,
+            resource_type=resource_type,
+            resource_id=resource_id,
+            event_metadata=event_metadata,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            prev_hash=prev_hash,
+            entry_hash=entry_hash,
+            sequence=sequence,
+            created_at=created_at,
+        )
+        return audit_repo.add_entry(db, entry)
 
 
 def verify_chain(db: Session) -> dict:

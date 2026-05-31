@@ -6,14 +6,14 @@ from tests.conftest import register_and_login
 
 def test_register_patient_then_login(client):
     res = client.post("/api/v1/auth/register/patient", json={
-        "email": "newpat@test.fr", "password": "Strong123!",
+        "email": "newpat@test.fr", "password": "Strong1234!@",
         "first_name": "Jean", "last_name": "Dupont",
     })
     assert res.status_code == 201
     assert res.json()["role"] == "patient"
 
     login = client.post("/api/v1/auth/login", json={
-        "email": "newpat@test.fr", "password": "Strong123!",
+        "email": "newpat@test.fr", "password": "Strong1234!@",
     })
     assert login.status_code == 200
     body = login.json()
@@ -22,7 +22,7 @@ def test_register_patient_then_login(client):
 
 def test_duplicate_email_rejected(client):
     payload = {
-        "email": "dup@test.fr", "password": "Strong123!",
+        "email": "dup@test.fr", "password": "Strong1234!@",
         "first_name": "A", "last_name": "B",
     }
     assert client.post("/api/v1/auth/register/patient", json=payload).status_code == 201
