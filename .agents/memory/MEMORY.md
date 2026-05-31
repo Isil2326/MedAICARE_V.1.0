@@ -1,1 +1,3 @@
-- [Schema verification on PostgreSQL](pg-schema-introspection.md) — `unique=True` on a column surfaces as a unique *index*, not a unique constraint, when introspecting PG; check `get_indexes`, and never `set()` `get_unique_constraints()` (returns unhashable dicts).
+- [Backend migration phasing](backend-migration-phases.md) — MediAI Care option-2 migration order/constraints; do not skip phases or start next before user validates report.
+- [Timeseries pipeline decisions](timeseries-pipeline.md) — TimescaleDB fallback rationale, idempotent dedup, tz-aware timestamp rule, anti-leakage guarantee.
+- [Backend test/migration quirks](backend-test-quirks.md) — tests use SQLite via create_all (not alembic); migrations target PG only; partial indexes need both *_where dialects.

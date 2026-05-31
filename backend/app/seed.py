@@ -130,14 +130,25 @@ def main() -> None:
         roles = seed_roles(db)
         users = seed_users(db, roles)
         seed_timeseries_and_reco(db, users["patient"])
+        # Phase 1 — profils temporels synthétiques (stable / hypo / hyper)
+        from app.seed_timeseries import seed_synthetic_timeseries
+
+        n_profiles = seed_synthetic_timeseries(
+            db, demo_password=DEMO_PASSWORD, hash_password=hash_password
+        )
         audit_service.record(
             db, action="system.seed",
-            event_metadata={"synthetic": True, "demo_accounts": 2},
+            event_metadata={
+                "synthetic": True, "demo_accounts": 2,
+                "timeseries_profiles": n_profiles,
+            },
         )
         db.commit()
         print("Seed terminé.")
         print(f"  Patient   : patient@demo.fr / {DEMO_PASSWORD}")
         print(f"  Clinicien : clinicien@demo.fr / {DEMO_PASSWORD}")
+        print(f"  Profils temporels synthétiques : {n_profiles} "
+              "(patient.stable@ / patient.hypo@ / patient.hyper@demo.fr)")
     finally:
         db.close()
 

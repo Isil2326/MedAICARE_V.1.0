@@ -45,6 +45,25 @@ EXPECTED_TS_INDEXES = {
     "activity_events": ("ix_activity_patient_ts", ["patient_id", "ts"]),
 }
 
+# Champs pipeline temporel (Phase 1) attendus sur chaque table event.
+_EVENT_TABLES = ("cgm_readings", "insulin_events", "meal_events", "activity_events")
+EXPECTED_PIPELINE_COLS = {
+    "source",
+    "external_event_id",
+    "device_id",
+    "quality_flag",
+    "ingestion_batch_id",
+    "unit",
+    "event_metadata",
+}
+# Index unique partiel d'idempotence (external_event_id) par table event.
+EXPECTED_DEDUP_INDEXES = {
+    "cgm_readings": "uq_cgm_external_event",
+    "insulin_events": "uq_insulin_external_event",
+    "meal_events": "uq_meal_external_event",
+    "activity_events": "uq_activity_external_event",
+}
+
 
 def main() -> int:
     failures: list[str] = []
@@ -84,6 +103,27 @@ def main() -> int:
             )
         else:
             oks.append(f"Index temporel {idx_name} OK ({cols}).")
+
+    # 2b) Champs pipeline temporel + index dedup (Phase 1) --------------------
+    for table in _EVENT_TABLES:
+        if table not in tables:
+            failures.append(f"Table event {table} absente — pipeline non vérifiable.")
+            continue
+        cols = {c["name"] for c in insp.get_columns(table)}
+        missing_cols = EXPECTED_PIPELINE_COLS - cols
+        if missing_cols:
+            failures.append(f"{table} : champs pipeline manquants {sorted(missing_cols)}.")
+        else:
+            oks.append(f"Champs pipeline temporel {table} OK (7/7).")
+
+        idx = {i["name"]: i for i in insp.get_indexes(table)}
+        dedup_name = EXPECTED_DEDUP_INDEXES[table]
+        if dedup_name not in idx:
+            failures.append(f"Index dedup {dedup_name} absent sur {table}.")
+        elif not idx[dedup_name].get("unique"):
+            failures.append(f"Index dedup {dedup_name} non unique sur {table}.")
+        else:
+            oks.append(f"Index dedup unique {dedup_name} OK.")
 
     # 3) Contraintes d'unicité audit (sequence + entry_hash) ------------------
     if "audit_logs" in tables:

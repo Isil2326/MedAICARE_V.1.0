@@ -141,6 +141,18 @@ open-loop d'approbation/rejet.
 - `POST /{id}/approve` — validation clinicien (pending → approved)
 - `POST /{id}/reject` — rejet clinicien (pending → rejected)
 
+### Séries temporelles (`/api/v1/timeseries`) — **Phase 1, simulé**
+Ingestion/lecture des événements IoMT simulés (`is_synthetic=True`). Validation
+stricte des timestamps (tz-aware, UTC, anti-futur) et bornes physiologiques.
+- `POST /cgm` · `GET /cgm` — glycémie CGM (mg/dL)
+- `POST /insulin` · `GET /insulin` — doses d'insuline (U)
+- `POST /meals` · `GET /meals` — repas (glucides g)
+- `POST /activity` · `GET /activity` — activité physique (min)
+- `GET /events` — vue consolidée multi-types
+- **RBAC/ownership** : patient écrit/lit le sien ; clinicien/admin lit avec
+  `patient_id` explicite. Écritures auditées. **201** créé / **200** doublon
+  idempotent. Détails : `docs/migration/PHASE_1_DATA_ENGINEERING.md`.
+
 ### Audit (`/api/v1/audit-logs`)
 - `GET ` — consultation du journal (clinicien/admin)
 - `GET /verify` — vérification de l'intégrité de la chaîne

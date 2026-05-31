@@ -9,6 +9,9 @@ Socle backend **FastAPI + PostgreSQL réel** construit en priorité (sécurité 
 - **Init :** `cd backend && alembic upgrade head && python -m app.seed` · **Tests :** `cd backend && python -m pytest -q` (SQLite isolé).
 - **Docs :** `backend/README.md` (exécution/API) · `docs/migration/RAPPORT_SOCLE_BACKEND.md` (implémenté/simulé/reste-à-faire) · `docs/migration/PHASE_0_INITIALISATION.md` (architecture).
 
+### Phase 1 — Data Engineering & Pipeline temporel (livré, validé)
+Socle temporel **anti-leakage** prêt pour ML/XAI, **sans** ML/XAI réel. 4 tables event enrichies (mixin pipeline : source/external_event_id/device_id/quality_flag/ingestion_batch_id/unit/event_metadata) + index dedup unique partiel + index `(patient_id, ts)`. Migration additive non destructive. **9 routes `/api/v1/timeseries`** (cgm/insulin/meals/activity + events) : ingestion idempotente (201 créé / 200 doublon, concurrency-safe via IntegrityError), RBAC rôle+ownership (patient écrit/lit le sien, clinicien/admin lit avec `patient_id`), audit des écritures. Timestamps tz-aware obligatoires normalisés UTC, bornes physiologiques. `feature_engineering.py` = fonctions pures (rolling/slope/TIR/post-prandial/calendaires) refusant tout point futur. Seed 3 profils synthétiques (stable/hypo/hyper) idempotent. **66 tests verts.** Décision **TimescaleDB → repli PG standard** (hypertables = PK composite destructive + conflit FK predictions ; architecture TimescaleDB-ready documentée). Docs : `docs/migration/PHASE_1_DATA_ENGINEERING.md` + `RAPPORT_PHASE_1.md` (14 points).
+
 ## Tech Stack
 - **Framework:** React 19 with TypeScript
 - **Build Tool:** Vite 7
