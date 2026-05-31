@@ -17,3 +17,9 @@ id = "pMbbea0IVnax4fHlbDjDP"
 uri = "file://MedAICare_V.3_10Patients/RAPPORT_JURY_ACADEMIQUE_EXPERTS.md"
 type = "text"
 title = "Rapport — Jury Académique et d'Experts"
+
+[[outputs]]
+id = "kkGrIxFWLIYBnutZ4BmL3"
+uri = "file://docs/migration/RAPPORT_VALIDATION_PHASE_0.md"
+type = "text"
+title = "Rapport de validation — Socle backend (Phase 0)"

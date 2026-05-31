@@ -43,11 +43,45 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
     # --- CORS (clinicien web / mobile Expo plus tard) ---
-    cors_origins: list[str] = ["*"]
+    # Liste d'origines autorisées, séparées par des virgules, lue depuis l'env.
+    # Vide => défaut localhost en dev ; refus strict en production (pas de `*`).
+    cors_origins_env: str = os.getenv("CORS_ORIGINS", "")
 
     @property
     def sqlalchemy_database_uri(self) -> str:
         return _normalize_db_url(self.database_url)
+
+    @property
+    def is_production(self) -> bool:
+        return self.environment.strip().lower() in {"production", "prod"}
+
+    @property
+    def cors_origins(self) -> list[str]:
+        """Origines CORS restreintes par environnement.
+
+        - Si CORS_ORIGINS est défini : on respecte exactement cette allow-list.
+        - Sinon, en dev/test : origines localhost usuelles (Vite/Expo).
+        - Sinon, en production : liste vide (refus) — il faut définir CORS_ORIGINS.
+
+        `*` est rejeté : il est incompatible avec `allow_credentials=True` et
+        rouvrirait l'accès à toutes les origines (régression de sécurité).
+        """
+        explicit = [o.strip() for o in self.cors_origins_env.split(",") if o.strip()]
+        if "*" in explicit:
+            raise RuntimeError(
+                "CORS_ORIGINS='*' interdit avec credentials. Indiquez une "
+                "allow-list explicite d'origines."
+            )
+        if explicit:
+            return explicit
+        if self.is_production:
+            return []
+        return [
+            "http://localhost:5000",
+            "http://localhost:5173",
+            "http://127.0.0.1:5000",
+            "http://127.0.0.1:5173",
+        ]
 
 
 @lru_cache
