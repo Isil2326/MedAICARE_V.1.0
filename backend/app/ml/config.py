@@ -19,6 +19,16 @@ HORIZONS_MIN = (30, 60)              # horizons de prédiction en minutes
 # --- Reproductibilité ------------------------------------------------------
 RANDOM_SEED = 42
 
+# --- Versioning des artefacts ----------------------------------------------
+# Conventions de versions (incrémentées manuellement lors d'un changement de
+# définition). `model_id` reste l'identifiant unique horodaté par entraînement.
+DATASET_VERSION = "1.0.0"   # définition du dataset (stride/warmup/labels/fenêtres)
+FEATURES_VERSION = "1.0.0"  # définition des 18 features (FEATURE_COLUMNS)
+# Statuts du cycle de vie d'un modèle dans le registre.
+MODEL_STATUS_ACTIVE = "active"
+MODEL_STATUS_CANDIDATE = "candidate"
+MODEL_STATUS_ARCHIVED = "archived"
+
 # --- Construction du dataset ----------------------------------------------
 # Cadence d'échantillonnage des instants d'évaluation T (réduit l'autocorrélation
 # entre lignes consécutives ; le CGM simulé est à 15 min).

@@ -56,16 +56,25 @@ def register(entry: dict, *, db=None, set_active: bool = True) -> dict:
     entry = dict(entry)
     entry.setdefault("created_at", datetime.now(timezone.utc).isoformat())
     entry["is_active"] = bool(set_active)
+    entry["status"] = config.MODEL_STATUS_ACTIVE if set_active else config.MODEL_STATUS_CANDIDATE
+    # La donnée est TOUJOURS simulée (contrainte projet) ; versions par défaut.
+    entry.setdefault("synthetic_only", True)
+    entry.setdefault("dataset_version", config.DATASET_VERSION)
+    entry.setdefault("features_version", config.FEATURES_VERSION)
 
     entries = _read_json()
     if set_active:
         for e in entries:
+            # N'archive QUE les entrées actuellement actives (parité avec
+            # deactivate_others côté DB) : un 'candidate' reste candidate.
             if (
-                e.get("target") == entry["target"]
+                e.get("is_active")
+                and e.get("target") == entry["target"]
                 and int(e.get("horizon_min", -1)) == int(entry["horizon_min"])
                 and e.get("model_id") != entry["model_id"]
             ):
                 e["is_active"] = False
+                e["status"] = config.MODEL_STATUS_ARCHIVED
     # remplace l'entrée existante de même model_id, sinon ajoute.
     entries = [e for e in entries if e.get("model_id") != entry["model_id"]]
     entries.append(entry)
@@ -74,7 +83,8 @@ def register(entry: dict, *, db=None, set_active: bool = True) -> dict:
     if db is not None:
         from app.repositories import ml_registry_repo
 
-        ml_registry_repo.upsert(db, entry)
+        # Ordre important pour l'index UNIQUE PARTIEL (un seul actif par couple) :
+        # on archive d'abord les autres actifs, on flush, PUIS on insère le nouveau.
         if set_active:
             ml_registry_repo.deactivate_others(
                 db,
@@ -82,5 +92,7 @@ def register(entry: dict, *, db=None, set_active: bool = True) -> dict:
                 horizon_min=int(entry["horizon_min"]),
                 keep_model_id=entry["model_id"],
             )
+            db.flush()
+        ml_registry_repo.upsert(db, entry)
         db.commit()
     return entry

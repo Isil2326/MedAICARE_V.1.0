@@ -80,6 +80,24 @@ def test_temporal_split_rejects_bad_fractions():
         temporal_split(df, fractions=(0.5, 0.3, 0.3))
 
 
+def test_temporal_split_no_timestamp_leaks_across_splits():
+    """Anti-leakage : un timestamp partagé (multi-patients) ne doit jamais
+    straddle deux splits. Ici chaque instant est dupliqué (2 'patients')."""
+    rows = []
+    for i in range(60):
+        rows.append({"at": _t(i), "patient_id": "A", "x": i})
+        rows.append({"at": _t(i), "patient_id": "B", "x": i})
+    df = pd.DataFrame(rows)
+    parts = temporal_split(df)
+    tr = set(parts["train"]["at"]); va = set(parts["val"]["at"]); te = set(parts["test"]["at"])
+    assert tr & va == set()
+    assert va & te == set()
+    assert tr & te == set()
+    # frontières strictement disjointes (pas d'égalité au bord)
+    assert parts["train"]["at"].max() < parts["val"]["at"].min()
+    assert parts["val"]["at"].max() < parts["test"]["at"].min()
+
+
 # --- Évaluation : aucune métrique inventée ----------------------------------
 def test_evaluate_single_class_returns_none_auroc():
     y = np.zeros(20, dtype=int)

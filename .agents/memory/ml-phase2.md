@@ -44,6 +44,21 @@ Non-negotiable invariants any future ML change must preserve (thesis SaMD protot
 - **Ops gotcha.** The `Backend API` workflow has no `--reload`; after editing routers/endpoints you
   must restart it or live calls 404 against stale code.
 
+- **Split must be timestamp-boundary-aware (multi-patient leakage).** With several patients sharing
+  identical `at` values, an index-fraction split can put the SAME timestamp in two splits (e.g.
+  val.max == test.min). `temporal_split` advances each cut to a timestamp boundary
+  (`_advance_to_boundary`) so a given instant belongs entirely to one split, and
+  `assert_no_timestamp_overlap` enforces zero overlap. **Why:** "aucun timestamp ne fuit" must hold
+  across patients, not just within one series. Don't revert to a raw `iloc` fraction cut.
+
+- **Registry single-active is a DB guarantee, not just app logic.** Partial unique index
+  `uq_model_registry_active_couple` on `(target,horizon_min)` where `is_active` enforces one active
+  model per couple. On register, archive others (`is_active=False`, `status='archived'`) + `flush()`
+  BEFORE inserting the new active row, or the partial-unique index trips on a transient double-active.
+  Lifecycle cols: `status` (active/candidate/archived), `dataset_version`/`features_version`,
+  `synthetic_only` (always True). Backfill migration must set `status='archived'` where not active
+  (server_default 'active' would wrongly label old inactive rows).
+
 Reproduce: `alembic upgrade head` → `python -m app.seed` → `python -m app.ml.train` →
 `python -m pytest -q` (Phase1 + Phase2 must stay green).
 Docs: `docs/migration/PHASE_2_MODELISATION_ML.md` + `RAPPORT_PHASE_2.md`.

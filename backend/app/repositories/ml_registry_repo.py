@@ -43,6 +43,7 @@ def deactivate_others(db: Session, *, target: str, horizon_min: int, keep_model_
     )
     for r in rows:
         r.is_active = False
+        r.status = "archived"
 
 
 def upsert(db: Session, entry_dict: dict) -> ModelRegistryEntry:
@@ -56,6 +57,10 @@ def upsert(db: Session, entry_dict: dict) -> ModelRegistryEntry:
         "artifact_path": entry_dict["artifact_path"],
         "calibrated": entry_dict.get("calibrated", False),
         "is_active": entry_dict.get("is_active", True),
+        "status": entry_dict.get("status", "active"),
+        "dataset_version": entry_dict.get("dataset_version"),
+        "features_version": entry_dict.get("features_version"),
+        "synthetic_only": entry_dict.get("synthetic_only", True),
         "feature_columns": entry_dict.get("feature_columns"),
         "metrics": entry_dict.get("metrics"),
         "dataset_meta": entry_dict.get("dataset_meta"),

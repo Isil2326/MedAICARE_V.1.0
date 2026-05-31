@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import uuid
 
-from sqlalchemy import JSON, Boolean, Integer, String
+from sqlalchemy import JSON, Boolean, Index, Integer, String, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
@@ -26,6 +26,24 @@ class ModelRegistryEntry(UUIDMixin, TimestampMixin, Base):
     artifact_path: Mapped[str] = mapped_column(String(255))
     calibrated: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    # Cycle de vie explicite : active / candidate / archived.
+    status: Mapped[str] = mapped_column(String(20), default="active", index=True)
+    # Versions de définition (la donnée est TOUJOURS simulée → synthetic_only=True).
+    dataset_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    features_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    synthetic_only: Mapped[bool] = mapped_column(Boolean, default=True)
     feature_columns: Mapped[list | None] = mapped_column(JSON, nullable=True)
     metrics: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     dataset_meta: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+
+    __table_args__ = (
+        # Garantie BASE : un seul modèle ACTIF par couple (target, horizon_min).
+        Index(
+            "uq_model_registry_active_couple",
+            "target",
+            "horizon_min",
+            unique=True,
+            sqlite_where=text("is_active = 1"),
+            postgresql_where=text("is_active = true"),
+        ),
+    )

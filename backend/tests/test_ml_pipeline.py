@@ -219,3 +219,48 @@ def test_predict_endpoint_naive_timestamp_is_coerced(client, db_session, ml_arti
     )
     assert res.status_code == 200, res.text
     assert res.json()["calculable"] in (True, False)
+
+
+def _reg_entry(model_id, *, model_name="logreg"):
+    """Entrée de registre minimale (données 100% synthétiques)."""
+    return {
+        "model_id": model_id,
+        "target": "hypo",
+        "horizon_min": 30,
+        "model_name": model_name,
+        "model_version": "1.0.0",
+        "artifact_path": f"/tmp/{model_id}.joblib",
+        "calibrated": False,
+        "feature_columns": list(config.FEATURE_COLUMNS),
+        "metrics": {},
+        "dataset_meta": {"is_synthetic": True},
+    }
+
+
+def test_registry_json_db_lifecycle_parity(db_session, ml_artifacts):
+    """Parité JSON canonique ↔ miroir DB sur le cycle de vie active/candidate/archived.
+
+    Séquence : actif A → candidate B → actif C. Attendu (JSON ET DB identiques) :
+    A archived, B candidate (inchangé), C active ; un seul actif par couple.
+    """
+    from app.repositories import ml_registry_repo
+
+    db, _ = db_session
+    registry.register(_reg_entry("A"), db=db, set_active=True)
+    registry.register(_reg_entry("B", model_name="ebm"), db=db, set_active=False)
+    registry.register(_reg_entry("C", model_name="random_forest"), db=db, set_active=True)
+
+    json_status = {e["model_id"]: (e["is_active"], e["status"]) for e in registry.list_entries()}
+    db_rows = ml_registry_repo.list_all(db)
+    db_status = {r.model_id: (r.is_active, r.status) for r in db_rows}
+
+    expected = {
+        "A": (False, "archived"),
+        "B": (False, "candidate"),
+        "C": (True, "active"),
+    }
+    assert json_status == expected
+    assert db_status == expected
+    # Un seul modèle actif par couple, des deux côtés.
+    assert sum(1 for v in json_status.values() if v[0]) == 1
+    assert sum(1 for r in db_rows if r.is_active) == 1
