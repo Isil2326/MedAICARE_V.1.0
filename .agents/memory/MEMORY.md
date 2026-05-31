@@ -1,0 +1,1 @@
+- [Backend foundation](backend-foundation.md) — FastAPI+Postgres socle under `backend/`, runs on port 8000 (separate from React app on 5000); open-loop, synthetic data only.

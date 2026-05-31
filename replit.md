@@ -3,6 +3,12 @@
 ## Overview
 MediAI Care (v1.0.0-prototype) is a specialized medical dashboard and decision-support system for managing diabetic patients. It is a Master's Thesis project in Biomedical Informatics integrating IoMT data with Explainable AI (XAI) to provide therapeutic recommendations. **Status: academic prototype — not destined for clinical use. No regulatory certification (MDR, IEC 62304, ISO 13485, HDS, operational GDPR).** See `MedAICare_V.3_10Patients/LIMITATIONS.md` for the full scope of intentional limits.
 
+## Backend Foundation (migration option 2 — `backend/`)
+Socle backend **FastAPI + PostgreSQL réel** construit en priorité (sécurité + base de données réelle) avant la couche mobile et ML/XAI. **Open-loop strict, données simulées uniquement (`is_synthetic=True`), non certifié.** Runs sur le port **8000** (workflow « Backend API »), séparé de l'app React (port 5000).
+- **Stack :** FastAPI · SQLAlchemy 2 (types portables) · Alembic · JWT access court + refresh opaque (rotation atomique + détection de réutilisation) · argon2 · RBAC serveur · audit append-only chaîné (SHA-256, contraintes d'unicité anti-fork).
+- **Init :** `cd backend && alembic upgrade head && python -m app.seed` · **Tests :** `cd backend && python -m pytest -q` (SQLite isolé).
+- **Docs :** `backend/README.md` (exécution/API) · `docs/migration/RAPPORT_SOCLE_BACKEND.md` (implémenté/simulé/reste-à-faire) · `docs/migration/PHASE_0_INITIALISATION.md` (architecture).
+
 ## Tech Stack
 - **Framework:** React 19 with TypeScript
 - **Build Tool:** Vite 7
