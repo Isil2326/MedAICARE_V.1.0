@@ -5,7 +5,7 @@ stack = "BEST_EFFORT_FALLBACK"
 
 [nix]
 channel = "stable-25_05"
-packages = ["libxcrypt"]
+packages = ["arrow-cpp", "glibcLocales", "libxcrypt", "pkg-config", "xsimd"]
 
 [workflows]
 runButton = "Project"

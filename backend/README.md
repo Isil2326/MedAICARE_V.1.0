@@ -153,6 +153,22 @@ stricte des timestamps (tz-aware, UTC, anti-futur) et bornes physiologiques.
   `patient_id` explicite. Écritures auditées. **201** créé / **200** doublon
   idempotent. Détails : `docs/migration/PHASE_1_DATA_ENGINEERING.md`.
 
+### ML — Risque glycémique (`/api/v1/ml`) — **Phase 2, simulé, open-loop**
+Inférence **open-loop stricte** : renvoie une **probabilité** de risque (`hypo`/`hyper`)
+aux horizons **30/60 min**, jamais de décision/dose. Données simulées
+(`is_synthetic=True`), anti-leakage strict, aucune métrique inventée.
+- `POST /predict` — body : `target` (`hypo`/`hyper`), `horizon_min` (30/60),
+  `patient_id` (requis clinicien/admin ; ignoré pour un patient → son dossier),
+  `at` (optionnel), `persist` (optionnel). Réponse : `probability` (ou `null` +
+  `reason` si **non calculable**), `risk_label`, `calibrated`, `open_loop_notice`.
+- **RBAC/ownership** comme les séries temporelles ; horizon hors {30,60} → **400** ;
+  non authentifié → **401**. **Audit systématique** (`ml.predict`). `persist=true`
+  écrit dans `predictions` (`is_synthetic=True`).
+- **CLI** : `python -m app.ml.build_dataset` · `python -m app.ml.train
+  [--target --horizon]` · `python -m app.ml.evaluate`. Artefacts sous
+  `backend/artifacts/` (gitignorés, régénérables). Détails :
+  `docs/migration/PHASE_2_MODELISATION_ML.md` + `RAPPORT_PHASE_2.md`.
+
 ### Audit (`/api/v1/audit-logs`)
 - `GET ` — consultation du journal (clinicien/admin)
 - `GET /verify` — vérification de l'intégrité de la chaîne
