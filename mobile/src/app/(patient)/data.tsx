@@ -8,6 +8,7 @@ import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
 import { SyntheticBadge } from '@/components/Badge';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
+import { CgmChart } from '@/components/CgmChart';
 import { getCgm, getInsulin, getMeals, getActivity } from '@/services/api/timeseries';
 import { formatGlucose, formatDateTime, isoDaysAgo } from '@/utils/format';
 import { spacing } from '@/theme/theme';
@@ -90,6 +91,24 @@ export default function PatientData() {
     <Screen refreshing={fetching} onRefresh={refetchAll}>
       <Text variant="h1">Mes données</Text>
       <Text tone="secondary">Mesures récentes (données simulées).</Text>
+
+      <Card>
+        <View
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+        >
+          <Text variant="h3">Glycémie récente (graphique)</Text>
+          <SyntheticBadge />
+        </View>
+        {cgmQ.isLoading ? (
+          <LoadingState />
+        ) : cgmQ.error ? (
+          <ErrorState error={cgmQ.error} onRetry={cgmQ.refetch} />
+        ) : cgmQ.data && cgmQ.data.length ? (
+          <CgmChart data={cgmQ.data} />
+        ) : (
+          <EmptyState message="Aucune donnée récente." />
+        )}
+      </Card>
 
       <Section
         title="Glycémie (CGM)"

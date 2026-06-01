@@ -40,8 +40,9 @@ FastAPI (`backend/`), app mobile Expo (`mobile/`).
 | 4.1 | Verrouillage sémantique & source-of-truth | **livré, à valider** |
 | 5 | Consolidation backend/API/sécurité/contrats | **livré, à valider** |
 | 6 | Application mobile Expo + intégration API | **validée** |
-| 7 | QA mobile, validation E2E, accessibilité, soutenance | **livré, à valider** |
-| 8 | — | **NON démarrée — attente validation superviseur** |
+| 7 | QA mobile, validation E2E, accessibilité, soutenance | **validée** |
+| 8 | Durcissement device, build mobile, QA accessibilité device, pré-release | **livré, à valider** |
+| 9 | — | **NON démarrée — attente validation superviseur** |
 
 > Les statuts « livré, à valider » reflètent l'attente de validation du superviseur.
 > Mettre à jour cette colonne au fil des validations réelles.
@@ -96,17 +97,21 @@ cd MedAICare_V.3_10Patients && npm run dev                      # « Start appli
 - Phase 5 : `PHASE_5_CONSOLIDATION.md` · `RAPPORT_PHASE_5.md`
 - Phase 6 : `RAPPORT_PHASE_6.md`
 - Phase 7 : `RAPPORT_PHASE_7.md`
+- Phase 8 : `PHASE_8_DEVICE_HARDENING_PRERELEASE.md` · `RAPPORT_PHASE_8.md`
 
 **Démo & soutenance** (`docs/demo/`) — `E2E_DEMO_SCRIPT.md` · `SCREEN_WALKTHROUGH.md` ·
 `SOUTENANCE_SCENARIO.md` (+ `screenshots/`)
 **QA** (`docs/qa/`) — `MOBILE_QA_CHECKLIST.md` · `ACCESSIBILITY_REVIEW.md` ·
-`TRACEABILITY_MATRIX.md`
+`TRACEABILITY_MATRIX.md` · `DEVICE_ACCESSIBILITY_CHECKLIST.md` ·
+`MOBILE_PRE_RELEASE_CHECKLIST.md`
 **Architecture** (`docs/architecture/`) — `FINAL_ARCHITECTURE.md` (schéma Mermaid)
 **API** (`docs/api/`) — `API_V1_CONTRACTS.md` · `ERROR_CATALOG.md`
 **Sécurité** (`docs/security/`) — `RBAC_MATRIX.md` · `AUDIT_COVERAGE.md` ·
-`AUDIT_CONCURRENCY.md` · `PASSWORD_POLICY.md` · `MOBILE_SECURITY_REVIEW.md`
+`AUDIT_CONCURRENCY.md` · `PASSWORD_POLICY.md` · `MOBILE_SECURITY_REVIEW.md` ·
+`DEVICE_TOKEN_STORAGE_VALIDATION.md` · `MOBILE_TLS_PINNING_STRATEGY.md`
 **Ops** (`docs/ops/`) — `PERFORMANCE_NOTES.md` · `TEST_STRATEGY.md` · `VALIDATION_COMMANDS.md`
-**Mobile** (`docs/mobile/`) — `PHASE_6_MOBILE_APP.md` · `MOBILE_API_CONTRACTS.md`
+**Mobile** (`docs/mobile/`) — `PHASE_6_MOBILE_APP.md` · `MOBILE_API_CONTRACTS.md` ·
+`DEVICE_BUILD_GUIDE.md`
 **Conformité** (`docs/compliance/`) — `COMPLIANCE_SCOPE.md` · `SYNTHETIC_DATA_POLICY.md`
 **Frontend web** (`docs/frontend/`) — `REACT_APP_ARCHITECTURE.md` (clinicien v6.0,
 design system, features web)
@@ -123,8 +128,10 @@ design system, features web)
 - Journal de décision web = `localStorage` non-autoritaire (démo, pas un dossier source).
 
 ## Prochaine phase attendue
-**Phase 8 — NON démarrée.** Ne pas la démarrer sans validation explicite du superviseur.
-Phase 7 (QA/validation E2E/accessibilité/soutenance) livrée, en attente de validation.
-Pistes Phase 8 proposées (open-loop, synthétiques, sans changement ML/XAI) : build
-device réel (EAS, Keychain/Keystore, TLS pinning, audit lecteur d'écran VoiceOver/
-TalkBack), graphiques séries temporelles mobiles (lecture seule).
+**Phase 9 — NON démarrée.** Ne pas la démarrer sans validation explicite du superviseur.
+Phase 8 (durcissement device, build mobile, QA accessibilité device, pré-release)
+livrée, en attente de validation. Pistes Phase 9 proposées (open-loop, synthétiques,
+sans changement ML/XAI) : exécution réelle des checklists device (build EAS dev/preview,
+audit VoiceOver/TalkBack), durcissement natif (prebuild + TLS pinning si requis),
+visualisations lecture seule supplémentaires (insuline/repas/activité) sans calcul
+local, formalisation d'un dossier de validation si un cadre réglementaire était envisagé.
