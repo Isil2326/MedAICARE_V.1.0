@@ -15,6 +15,7 @@ from app.models.timeseries import (
 from app.models.lab import LabReport
 from app.models.clinical import Prediction, Recommendation
 from app.models.ml_registry import ModelRegistryEntry
+from app.models.xai_explanation import XaiExplanation
 
 __all__ = [
     "Base",
@@ -33,4 +34,5 @@ __all__ = [
     "Prediction",
     "Recommendation",
     "ModelRegistryEntry",
+    "XaiExplanation",
 ]

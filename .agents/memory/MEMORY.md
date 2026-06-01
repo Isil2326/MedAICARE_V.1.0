@@ -2,3 +2,4 @@
 - [Timeseries pipeline decisions](timeseries-pipeline.md) — TimescaleDB fallback rationale, idempotent dedup, tz-aware timestamp rule, anti-leakage guarantee.
 - [Backend test/migration quirks](backend-test-quirks.md) — tests use SQLite via create_all (not alembic); migrations target PG only; partial indexes need both *_where dialects.
 - [ML Phase 2 + 2.1 decisions](ml-phase2.md) — open-loop strict, synthetic-only, anti-leakage, no invented metrics; Phase 2.1: rare-class test goes mono-class under chrono split (fix in seed not split), conditional activation, stable sha256 seeds.
+- [XAI Phase 3 decisions](xai-phase3.md) — explainability explains UNCALIBRATED model while proba is calibrated; _Bundle inner estimators; honest occlusion fallback; method field is str (400 not 422); template-based non-prescriptive text.
