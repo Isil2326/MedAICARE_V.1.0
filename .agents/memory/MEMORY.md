@@ -1,1 +1,2 @@
 - [Backend test execution (OOM)](backend-test-execution.md) — run `backend/` pytest in batches via scripts/run_test_batches.sh; full single run can OOM with 3 workflows + ML deps.
+- [Mobile Jest mocking](mobile-jest-mocking.md) — jest.mock() is hoisted above consts; create jest.fn() inside the factory then grab ref via import; add types:[jest,node] for tsc.

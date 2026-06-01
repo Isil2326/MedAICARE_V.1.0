@@ -23,6 +23,10 @@ args = "Start application"
 task = "workflow.run"
 args = "Backend API"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Mobile App"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -39,10 +43,22 @@ outputType = "webview"
 name = "Backend API"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+args = "cd backend && CORS_ORIGINS=\"https://$REPLIT_DEV_DOMAIN:5173,https://$REPLIT_DEV_DOMAIN:3001,https://$REPLIT_DEV_DOMAIN:3002,https://$REPLIT_DEV_DOMAIN:3003,https://$REPLIT_DEV_DOMAIN,http://localhost:5173,http://localhost:8081\" uvicorn app.main:app --host 0.0.0.0 --port 8000"
 waitForPort = 8000
+
+[[workflows.workflow]]
+name = "Mobile App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd mobile && CI=1 EXPO_PUBLIC_API_BASE_URL=\"https://$REPLIT_DEV_DOMAIN:8000\" npx expo start --web --port 5173"
+waitForPort = 5173
 
 [workflows.workflow.metadata]
 outputType = "console"
@@ -58,6 +74,10 @@ externalPort = 3001
 [[ports]]
 localPort = 5002
 externalPort = 3003
+
+[[ports]]
+localPort = 5173
+externalPort = 5173
 
 [[ports]]
 localPort = 8000

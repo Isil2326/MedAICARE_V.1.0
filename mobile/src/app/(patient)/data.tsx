@@ -1,0 +1,125 @@
+/** Données patient — séries CGM / repas / insuline / activité (lecture seule). */
+import React from 'react';
+import { View } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
+
+import { Screen } from '@/components/Screen';
+import { Card } from '@/components/Card';
+import { Text } from '@/components/Text';
+import { SyntheticBadge } from '@/components/Badge';
+import { LoadingState, ErrorState, EmptyState } from '@/components/States';
+import { getCgm, getInsulin, getMeals, getActivity } from '@/services/api/timeseries';
+import { formatGlucose, formatDateTime, isoDaysAgo } from '@/utils/format';
+import { spacing } from '@/theme/theme';
+
+const RANGE = { start: isoDaysAgo(2), limit: 12 };
+
+function Row({ left, right }: { left: string; right: string }) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: spacing.xs,
+        gap: spacing.md,
+      }}
+    >
+      <Text variant="small" tone="secondary" style={{ flexShrink: 1 }}>
+        {left}
+      </Text>
+      <Text variant="small">{right}</Text>
+    </View>
+  );
+}
+
+function Section<T>({
+  title,
+  q,
+  render,
+}: {
+  title: string;
+  q: { isLoading: boolean; error: unknown; data?: T[]; refetch: () => void };
+  render: (item: T) => { left: string; right: string };
+}) {
+  return (
+    <Card>
+      <View
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        <Text variant="h3">{title}</Text>
+        <SyntheticBadge />
+      </View>
+      {q.isLoading ? (
+        <LoadingState />
+      ) : q.error ? (
+        <ErrorState error={q.error} onRetry={q.refetch} />
+      ) : q.data && q.data.length ? (
+        <View style={{ marginTop: spacing.sm }}>
+          {q.data
+            .slice()
+            .reverse()
+            .map((item, i) => {
+              const r = render(item);
+              return <Row key={i} left={r.left} right={r.right} />;
+            })}
+        </View>
+      ) : (
+        <EmptyState message="Aucune donnée récente." />
+      )}
+    </Card>
+  );
+}
+
+export default function PatientData() {
+  const cgmQ = useQuery({ queryKey: ['p', 'cgm'], queryFn: () => getCgm(RANGE) });
+  const insulinQ = useQuery({ queryKey: ['p', 'insulin'], queryFn: () => getInsulin(RANGE) });
+  const mealsQ = useQuery({ queryKey: ['p', 'meals'], queryFn: () => getMeals(RANGE) });
+  const actQ = useQuery({ queryKey: ['p', 'activity'], queryFn: () => getActivity(RANGE) });
+
+  const refetchAll = () => {
+    cgmQ.refetch();
+    insulinQ.refetch();
+    mealsQ.refetch();
+    actQ.refetch();
+  };
+
+  const fetching =
+    cgmQ.isFetching || insulinQ.isFetching || mealsQ.isFetching || actQ.isFetching;
+
+  return (
+    <Screen refreshing={fetching} onRefresh={refetchAll}>
+      <Text variant="h1">Mes données</Text>
+      <Text tone="secondary">Mesures récentes (données simulées).</Text>
+
+      <Section
+        title="Glycémie (CGM)"
+        q={cgmQ}
+        render={(c) => ({ left: formatDateTime(c.ts), right: formatGlucose(c.glucose_mgdl) })}
+      />
+      <Section
+        title="Repas"
+        q={mealsQ}
+        render={(m) => ({
+          left: formatDateTime(m.ts),
+          right: `${m.carbs_g} g glucides`,
+        })}
+      />
+      <Section
+        title="Insuline"
+        q={insulinQ}
+        render={(i) => ({
+          left: formatDateTime(i.ts),
+          right: `${i.units} U${i.insulin_type ? ` · ${i.insulin_type}` : ''}`,
+        })}
+      />
+      <Section
+        title="Activité"
+        q={actQ}
+        render={(a) => ({
+          left: formatDateTime(a.ts),
+          right: `${a.duration_min ?? '—'} min${a.intensity ? ` · ${a.intensity}` : ''}`,
+        })}
+      />
+    </Screen>
+  );
+}
