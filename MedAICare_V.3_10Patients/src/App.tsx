@@ -9,6 +9,7 @@ import {
   MessageSquare, Bell, ChevronRight, Lock,
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './auth/AuthContext';
+import PortalPage from './components/PortalPage';
 import LandingPage from './components/LandingPage';
 import PatientDashboard from './components/PatientDashboard';
 import ClinicianHub from './components/clinician/ClinicianHub';
@@ -30,7 +31,7 @@ const patientNavItems = [
 
 function AppContent() {
   const { user, logout, loading } = useAuth();
-  const [activeView, setActiveView]   = useState<ViewMode>('landing');
+  const [activeView, setActiveView]   = useState<ViewMode>('portal');
   const [accessDenied, setAccessDenied] = useState<string | null>(null);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
@@ -72,15 +73,19 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [user]);
 
-  // After login, route to the right shell based on role
+  // After login (via the legacy web demo or portal), route to the right shell.
   useEffect(() => {
-    if (user && activeView === 'landing') {
+    if (user && (activeView === 'landing' || activeView === 'portal')) {
       setActiveView(user.role === 'patient' ? 'patient' : 'doctor');
     }
   }, [user, activeView]);
 
+  // Logged out → return to the institutional portal (new web home). The legacy
+  // login page ('landing') is only reached on explicit demand and is left alone.
   useEffect(() => {
-    if (!loading && !user && activeView !== 'landing') setActiveView('landing');
+    if (!loading && !user && activeView !== 'landing' && activeView !== 'portal') {
+      setActiveView('portal');
+    }
   }, [user, loading, activeView]);
 
   if (loading) {
@@ -92,6 +97,10 @@ function AppContent() {
         </div>
       </div>
     );
+  }
+
+  if (activeView === 'portal' && !user) {
+    return <PortalPage onNavigate={(v) => navigate(v as ViewMode)} />;
   }
 
   if (activeView === 'landing' || !user) {
@@ -107,7 +116,7 @@ function AppContent() {
   const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const firstName = user.name.split(' ')[0];
   const currentNav = patientNavItems.find(n => n.key === activeView);
-  const handleLogout = () => { logout(); setActiveView('landing'); };
+  const handleLogout = () => { logout(); setActiveView('portal'); };
 
   return (
     <div className="min-h-screen bg-slate-50 flex">

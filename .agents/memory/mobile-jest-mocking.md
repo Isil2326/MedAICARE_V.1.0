@@ -25,11 +25,13 @@ the factory too.
 mocked function (it just checks "not called"), so the bug hides until a suite
 actually invokes it. Don't trust a green suite that uses the fragile pattern.
 
-## jest-expo winter fetch warning is harmless noise
+## jest-expo winter fetch warning — noise, but it DID force exit 1
 The preset logs `An error occurred while requiring the 'ExpoModulesCoreJSLogger'
 module: Cannot read properties of undefined (reading 'get')` / "Cannot log after
-tests are done". It comes from `expo/src/winter/fetch` setup, NOT from your tests,
-and does not fail the run. Tests that override `global.fetch` still work.
+tests are done". It comes from `expo-modules-core` requiring the optional native
+logger, NOT from your tests. **Correction:** in this CI config it fires AFTER
+teardown and forces a non-zero exit even with all tests green. Fix = filter that one
+message in `jest.setup.ts`. See `jest-expo-exit-code.md` for the targeted fix.
 
 ## tsc + jest globals
 Expo's `tsconfig.base` uses bundler resolution and does NOT auto-include

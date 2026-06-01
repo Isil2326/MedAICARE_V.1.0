@@ -1,3 +1,15 @@
-- [Backend test execution (OOM)](backend-test-execution.md) — run `backend/` pytest in batches via scripts/run_test_batches.sh; full single run can OOM with 3 workflows + ML deps.
-- [Mobile Jest mocking](mobile-jest-mocking.md) — jest.mock() is hoisted above consts; create jest.fn() inside the factory then grab ref via import; add types:[jest,node] for tsc.
-- [Mobile a11y touch targets](mobile-a11y-touch-targets.md) — selectors/chips must be a full Pressable ≥44px (use SelectChip), never onPress on a Text node.
+- [Backend foundation](backend-foundation.md) — FastAPI/Postgres socle architecture & conventions (migration option 2).
+- [Backend migration phases](backend-migration-phases.md) — option-2 migration order, hard constraints, phase-gating rule.
+- [Backend test execution](backend-test-execution.md) — run the FastAPI suite in batches (anti-OOM), not all at once.
+- [Backend test quirks](backend-test-quirks.md) — test DB vs prod differences and portable-index gotchas.
+- [PG schema introspection](pg-schema-introspection.md) — pitfalls verifying a SQLAlchemy-migrated schema via the Inspector.
+- [Timeseries pipeline](timeseries-pipeline.md) — Phase 1 decisions: Timescale fallback, idempotent dedup, timestamp rule, anti-leakage.
+- [ML phase 2](ml-phase2.md) — backend ML risk layer rules (open-loop, anti-leakage, synthetic-only).
+- [XAI phase 3](xai-phase3.md) — non-obvious constraints for the backend XAI layer.
+- [XAI reliability semantics](xai-reliability-semantics.md) — how XAI reliability status is derived; invariants that must not regress.
+- [Recommendation engine safety](recommendation-engine-safety.md) — open-loop safety must cover EVERY persistence path, not just generation.
+- [Mobile a11y touch targets](mobile-a11y-touch-targets.md) — interactive selectors must be a full Pressable ≥44px, never onPress on a Text node.
+- [Mobile jest mocking](mobile-jest-mocking.md) — mock factories must create jest.fn() inside themselves; jest-expo winter-fetch caveat.
+- [jest-expo exit code 1](jest-expo-exit-code.md) — green tests can still exit 1 via a post-teardown console.warn from expo-modules-core's optional native logger.
+- [Replit preview ports (MediAI Care)](replit-preview-ports.md) — main webview = port 5000 web app; mobile Expo is console on 5173, so mobile UI edits are invisible in the main preview.
+- [Web single-file dist](web-singlefile-dist.md) — web deploys a git-tracked vite-singlefile dist/index.html; editing src/ is not enough, must rebuild + scan dist.

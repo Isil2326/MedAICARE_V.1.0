@@ -142,3 +142,41 @@ cd backend && python scripts/validate_backend.py  # RESULTAT : OK
    backend smoke OK.
 10. **Aucune dépendance lourde** ajoutée ; aucune modification backend/ML/XAI/reco.
 11. **Phase 9 NON démarrée** — en attente de validation explicite du superviseur.
+
+---
+
+## Addendum — Phase 8.5.1 (visibilité, Jest rc=0, recadrage web/mobile)
+
+> Posture inchangée. Aucun changement backend / ML / XAI / recommandation /
+> seuil / données. Phase 9 non démarrée.
+
+### Pourquoi l'UI 8.5 n'était pas visible
+Le preview Replit principal = workflow **« Start application »** (app **web**,
+port 5000, `webview`). Le workflow **« Mobile App »** (Expo Web, port 5173) est en
+`outputType = console` → la refonte UI **mobile** était livrée mais **invisible**
+dans le preview principal (qui montre l'app web). Détails et matrice des ports :
+`docs/web/WEB_PORTAL_STRATEGY.md`.
+
+### Correctif code de sortie Jest (rc=0)
+`expo-modules-core` tente de résoudre le module natif optionnel
+`ExpoModulesCoreJSLogger`. En Jest (Node, sans natif), la résolution échoue et
+`requireOptionalNativeModule` émet un `console.warn` **après** le démontage des
+tests → « Cannot log after tests are done » → code de sortie 1, alors que les 79
+tests passent. **Correctif ciblé** dans `mobile/jest.setup.ts** : on filtre
+**uniquement** le message contenant `ExpoModulesCoreJSLogger`. Aucun mock global
+d'`expo-secure-store`, le test `no-token-leak` reste intact, et ce filtre ne peut
+pas masquer un échec (il ne supprime qu'une chaîne de bruit précise).
+Résultat : `npx jest --ci --runInBand` → **exit 0**, 10 suites / 79 tests verts.
+
+### Marqueur de version UI
+Caption sobre **« MediAI Care Mobile · UI Phase 8.5 »** ajoutée en bas des écrans
+profil patient et clinicien (`(patient)/profile.tsx`, `(clinician)/profile.tsx`).
+
+### Composants 8.5 réellement utilisés (audit imports `src/app`)
+Header, MetricCard, PatientCard, ClinicianActionBar, SelectChip, ComplianceBanner,
+CgmChart, RecommendationCard, XaiWarningBox — **tous référencés** dans les routes.
+
+### Recadrage web/mobile
+Web = **portail institutionnel** (port 5000) ; mobile = **app principale**
+patient/clinicien (port 5173) ; backend = source de vérité (port 8000).
+Voir `docs/web/WEB_PORTAL_STRATEGY.md`.

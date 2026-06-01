@@ -327,7 +327,7 @@ export default function AuditLog() {
               {[
                 { item: 'Modèle IA principal',    value: 'risk-rf v2.3.1',   status: 'success' as const, hint: 'Déployé · 14 mai' },
                 { item: 'Dataset d\'entraînement', value: 'cohorte-fr v4.1', status: 'success' as const, hint: '12 480 échantillons' },
-                { item: 'Module XAI',              value: 'tree-shap v1.8',  status: 'success' as const, hint: 'Validé par 2 cliniciens' },
+                { item: 'Module XAI',              value: 'tree-shap v1.8',  status: 'success' as const, hint: 'Revue clinique cible (non réalisée)' },
                 { item: 'Schéma base de données', value: 'fhir-bridge v3.0', status: 'info' as const,    hint: 'Migration prévue' },
               ].map(v => (
                 <div key={v.item} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">

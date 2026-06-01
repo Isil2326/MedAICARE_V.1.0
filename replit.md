@@ -3,8 +3,10 @@
 ## Projet
 **MediAI Care** (v1.0.0-prototype) — dashboard médical et système d'aide à la décision
 pour le suivi de patients diabétiques (mémoire de Master en Informatique Biomédicale,
-IoMT + XAI). Trois couches : app web React (`MedAICare_V.3_10Patients/`), socle backend
-FastAPI (`backend/`), app mobile Expo (`mobile/`).
+IoMT + XAI). Trois couches : **portail web institutionnel** React
+(`MedAICare_V.3_10Patients/`, présentation/soutenance), socle backend FastAPI
+(`backend/`, source de vérité), **app mobile Expo** (`mobile/`, application
+principale patient/clinicien). Voir `docs/web/WEB_PORTAL_STRATEGY.md`.
 
 ## Posture (non-négociables — toujours valables)
 - **Prototype académique NON certifié** — pas destiné à un usage clinique (aucune
@@ -43,6 +45,7 @@ FastAPI (`backend/`), app mobile Expo (`mobile/`).
 | 7 | QA mobile, validation E2E, accessibilité, soutenance | **validée** |
 | 8 | Durcissement device, build mobile, QA accessibilité device, pré-release | **livré, à valider** |
 | 8.5 | Refonte UI/UX premium mobile (présentation uniquement) | **livré, à valider** |
+| 8.5.1 | Visibilité UI, Jest rc=0, recadrage web (portail) / mobile (app) | **livré, à valider** |
 | 9 | — | **NON démarrée — attente validation superviseur** |
 
 > Les statuts « livré, à valider » reflètent l'attente de validation du superviseur.
@@ -70,7 +73,10 @@ cd MedAICare_V.3_10Patients && npm run dev                      # « Start appli
 ## Workflows Replit
 - **Backend API** — FastAPI/uvicorn, port 8000, injecte `CORS_ORIGINS` (autorise l'origine 5173).
 - **Mobile App** — Expo Web, port 5173, `EXPO_PUBLIC_API_BASE_URL` pointant le backend.
-- **Start application** — app React/Vite, port 5000 (déploiement site statique, `dist/`).
+- **Start application** — **portail web institutionnel** React/Vite, port 5000
+  (preview principal `webview` ; déploiement site statique, `dist/`). C'est le rendu
+  par défaut du preview Replit. L'app **mobile** est sur le **port 5173** (workflow
+  « Mobile App », `console`) — lien « Ouvrir l'app mobile » depuis le portail.
 
 ## Attention Replit
 - **Tests backend lourds** → exécuter **par lots** (`scripts/run_test_batches.sh`) pour

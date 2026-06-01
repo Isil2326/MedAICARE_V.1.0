@@ -210,8 +210,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 Icon: Sparkles,
                 color: 'coral',
                 title: 'Recommandations actionnables',
-                desc: 'Pas des listes de règles impossibles. Des suggestions précises, validées cliniquement, adaptées à votre vie du moment.',
-                tag: 'Personnalisé · Validé MD',
+                desc: 'Des suggestions open-loop générées par le backend sur données synthétiques. Aucune dose, aucune décision automatique — support de présentation uniquement.',
+                tag: 'Open-loop · Synthétique',
               },
             ].map(({ Icon, color, title, desc, tag }) => (
               <motion.div key={title} variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -249,7 +249,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   '2h de prévisibilité glycémique',
                   'Facteur principal identifié (repas / stress / activité)',
                   'Confiance IA affichée clairement',
-                  'Validé par un comité clinique',
+                  'Prototype non certifié · données synthétiques',
                 ].map(it => (
                   <li key={it} className="flex items-center gap-3 text-[14px] text-slate-700 font-semibold">
                     <div className="w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center shrink-0">

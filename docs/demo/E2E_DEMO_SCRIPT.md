@@ -80,3 +80,14 @@ XAI globale (`GET /xai/global`) autorisée ; un patient sur ces mêmes routes �
 
 Voir aussi : `docs/qa/MOBILE_QA_CHECKLIST.md` (checklist détaillée) et
 `docs/demo/SCREEN_WALKTHROUGH.md` (structure écran par écran).
+
+---
+
+## Note Phase 8.5.1 — Web = portail, Mobile = app principale
+
+Le **web** (port 5000) est désormais un **portail institutionnel** de présentation
+(hero, posture synthétique/open-loop/non certifié, accès mobile, limites,
+architecture, documentation). L'**application réelle** patient/clinicien est
+l'**app mobile** (Expo Web, port 5173 ; lien « Ouvrir l'app mobile » depuis le
+portail). Le login web n'est conservé que comme **« Démo web (legacy) »**
+secondaire (footer du portail). Détails : `docs/web/WEB_PORTAL_STRATEGY.md`.

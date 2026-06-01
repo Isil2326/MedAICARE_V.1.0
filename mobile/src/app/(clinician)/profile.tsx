@@ -79,6 +79,13 @@ export default function ClinicianProfile() {
         }}
         fullWidth
       />
+      <Text
+        variant="caption"
+        tone="muted"
+        style={{ textAlign: 'center', marginTop: spacing.md }}
+      >
+        MediAI Care Mobile · UI Phase 8.5
+      </Text>
       <Gap />
     </Screen>
   );
