@@ -8,7 +8,12 @@ import pandas as pd
 import pytest
 
 from app.ml import calibration, config
-from app.ml.evaluation import evaluate, expected_calibration_error
+from app.ml.evaluation import (
+    bootstrap_metrics,
+    evaluate,
+    evaluation_status,
+    expected_calibration_error,
+)
 from app.ml.features_adapter import Point, build_samples
 from app.ml.labels import make_label
 from app.ml.splits import SplitError, temporal_split
@@ -138,3 +143,79 @@ def test_calibrator_outputs_probabilities():
     cal = calibration.fit_calibrator(p, y, method="isotonic")
     out = cal.transform(p)
     assert out.min() >= 0.0 and out.max() <= 1.0
+
+
+# --- Phase 2.1 : anti-fuite de scénario ------------------------------------
+def test_feature_columns_have_no_scenario_leakage():
+    """Aucune colonne de features ne doit exposer le scénario/profil/identité.
+
+    La nature « scénario » d'un patient pilote la GÉNÉRATION du seed mais ne doit
+    jamais devenir un signal d'entrée du modèle (sinon fuite de label triviale).
+    """
+    forbidden = ("profile", "scenario", "patient_id", "hypo_prone", "hyper_prone",
+                 "label", "is_synthetic", "diabetes_type", "email")
+    for col in config.FEATURE_COLUMNS:
+        low = col.lower()
+        for bad in forbidden:
+            assert bad not in low, f"feature suspecte (fuite scénario possible) : {col}"
+
+
+def test_build_samples_row_features_subset_of_feature_columns():
+    """X d'entraînement = FEATURE_COLUMNS uniquement (aucune feature de scénario injectée)."""
+    pts = synthetic_points(n_steps=192, step_min=15)
+    rows = build_samples(patient_id="p", cgm=pts, stride_min=30, warmup_min=60)
+    assert rows
+    feature_set = set(config.FEATURE_COLUMNS)
+    label_cols = {config.label_column(t, h) for t in config.TARGETS for h in config.HORIZONS_MIN}
+    # `patient_id`/`at` sont des colonnes STRUCTURELLES (clé de groupe pour le split
+    # temporel, instant d'évaluation) — jamais utilisées comme features (X = FEATURE_COLUMNS).
+    structural = {"patient_id", "at"}
+    allowed = feature_set | label_cols | structural
+    assert structural.isdisjoint(feature_set), "patient_id/at ne doivent pas être des features"
+    for r in rows:
+        extra = set(r.keys()) - allowed
+        assert not extra, f"colonnes non autorisées dans une ligne d'échantillon : {extra}"
+
+
+# --- Phase 2.1 : statut d'évaluation scientifique --------------------------
+def test_evaluation_status_mono_class():
+    assert evaluation_status({"positives": 0, "negatives": 50}) == config.EVAL_STATUS_MONO_CLASS
+    assert evaluation_status({"positives": 5, "negatives": 0}) == config.EVAL_STATUS_MONO_CLASS
+
+
+def test_evaluation_status_insufficient_and_evaluated():
+    assert evaluation_status({"positives": 3, "negatives": 50}) == config.EVAL_STATUS_INSUFFICIENT
+    assert evaluation_status(
+        {"positives": config.MIN_TEST_POSITIVES, "negatives": 50}
+    ) == config.EVAL_STATUS_EVALUATED
+
+
+# --- Phase 2.1 : bootstrap d'incertitude -----------------------------------
+def test_bootstrap_metrics_returns_real_intervals():
+    rng = np.random.default_rng(0)
+    y = rng.integers(0, 2, size=200)
+    # probas corrélées au label -> AUROC > 0.5, intervalle défini.
+    p = np.clip(0.3 * y + rng.uniform(size=200) * 0.7, 0, 1)
+    out = bootstrap_metrics(y, p, n_boot=120)
+    assert out["auroc"]["n_valid"] > 0
+    assert out["auroc"]["lo"] <= out["auroc"]["mean"] <= out["auroc"]["hi"]
+    assert 0.0 <= out["brier"]["mean"] <= 1.0
+
+
+def test_bootstrap_metrics_mono_class_auroc_undefined():
+    y = np.zeros(40, dtype=int)
+    p = np.linspace(0, 1, 40)
+    out = bootstrap_metrics(y, p, n_boot=60)
+    # AUROC jamais définie (une seule classe partout) -> bornes None, jamais inventées.
+    assert out["auroc"]["n_valid"] == 0
+    assert out["auroc"]["mean"] is None
+    assert out["brier"]["mean"] is not None  # Brier reste calculable
+
+
+def test_bootstrap_metrics_reproducible():
+    rng = np.random.default_rng(2)
+    y = rng.integers(0, 2, size=150)
+    p = rng.uniform(size=150)
+    a = bootstrap_metrics(y, p, n_boot=80, seed=123)
+    b = bootstrap_metrics(y, p, n_boot=80, seed=123)
+    assert a["brier"]["mean"] == b["brier"]["mean"]

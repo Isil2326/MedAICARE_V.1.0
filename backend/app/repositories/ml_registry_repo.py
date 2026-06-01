@@ -58,6 +58,7 @@ def upsert(db: Session, entry_dict: dict) -> ModelRegistryEntry:
         "calibrated": entry_dict.get("calibrated", False),
         "is_active": entry_dict.get("is_active", True),
         "status": entry_dict.get("status", "active"),
+        "evaluation_status": entry_dict.get("evaluation_status"),
         "dataset_version": entry_dict.get("dataset_version"),
         "features_version": entry_dict.get("features_version"),
         "synthetic_only": entry_dict.get("synthetic_only", True),

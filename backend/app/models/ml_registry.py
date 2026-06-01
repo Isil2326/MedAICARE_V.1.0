@@ -28,6 +28,9 @@ class ModelRegistryEntry(UUIDMixin, TimestampMixin, Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
     # Cycle de vie explicite : active / candidate / archived.
     status: Mapped[str] = mapped_column(String(20), default="active", index=True)
+    # Statut d'évaluation scientifique (Phase 2.1) : evaluated /
+    # insufficient_test_positives / not_evaluable_mono_class_test / candidate_only.
+    evaluation_status: Mapped[str | None] = mapped_column(String(40), nullable=True, index=True)
     # Versions de définition (la donnée est TOUJOURS simulée → synthetic_only=True).
     dataset_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
     features_version: Mapped[str | None] = mapped_column(String(40), nullable=True)

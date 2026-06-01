@@ -107,6 +107,7 @@ class RegistryEntry(BaseModel):
     dataset_meta: dict
     is_active: bool = True
     status: str = "active"
+    evaluation_status: str | None = None
     dataset_version: str | None = None
     features_version: str | None = None
     synthetic_only: bool = True

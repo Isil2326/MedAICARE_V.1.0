@@ -121,6 +121,16 @@ def train_target(
     test_metrics = evaluation.evaluate(y_te, p_te, target=target, horizon_min=horizon_min)
     reliability = calibration.reliability_curve(y_te, p_te)
 
+    # 4bis) Statut d'évaluation scientifique + incertitude (bootstrap) — Phase 2.1.
+    # Un couple n'est ACTIVABLE que s'il est évaluable sur le test (pos>0 et neg>0).
+    eval_status = evaluation.evaluation_status(test_metrics)
+    evaluable = eval_status != config.EVAL_STATUS_MONO_CLASS
+    bootstrap = (
+        evaluation.bootstrap_metrics(y_te, p_te)
+        if evaluable
+        else {"note": "test mono-classe : bootstrap non calculable."}
+    )
+
     # 5) Persistance de l'artefact (modèle + calibrateur empaquetés).
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
     model_id = f"{best_model.name}-{target}-{horizon_min}-{stamp}"
@@ -138,15 +148,25 @@ def train_target(
         "artifact_path": str(artifact_path),
         "calibrated": calibrator is not None,
         "feature_columns": feat,
+        "evaluation_status": eval_status,
         "metrics": {
             "validation": {k: trained[k]["val"] for k in trained},
             "selected": best_key,
             "test": test_metrics,
+            "test_bootstrap": bootstrap,
             "reliability_curve": reliability,
+            "split_sizes": {"train": int(len(y_tr)), "val": int(len(y_va)), "test": int(len(y_te))},
+            "split_positives": {
+                "train": int((y_tr == 1).sum()),
+                "val": int((y_va == 1).sum()),
+                "test": int((y_te == 1).sum()),
+            },
         },
         "dataset_meta": meta,
     }
-    registry.register(entry, db=db, set_active=True)
+    # Activation conditionnelle : actif seulement si le couple est évaluable sur
+    # le test (sinon candidat documenté — pas d'activation d'un modèle non évalué).
+    registry.register(entry, db=db, set_active=evaluable)
 
     return {
         "target": target,
@@ -155,10 +175,18 @@ def train_target(
         "selected_model": best_model.name,
         "calibrated": calibrator is not None,
         "model_id": model_id,
+        "evaluation_status": eval_status,
+        "activated": evaluable,
         "test_metrics": test_metrics,
+        "test_bootstrap": bootstrap,
         "n_train": int(len(y_tr)),
         "n_val": int(len(y_va)),
         "n_test": int(len(y_te)),
+        "split_positives": {
+            "train": int((y_tr == 1).sum()),
+            "val": int((y_va == 1).sum()),
+            "test": int((y_te == 1).sum()),
+        },
     }
 
 

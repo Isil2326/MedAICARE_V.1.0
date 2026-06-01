@@ -22,12 +22,22 @@ RANDOM_SEED = 42
 # --- Versioning des artefacts ----------------------------------------------
 # Conventions de versions (incrémentées manuellement lors d'un changement de
 # définition). `model_id` reste l'identifiant unique horodaté par entraînement.
-DATASET_VERSION = "1.0.0"   # définition du dataset (stride/warmup/labels/fenêtres)
-FEATURES_VERSION = "1.0.0"  # définition des 18 features (FEATURE_COLUMNS)
+DATASET_VERSION = "1.1.0"   # Phase 2.1 : benchmark synthétique v2 (10 profils, 14 j)
+FEATURES_VERSION = "1.0.0"  # définition des 18 features (FEATURE_COLUMNS) — inchangée
 # Statuts du cycle de vie d'un modèle dans le registre.
 MODEL_STATUS_ACTIVE = "active"
 MODEL_STATUS_CANDIDATE = "candidate"
 MODEL_STATUS_ARCHIVED = "archived"
+
+# --- Statut d'évaluation scientifique (Phase 2.1) --------------------------
+# Un couple (target, horizon) n'est ACTIVABLE que s'il est évaluable sur le test
+# (au moins un positif ET un négatif). Sinon le modèle reste candidat documenté.
+EVAL_STATUS_EVALUATED = "evaluated"                       # >= MIN_TEST_POSITIVES positifs
+EVAL_STATUS_INSUFFICIENT = "insufficient_test_positives"  # 1..MIN-1 positifs (évaluable, fragile)
+EVAL_STATUS_MONO_CLASS = "not_evaluable_mono_class_test"  # 0 positif OU 0 négatif → non activable
+EVAL_STATUS_CANDIDATE_ONLY = "candidate_only"
+# Seuil recommandé de positifs dans le test pour considérer un couple « évalué ».
+MIN_TEST_POSITIVES = 10
 
 # --- Construction du dataset ----------------------------------------------
 # Cadence d'échantillonnage des instants d'évaluation T (réduit l'autocorrélation

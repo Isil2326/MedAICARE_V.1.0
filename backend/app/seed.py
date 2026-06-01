@@ -147,8 +147,8 @@ def main() -> None:
         print("Seed terminé.")
         print(f"  Patient   : patient@demo.fr / {DEMO_PASSWORD}")
         print(f"  Clinicien : clinicien@demo.fr / {DEMO_PASSWORD}")
-        print(f"  Profils temporels synthétiques : {n_profiles} "
-              "(patient.stable@ / patient.hypo@ / patient.hyper@demo.fr)")
+        print(f"  Profils synthétiques v2 (Phase 2.1) : {n_profiles} "
+              "patients · 14 jours · CGM 5 min · épisodes hypo/hyper quotidiens.")
     finally:
         db.close()
 

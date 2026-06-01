@@ -168,6 +168,12 @@ aux horizons **30/60 min**, jamais de décision/dose. Données simulées
   [--target --horizon]` · `python -m app.ml.evaluate`. Artefacts sous
   `backend/artifacts/` (gitignorés, régénérables). Détails :
   `docs/migration/PHASE_2_MODELISATION_ML.md` + `RAPPORT_PHASE_2.md`.
+- **Phase 2.1 (benchmark synthétique v2)** : seed v2 (10 profils, 14 j, CGM 5 min,
+  épisodes hypo/hyper quotidiens) rendant les **4 couples évaluables** sur le test ;
+  registre `evaluation_status` + **activation conditionnelle** (actif seulement si test
+  bi-classe) ; **bootstrap** d'incertitude (IC95, 200 reps). `DATASET_VERSION=1.1.0`,
+  migration `d4e5f6a7b8c9`. Détails :
+  `docs/migration/AMENDEMENT_PHASE_2_1_BENCHMARK_SYNTHETIQUE.md`.
 
 ### Audit (`/api/v1/audit-logs`)
 - `GET ` — consultation du journal (clinicien/admin)

@@ -15,6 +15,8 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
+from app.ml import config
+
 
 def expected_calibration_error(y_true, y_prob, *, n_bins: int = 10) -> float | None:
     """ECE par binning d'équal-largeur sur [0,1]. None si vide."""
@@ -115,3 +117,88 @@ def evaluate(
         report["f1"] = 2 * p * r / (p + r)
 
     return report
+
+
+def evaluation_status(test_metrics: dict, *, min_positives: int = config.MIN_TEST_POSITIVES) -> str:
+    """Statut d'évaluation scientifique d'un couple à partir des métriques de TEST.
+
+    - `not_evaluable_mono_class_test` : 0 positif OU 0 négatif (AUROC/AUPRC null) ;
+    - `insufficient_test_positives`   : évaluable mais < `min_positives` positifs ;
+    - `evaluated`                     : au moins `min_positives` positifs ET des négatifs.
+    Aucune métrique inventée : ce statut ne fait que QUALIFIER la mesure réelle.
+    """
+    pos = int(test_metrics.get("positives", 0))
+    neg = int(test_metrics.get("negatives", 0))
+    if pos == 0 or neg == 0:
+        return config.EVAL_STATUS_MONO_CLASS
+    if pos < min_positives:
+        return config.EVAL_STATUS_INSUFFICIENT
+    return config.EVAL_STATUS_EVALUATED
+
+
+def _f1_from(y_true: np.ndarray, y_pred: np.ndarray) -> float | None:
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
+    tn, fp, fn, tp = int(cm[0, 0]), int(cm[0, 1]), int(cm[1, 0]), int(cm[1, 1])
+    if tp + fp == 0 or tp + fn == 0:
+        return None
+    prec = tp / (tp + fp)
+    rec = tp / (tp + fn)
+    if prec + rec == 0:
+        return None
+    return 2 * prec * rec / (prec + rec)
+
+
+def bootstrap_metrics(
+    y_true,
+    y_prob,
+    *,
+    n_boot: int = 200,
+    threshold: float = 0.5,
+    seed: int = config.RANDOM_SEED,
+    ci: float = 0.95,
+) -> dict:
+    """Intervalles d'incertitude par bootstrap (rééchantillonnage avec remise du TEST).
+
+    Renvoie pour AUROC/AUPRC/F1/Brier un dict {mean, lo, hi, n_valid} calculé sur
+    les rééchantillons où la métrique est définie (deux classes pour AUROC/AUPRC/F1).
+    AUCUNE valeur inventée : si une métrique n'est jamais définie, ses bornes sont None.
+    """
+    y_true = np.asarray(y_true, dtype=int)
+    y_prob = np.asarray(y_prob, dtype=float)
+    n = int(y_true.size)
+    out: dict = {
+        "n_boot": int(n_boot),
+        "ci": ci,
+        "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+    }
+    if n == 0:
+        out["note"] = "test vide : bootstrap impossible."
+        return out
+
+    rng = np.random.default_rng(seed)
+    collect: dict[str, list[float]] = {"auroc": [], "auprc": [], "f1": [], "brier": []}
+    for _ in range(n_boot):
+        idx = rng.integers(0, n, n)
+        yt, yp = y_true[idx], y_prob[idx]
+        collect["brier"].append(float(brier_score_loss(yt, yp)))
+        if (yt == 1).any() and (yt == 0).any():
+            collect["auroc"].append(float(roc_auc_score(yt, yp)))
+            collect["auprc"].append(float(average_precision_score(yt, yp)))
+            f1 = _f1_from(yt, (yp >= threshold).astype(int))
+            if f1 is not None:
+                collect["f1"].append(f1)
+
+    lo_q = (1.0 - ci) / 2.0
+    hi_q = 1.0 - lo_q
+    for name, vals in collect.items():
+        if vals:
+            arr = np.asarray(vals, dtype=float)
+            out[name] = {
+                "mean": float(arr.mean()),
+                "lo": float(np.quantile(arr, lo_q)),
+                "hi": float(np.quantile(arr, hi_q)),
+                "n_valid": int(arr.size),
+            }
+        else:
+            out[name] = {"mean": None, "lo": None, "hi": None, "n_valid": 0}
+    return out

@@ -62,3 +62,23 @@ Non-negotiable invariants any future ML change must preserve (thesis SaMD protot
 Reproduce: `alembic upgrade head` → `python -m app.seed` → `python -m app.ml.train` →
 `python -m pytest -q` (Phase1 + Phase2 must stay green).
 Docs: `docs/migration/PHASE_2_MODELISATION_ML.md` + `RAPPORT_PHASE_2.md`.
+
+## Phase 2.1 — synthetic benchmark evaluability
+
+- **Rare-class test segments go mono-class under a chronological split.** With a temporal
+  60/20/20 split, rare positives (hypo) concentrated in time fall outside the most-recent test
+  window → 0 positives → AUROC/AUPRC `null`, model not evaluable. **Fix:** seed must place
+  episodes *daily* across the whole window so every split inherits both classes by construction —
+  never inject positives into a specific split (that is label leakage). The scenario key drives
+  *generation only*, never a feature.
+  **Why:** evaluability must come from data design, not from touching the split or the labels.
+
+- **Conditional activation:** a model is `active` only if its couple is evaluable on test
+  (test has both positives AND negatives). Else register as candidate with `evaluation_status`
+  (`evaluated` / `insufficient_test_positives` / `not_evaluable_mono_class_test` / `candidate_only`).
+  `MIN_TEST_POSITIVES=10` is the "evaluated" threshold.
+
+- **Per-profile RNG seeds must use a stable hash.** Python's builtin `hash(str)` is randomized
+  per-process (PYTHONHASHSEED) → non-reproducible benchmark. Use `hashlib.sha256` for any
+  deterministic seed derived from a string key.
+  **Why:** "fixed seed / reproducible" claims break silently across interpreter runs otherwise.

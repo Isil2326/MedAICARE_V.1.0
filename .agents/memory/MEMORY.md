@@ -1,4 +1,4 @@
 - [Backend migration phasing](backend-migration-phases.md) — MediAI Care option-2 migration order/constraints; do not skip phases or start next before user validates report.
 - [Timeseries pipeline decisions](timeseries-pipeline.md) — TimescaleDB fallback rationale, idempotent dedup, tz-aware timestamp rule, anti-leakage guarantee.
 - [Backend test/migration quirks](backend-test-quirks.md) — tests use SQLite via create_all (not alembic); migrations target PG only; partial indexes need both *_where dialects.
-- [ML Phase 2 decisions](ml-phase2.md) — open-loop strict (probas only), synthetic-only at source, anti-leakage, no invented metrics, tz UTC normalization, Optuna fallback, gitignored artifacts.
+- [ML Phase 2 + 2.1 decisions](ml-phase2.md) — open-loop strict, synthetic-only, anti-leakage, no invented metrics; Phase 2.1: rare-class test goes mono-class under chrono split (fix in seed not split), conditional activation, stable sha256 seeds.

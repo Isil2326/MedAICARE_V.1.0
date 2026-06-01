@@ -237,6 +237,62 @@ def _reg_entry(model_id, *, model_name="logreg"):
     }
 
 
+def test_train_evaluable_couple_is_active_with_status(client, db_session, ml_artifacts):
+    """Un couple évaluable (positifs ET négatifs au test) est ACTIF et porte un
+    evaluation_status non mono-classe, propagé au JSON et au miroir DB."""
+    from app.repositories import ml_registry_repo
+
+    db, _ = db_session
+    register_and_login(client, role="patient", email="evcouple@test.fr")
+    patient = get_patient(db, "evcouple@test.fr")
+    insert_synthetic_series(db, patient.id)
+
+    res = training.train_target(
+        db, target="hypo", horizon_min=30, model_keys=["expert_rules", "logreg"]
+    )
+    assert res["status"] == "ok", res
+    # La série de test traverse hypo et hyper -> couple évaluable, donc actif.
+    assert res["activated"] is True
+    assert res["evaluation_status"] != config.EVAL_STATUS_MONO_CLASS
+    assert "test_bootstrap" in res
+
+    active = registry.get_active("hypo", 30)
+    assert active is not None and active["is_active"] is True
+    assert active["evaluation_status"] == res["evaluation_status"]
+
+    rows = [r for r in ml_registry_repo.list_all(db) if r.model_id == res["model_id"]]
+    assert rows and rows[0].evaluation_status == res["evaluation_status"]
+
+
+def test_train_mono_class_test_not_activated(client, db_session, ml_artifacts, monkeypatch):
+    """Si le test est mono-classe, le modèle reste candidat (non actif) et le
+    statut est not_evaluable_mono_class_test : aucune activation d'un non-évaluable."""
+    db, _ = db_session
+    register_and_login(client, role="patient", email="monocls@test.fr")
+    patient = get_patient(db, "monocls@test.fr")
+    insert_synthetic_series(db, patient.id)
+
+    # Force un test mono-classe en neutralisant les positifs détectés au test.
+    real_eval = training.evaluation.evaluate
+
+    def _mono_eval(y_true, y_prob, **kw):
+        rep = real_eval(y_true, y_prob, **kw)
+        rep["positives"], rep["negatives"] = 0, int(rep.get("n", 0))
+        rep["auroc"] = rep["auprc"] = None
+        return rep
+
+    monkeypatch.setattr(training.evaluation, "evaluate", _mono_eval)
+
+    res = training.train_target(
+        db, target="hypo", horizon_min=30, model_keys=["expert_rules", "logreg"]
+    )
+    assert res["status"] == "ok", res
+    assert res["activated"] is False
+    assert res["evaluation_status"] == config.EVAL_STATUS_MONO_CLASS
+    # Pas d'actif pour ce couple (candidat documenté seulement).
+    assert registry.get_active("hypo", 30) is None
+
+
 def test_registry_json_db_lifecycle_parity(db_session, ml_artifacts):
     """Parité JSON canonique ↔ miroir DB sur le cycle de vie active/candidate/archived.
 

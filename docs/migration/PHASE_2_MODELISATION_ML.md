@@ -84,3 +84,24 @@ Artefacts écrits sous `backend/artifacts/` (**gitignoré** — régénérables 
 - **Open-loop strict** : aucune recommandation de dose, aucune fermeture de boucle.
 
 Voir `RAPPORT_PHASE_2.md` pour le détail implémenté / simulé / reste-à-faire.
+
+## Amendement Phase 2.1 — Remédiation scientifique du benchmark synthétique
+
+En Phase 2, les segments de **test** `hypo 30` / `hypo 60` étaient **mono-classe (0 positif)**
+→ modèles hypo **non évaluables**. La Phase 2.1 corrige ce point **sans** données réelles,
+**sans** métrique inventée, **sans** XAI clinique et en conservant l'**open-loop strict** :
+
+- **Dataset synthétique v2** (`seed_timeseries.py`) : **10 profils**, **14 jours**, CGM 5 min,
+  épisodes hypo/hyper **quotidiens** présents dans train/val/test (sans fuite de label).
+  `DATASET_VERSION=1.1.0`.
+- **`evaluation_status`** sur `model_registry` (migration additive `d4e5f6a7b8c9`) :
+  `evaluated` / `insufficient_test_positives` / `not_evaluable_mono_class_test` /
+  `candidate_only`. **Activation conditionnelle** : `active` seulement si le couple est
+  évaluable sur le test (bi-classe), sinon **candidat documenté**.
+- **Bootstrap d'incertitude** (`evaluation.bootstrap_metrics`) : IC95 percentile, 200 reps,
+  graine fixe, sur AUROC/AUPRC/F1/Brier (bornes `None` si non définies).
+- **Anti-fuite de scénario** vérifiée par test : aucune variable de scénario dans les features.
+- **Résultat** : les **4 couples** sont évaluables (≥ 10 positifs en test) et actifs.
+  **101 tests verts**.
+
+Détail complet, métriques recalculées et IC : `AMENDEMENT_PHASE_2_1_BENCHMARK_SYNTHETIQUE.md`.
