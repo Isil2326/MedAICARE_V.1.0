@@ -60,15 +60,32 @@ export function XaiWarningBox({
         backgroundColor: s.surface,
         borderWidth: isCritical ? 2 : 1,
         borderColor: s.color,
-        borderRadius: radius.md,
+        borderRadius: radius.lg,
         padding: spacing.md,
         gap: spacing.sm,
       }}
     >
-      <Text variant="bodyStrong" style={{ color: s.color }}>
-        {isCritical ? '⚠ ' : ''}
-        {meta.label}
-      </Text>
+      {/* En-tête : pastille + libellé de fiabilité (texte explicite). */}
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm }}>
+        <View
+          style={{
+            width: 22,
+            height: 22,
+            borderRadius: 11,
+            backgroundColor: s.color,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 1,
+          }}
+        >
+          <Text variant="caption" tone="inverse" style={{ fontWeight: '700' }}>
+            {isCritical ? '!' : 'i'}
+          </Text>
+        </View>
+        <Text variant="bodyStrong" style={{ color: s.color, flexShrink: 1 }}>
+          {meta.label}
+        </Text>
+      </View>
 
       <Text variant="small" tone="secondary">
         {COMPLIANCE.xaiNotCausal}

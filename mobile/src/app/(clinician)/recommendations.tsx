@@ -10,14 +10,16 @@ import { View } from 'react-native';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Screen } from '@/components/Screen';
-import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
 import { RecommendationCard } from '@/components/RecommendationCard';
 import { RecommendationActions } from '@/components/RecommendationActions';
+import { ClinicianActionBar } from '@/components/ClinicianActionBar';
+import { SelectChip } from '@/components/SelectChip';
 import { AlertBanner } from '@/components/Banners';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
 import { listRecommendations } from '@/services/api/recommendations';
 import { COMPLIANCE } from '@/config/env';
-import { palette, radius, spacing } from '@/theme/theme';
+import { spacing } from '@/theme/theme';
 
 const FILTERS: { key: string; label: string }[] = [
   { key: 'pending', label: 'En attente' },
@@ -42,7 +44,7 @@ export default function ClinicianRecommendations() {
 
   return (
     <Screen refreshing={q.isFetching} onRefresh={q.refetch}>
-      <Text variant="h1">Recommandations</Text>
+      <Header title="Recommandations" subtitle="File de validation clinicien" />
       <AlertBanner
         level="info"
         title="Validation humaine obligatoire"
@@ -50,46 +52,34 @@ export default function ClinicianRecommendations() {
       />
 
       <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }}>
-        {FILTERS.map((f) => {
-          const selected = statusFilter === f.key;
-          return (
-            <View
-              key={f.key || 'all'}
-              style={{
-                borderWidth: selected ? 2 : 1,
-                borderColor: selected ? palette.brand : palette.borderStrong,
-                backgroundColor: selected ? palette.brandSurface : palette.surface,
-                borderRadius: radius.pill,
-                paddingVertical: spacing.xs,
-                paddingHorizontal: spacing.md,
-              }}
-            >
-              <Text
-                variant="small"
-                accessibilityRole="button"
-                accessibilityState={{ selected }}
-                onPress={() => setStatusFilter(f.key)}
-                style={{ color: selected ? palette.brandDark : palette.text }}
-              >
-                {f.label}
-              </Text>
-            </View>
-          );
-        })}
+        {FILTERS.map((f) => (
+          <SelectChip
+            key={f.key || 'all'}
+            pill
+            label={f.label}
+            selected={statusFilter === f.key}
+            onPress={() => setStatusFilter(f.key)}
+          />
+        ))}
       </View>
 
       {q.isLoading ? (
-        <LoadingState />
+        <LoadingState skeleton />
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : q.data && q.data.length ? (
         q.data.map((rec) => (
           <RecommendationCard key={rec.id} rec={rec}>
-            <RecommendationActions rec={rec} onChanged={refresh} />
+            <ClinicianActionBar>
+              <RecommendationActions rec={rec} onChanged={refresh} />
+            </ClinicianActionBar>
           </RecommendationCard>
         ))
       ) : (
-        <EmptyState message="Aucune recommandation pour ce filtre." />
+        <EmptyState
+          title="Aucune recommandation"
+          message="Aucune recommandation pour ce filtre."
+        />
       )}
     </Screen>
   );

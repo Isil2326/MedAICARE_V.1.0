@@ -5,8 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
 import { Screen } from '@/components/Screen';
-import { Card } from '@/components/Card';
+import { Header } from '@/components/Header';
 import { Text } from '@/components/Text';
+import { PatientCard } from '@/components/PatientCard';
 import { SyntheticBadge } from '@/components/Badge';
 import { AlertBanner } from '@/components/Banners';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
@@ -31,7 +32,13 @@ export default function ClinicianPatients() {
 
   return (
     <Screen refreshing={q.isFetching} onRefresh={q.refetch}>
-      <Text variant="h1">Cohorte</Text>
+      <Header
+        variant="hero"
+        title="Cohorte"
+        subtitle={
+          q.data ? `${q.data.length} patient(s) · données simulées` : 'Données simulées'
+        }
+      />
       <AlertBanner
         level="synthetic"
         title="Données simulées"
@@ -57,53 +64,27 @@ export default function ClinicianPatients() {
       />
 
       {q.isLoading ? (
-        <LoadingState />
+        <LoadingState skeleton />
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : filtered.length ? (
         filtered.map((p) => (
-          <Card key={p.id}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: spacing.sm,
-              }}
-            >
-              <View style={{ flexShrink: 1 }}>
-                <Text
-                  variant="h3"
-                  accessibilityRole="button"
-                  onPress={() =>
-                    router.push({ pathname: '/patient-detail', params: { id: p.id } })
-                  }
-                >
-                  {p.first_name} {p.last_name}
-                </Text>
-                <Text variant="caption" tone="muted">
-                  {p.diabetes_type ?? 'Type non précisé'}
-                  {p.birth_date ? ` · ${ageFromBirth(p.birth_date)}` : ''}
-                </Text>
-              </View>
-              <SyntheticBadge />
-            </View>
-            <View style={{ marginTop: spacing.sm }}>
-              <Text
-                variant="small"
-                tone="brand"
-                accessibilityRole="button"
-                onPress={() =>
-                  router.push({ pathname: '/patient-detail', params: { id: p.id } })
-                }
-              >
-                Ouvrir le dossier →
-              </Text>
-            </View>
-          </Card>
+          <PatientCard
+            key={p.id}
+            name={`${p.first_name} ${p.last_name}`}
+            meta={`${p.diabetes_type ?? 'Type non précisé'}${
+              p.birth_date ? ` · ${ageFromBirth(p.birth_date)}` : ''
+            }`}
+            right={<SyntheticBadge />}
+            accessibilityHint="Affiche le profil, le risque et les recommandations"
+            onPress={() => router.push({ pathname: '/patient-detail', params: { id: p.id } })}
+          />
         ))
       ) : (
-        <EmptyState message="Aucun patient trouvé." />
+        <EmptyState
+          title="Aucun patient trouvé"
+          message={search ? 'Essayez un autre terme de recherche.' : undefined}
+        />
       )}
     </Screen>
   );

@@ -13,6 +13,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
 import { SyntheticBadge } from '@/components/Badge';
 import { XaiWarningBox } from '@/components/XaiWarningBox';
 import { AlertBanner } from '@/components/Banners';
@@ -34,13 +36,13 @@ export default function PatientXai() {
 
   return (
     <Screen refreshing={q.isFetching} onRefresh={q.refetch}>
-      <Text variant="h1">Explication</Text>
-      <Text tone="secondary">
-        {target === 'hypo' ? 'Hypoglycémie' : 'Hyperglycémie'} · horizon {horizon} min
-      </Text>
+      <Header
+        title="Explication"
+        subtitle={`${target === 'hypo' ? 'Hypoglycémie' : 'Hyperglycémie'} · horizon ${horizon} min`}
+      />
 
       {q.isLoading ? (
-        <LoadingState label="Génération de l'explication…" />
+        <LoadingState label="Génération de l'explication…" skeleton />
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : q.data ? (
@@ -61,13 +63,11 @@ export default function PatientXai() {
           ) : null}
 
           <Card>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-            >
-              <Text variant="h3">Ce que le modèle a surtout utilisé</Text>
-              <SyntheticBadge />
-            </View>
-            <Text style={{ marginTop: spacing.sm }}>
+            <SectionTitle
+              title="Ce que le modèle a surtout utilisé"
+              action={<SyntheticBadge />}
+            />
+            <Text style={{ marginTop: spacing.md }}>
               {q.data.explanation_text_patient}
             </Text>
 
@@ -78,15 +78,34 @@ export default function PatientXai() {
                     key={i}
                     style={{
                       flexDirection: 'row',
+                      alignItems: 'center',
                       justifyContent: 'space-between',
-                      paddingVertical: spacing.xs,
+                      paddingVertical: spacing.sm,
                       borderTopWidth: i === 0 ? 0 : 1,
                       borderTopColor: palette.border,
                     }}
                   >
-                    <Text variant="small" style={{ flexShrink: 1 }}>
-                      {f.feature}
-                    </Text>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexShrink: 1 }}
+                    >
+                      <View
+                        style={{
+                          width: 22,
+                          height: 22,
+                          borderRadius: 11,
+                          backgroundColor: palette.brandSurface,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Text variant="caption" tone="brand" style={{ fontWeight: '700' }}>
+                          {i + 1}
+                        </Text>
+                      </View>
+                      <Text variant="small" style={{ flexShrink: 1 }}>
+                        {f.feature}
+                      </Text>
+                    </View>
                     <Text variant="small" tone="secondary">
                       {f.direction}
                     </Text>
@@ -98,8 +117,10 @@ export default function PatientXai() {
             <View
               style={{
                 marginTop: spacing.md,
-                backgroundColor: palette.surfaceAlt,
+                backgroundColor: palette.surfaceMuted,
                 borderRadius: radius.sm,
+                borderWidth: 1,
+                borderColor: palette.border,
                 padding: spacing.sm,
               }}
             >

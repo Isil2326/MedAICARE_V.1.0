@@ -20,8 +20,8 @@ import { ApiError } from '@/services/api/client';
 import { Text } from '@/components/Text';
 import { Button, Gap } from '@/components/Button';
 import { Card } from '@/components/Card';
-import { AlertBanner } from '@/components/Banners';
-import { palette, radius, spacing } from '@/theme/theme';
+import { AlertBanner, ComplianceBanner } from '@/components/Banners';
+import { palette, radius, shadow, spacing } from '@/theme/theme';
 import { COMPLIANCE, IS_API_CONFIGURED } from '@/config/env';
 
 const DEMO = {
@@ -97,6 +97,25 @@ export default function Login() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
+          {/* Logotype simple (initiales de marque). */}
+          <View
+            style={[
+              {
+                width: 64,
+                height: 64,
+                borderRadius: 20,
+                backgroundColor: palette.brandDark,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: spacing.md,
+              },
+              shadow.elevated,
+            ]}
+          >
+            <Text variant="h2" tone="inverse">
+              M
+            </Text>
+          </View>
           <Text variant="h1" tone="brand">
             MediAI Care
           </Text>
@@ -105,8 +124,7 @@ export default function Login() {
           </Text>
         </View>
 
-        <AlertBanner
-          level="synthetic"
+        <ComplianceBanner
           title="Prototype académique"
           message={`${COMPLIANCE.synthetic} ${COMPLIANCE.notCertified} ${COMPLIANCE.noMedicalAdvice}`}
         />

@@ -11,6 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
+import { SelectChip } from '@/components/SelectChip';
 import { XaiWarningBox } from '@/components/XaiWarningBox';
 import { AlertBanner } from '@/components/Banners';
 import { LoadingState, ErrorState } from '@/components/States';
@@ -36,40 +39,25 @@ export default function ClinicianXaiGlobal() {
 
   return (
     <Screen refreshing={q.isFetching} onRefresh={q.refetch}>
-      <Text variant="h1">XAI global</Text>
-      <Text tone="secondary">Importance moyenne des variables par modèle actif.</Text>
+      <Header
+        title="XAI global"
+        subtitle="Importance moyenne des variables par modèle actif."
+      />
 
       <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }}>
-        {COUPLES.map((c, i) => {
-          const selected = i === idx;
-          return (
-            <View
-              key={c.label}
-              style={{
-                borderWidth: selected ? 2 : 1,
-                borderColor: selected ? palette.brand : palette.borderStrong,
-                backgroundColor: selected ? palette.brandSurface : palette.surface,
-                borderRadius: radius.pill,
-                paddingVertical: spacing.xs,
-                paddingHorizontal: spacing.md,
-              }}
-            >
-              <Text
-                variant="small"
-                accessibilityRole="button"
-                accessibilityState={{ selected }}
-                onPress={() => setIdx(i)}
-                style={{ color: selected ? palette.brandDark : palette.text }}
-              >
-                {c.label}
-              </Text>
-            </View>
-          );
-        })}
+        {COUPLES.map((c, i) => (
+          <SelectChip
+            key={c.label}
+            pill
+            label={c.label}
+            selected={i === idx}
+            onPress={() => setIdx(i)}
+          />
+        ))}
       </View>
 
       {q.isLoading ? (
-        <LoadingState label="Chargement de l'explication globale…" />
+        <LoadingState label="Chargement de l'explication globale…" skeleton />
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : q.data ? (
@@ -82,15 +70,15 @@ export default function ClinicianXaiGlobal() {
           />
 
           <Card>
-            <Text variant="h3">
-              {q.data.model_name} ({q.data.model_version})
-            </Text>
-            <Text variant="caption" tone="muted">
-              Méthode : {q.data.xai_method}
-              {q.data.method_fallback ? ' (repli documenté)' : ''} ·{' '}
-              {q.data.calibrated ? 'calibré' : 'non calibré'}
-            </Text>
-            <AlertBanner level="info" message={q.data.direction_semantics} />
+            <SectionTitle
+              title={`${q.data.model_name} (${q.data.model_version})`}
+              subtitle={`Méthode : ${q.data.xai_method}${
+                q.data.method_fallback ? ' (repli documenté)' : ''
+              } · ${q.data.calibrated ? 'calibré' : 'non calibré'}`}
+            />
+            <View style={{ marginTop: spacing.md }}>
+              <AlertBanner level="info" message={q.data.direction_semantics} />
+            </View>
 
             <View style={{ marginTop: spacing.md, gap: spacing.xs }}>
               {q.data.top_features.map((f, i) => (
@@ -99,7 +87,7 @@ export default function ClinicianXaiGlobal() {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingVertical: spacing.xs,
+                    paddingVertical: spacing.sm,
                     borderTopWidth: i === 0 ? 0 : 1,
                     borderTopColor: palette.border,
                     gap: spacing.md,
@@ -118,8 +106,10 @@ export default function ClinicianXaiGlobal() {
             <View
               style={{
                 marginTop: spacing.md,
-                backgroundColor: palette.surfaceAlt,
+                backgroundColor: palette.surfaceMuted,
                 borderRadius: radius.sm,
+                borderWidth: 1,
+                borderColor: palette.border,
                 padding: spacing.sm,
               }}
             >

@@ -2,7 +2,8 @@
  * Bannières de conformité et d'alerte.
  *
  * Posture honnête : prototype académique, données simulées, open-loop. Ces
- * bannières sont volontairement visibles et non masquables.
+ * bannières sont volontairement visibles et non masquables. L'information est
+ * portée par le TEXTE (titre + message) ; la couleur n'est qu'un renfort.
  */
 import React from 'react';
 import { View } from 'react-native';
@@ -31,21 +32,37 @@ export function AlertBanner({ level = 'info', title, message }: AlertBannerProps
     <View
       accessibilityRole="alert"
       style={{
+        flexDirection: 'row',
+        gap: spacing.sm,
         backgroundColor: s.surface,
+        borderWidth: 1,
+        borderColor: s.color,
         borderLeftWidth: 4,
         borderLeftColor: s.color,
         borderRadius: radius.md,
         padding: spacing.md,
       }}
     >
-      {title ? (
-        <Text variant="bodyStrong" style={{ color: s.color, marginBottom: 2 }}>
-          {title}
+      {/* Pastille de renfort (décorative ; l'info reste dans le texte). */}
+      <View
+        style={{
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+          backgroundColor: s.color,
+          marginTop: 5,
+        }}
+      />
+      <View style={{ flexShrink: 1, gap: 2 }}>
+        {title ? (
+          <Text variant="bodyStrong" style={{ color: s.color }}>
+            {title}
+          </Text>
+        ) : null}
+        <Text variant="small" style={{ color: palette.text }}>
+          {message}
         </Text>
-      ) : null}
-      <Text variant="small" style={{ color: palette.text }}>
-        {message}
-      </Text>
+      </View>
     </View>
   );
 }
@@ -57,6 +74,30 @@ export function OpenLoopSyntheticBanner() {
       level="synthetic"
       title="Prototype — données simulées"
       message={`${COMPLIANCE.synthetic} ${COMPLIANCE.openLoop} ${COMPLIANCE.doNotChangeTreatment}`}
+    />
+  );
+}
+
+/**
+ * Bannière de conformité générique (alias sémantique d'AlertBanner) — utile pour
+ * afficher un rappel de conformité ponctuel avec un niveau choisi.
+ */
+export function ComplianceBanner({
+  level = 'synthetic',
+  title = 'Prototype académique',
+  message,
+}: {
+  level?: Level;
+  title?: string;
+  message?: string;
+}) {
+  return (
+    <AlertBanner
+      level={level}
+      title={title}
+      message={
+        message ?? `${COMPLIANCE.synthetic} ${COMPLIANCE.notCertified} ${COMPLIANCE.noMedicalAdvice}`
+      }
     />
   );
 }

@@ -6,8 +6,9 @@
  *   d'affichage FIXE [40, 300] mg/dL ; chaque barre est un simple mapping linéaire
  *   valeur→hauteur (pur rendu, rien n'est dérivé/interprété à partir des données).
  * - AUCUNE alerte locale, AUCUNE interprétation thérapeutique, AUCUNE dose.
- * - Le repère 70–180 mg/dL est un REPÈRE VISUEL NON DÉCISIONNEL (plage de référence
- *   d'affichage usuelle), jamais une alerte ni une recommandation.
+ * - Les barres ont TOUTES la même couleur : on n'encode jamais « dans/hors plage »
+ *   par la couleur (ce serait une interprétation clinique). Le repère 70–180 mg/dL
+ *   est un REPÈRE VISUEL NON DÉCISIONNEL (plage de référence d'affichage usuelle).
  * - Données 100 % synthétiques. Si moins de 2 points : fallback liste.
  *
  * Implémentation en Views pures (zéro dépendance graphique) → robuste natif + web.
@@ -25,7 +26,8 @@ const DOMAIN_MAX = 300;
 /** Repère visuel non décisionnel (plage d'affichage usuelle). */
 const REF_LOW = 70;
 const REF_HIGH = 180;
-const CHART_HEIGHT = 120;
+const CHART_HEIGHT = 140;
+const Y_GUTTER = 34;
 
 export interface CgmChartPoint {
   ts: string;
@@ -63,6 +65,46 @@ function ListFallback({ points }: { points: CgmChartPoint[] }) {
   );
 }
 
+/** Étiquette d'axe Y (repère d'affichage fixe, jamais une alerte). */
+function YLabel({ value }: { value: number }) {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        position: 'absolute',
+        left: 0,
+        bottom: fraction(value) * CHART_HEIGHT - 7,
+        width: Y_GUTTER - 4,
+        alignItems: 'flex-end',
+      }}
+    >
+      <Text variant="caption" tone="muted">
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+/** Ligne horizontale de repère (pointillée), pour les bornes 70/180. */
+function RefLine({ value }: { value: number }) {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: fraction(value) * CHART_HEIGHT,
+        height: 1,
+        borderTopWidth: 1,
+        borderColor: palette.borderStrong,
+        borderStyle: 'dashed',
+        opacity: 0.7,
+      }}
+    />
+  );
+}
+
 export function CgmChart({ data }: { data: CgmChartPoint[] }) {
   const points = [...data].sort((a, b) => a.ts.localeCompare(b.ts));
 
@@ -87,50 +129,65 @@ export function CgmChart({ data }: { data: CgmChartPoint[] }) {
         accessible
         accessibilityRole="image"
         accessibilityLabel={a11yLabel}
-        style={{
-          height: CHART_HEIGHT,
-          borderRadius: radius.sm,
-          backgroundColor: palette.surfaceAlt,
-          overflow: 'hidden',
-        }}
+        style={{ flexDirection: 'row' }}
       >
-        {/* Repère visuel non décisionnel (plage 70–180). */}
-        <View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: lowFrac * CHART_HEIGHT,
-            height: (highFrac - lowFrac) * CHART_HEIGHT,
-            backgroundColor: palette.brandSurface,
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: palette.border,
-          }}
-        />
-        {/* Barres = mapping linéaire pur valeur→hauteur (domaine fixe). */}
+        {/* Gouttière d'axe Y avec étiquettes de repère (domaine fixe). */}
+        <View style={{ width: Y_GUTTER, height: CHART_HEIGHT }}>
+          <YLabel value={DOMAIN_MAX} />
+          <YLabel value={REF_HIGH} />
+          <YLabel value={REF_LOW} />
+          <YLabel value={DOMAIN_MIN} />
+        </View>
+
         <View
           style={{
             flex: 1,
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            gap: 2,
-            paddingHorizontal: spacing.xs,
+            height: CHART_HEIGHT,
+            borderRadius: radius.sm,
+            backgroundColor: palette.surfaceAlt,
+            borderWidth: 1,
+            borderColor: palette.border,
+            overflow: 'hidden',
           }}
         >
-          {points.map((p, i) => (
-            <View
-              key={i}
-              style={{
-                flex: 1,
-                height: Math.max(2, fraction(p.glucose_mgdl) * CHART_HEIGHT),
-                backgroundColor: palette.brand,
-                borderTopLeftRadius: 2,
-                borderTopRightRadius: 2,
-              }}
-            />
-          ))}
+          {/* Repère visuel non décisionnel (plage 70–180). */}
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: lowFrac * CHART_HEIGHT,
+              height: (highFrac - lowFrac) * CHART_HEIGHT,
+              backgroundColor: palette.brandSurface,
+            }}
+          />
+          <RefLine value={REF_HIGH} />
+          <RefLine value={REF_LOW} />
+
+          {/* Barres = mapping linéaire pur valeur→hauteur (domaine fixe). */}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              gap: 3,
+              paddingHorizontal: spacing.xs,
+            }}
+          >
+            {points.map((p, i) => (
+              <View
+                key={i}
+                style={{
+                  flex: 1,
+                  height: Math.max(3, fraction(p.glucose_mgdl) * CHART_HEIGHT),
+                  backgroundColor: palette.brand,
+                  borderTopLeftRadius: 3,
+                  borderTopRightRadius: 3,
+                }}
+              />
+            ))}
+          </View>
         </View>
       </View>
 
@@ -139,6 +196,7 @@ export function CgmChart({ data }: { data: CgmChartPoint[] }) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginTop: spacing.xs,
+          marginLeft: Y_GUTTER,
         }}
       >
         <Text variant="caption" tone="secondary">
@@ -146,6 +204,30 @@ export function CgmChart({ data }: { data: CgmChartPoint[] }) {
         </Text>
         <Text variant="caption" tone="secondary">
           {formatTime(last.ts)}
+        </Text>
+      </View>
+
+      {/* Légende du repère (renfort texte ; jamais une couleur seule). */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: spacing.xs,
+          marginTop: spacing.xs,
+        }}
+      >
+        <View
+          style={{
+            width: 14,
+            height: 10,
+            borderRadius: 2,
+            backgroundColor: palette.brandSurface,
+            borderWidth: 1,
+            borderColor: palette.border,
+          }}
+        />
+        <Text variant="caption" tone="secondary">
+          Bande = plage de référence 70–180 mg/dL
         </Text>
       </View>
 

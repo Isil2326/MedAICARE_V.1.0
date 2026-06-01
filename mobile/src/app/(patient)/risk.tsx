@@ -12,7 +12,11 @@ import { useRouter } from 'expo-router';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
+import { MetricCard } from '@/components/MetricCard';
 import { Button, Gap } from '@/components/Button';
+import { SelectChip } from '@/components/SelectChip';
 import { RiskBadge, SyntheticBadge } from '@/components/Badge';
 import { AlertBanner, OpenLoopSyntheticBanner } from '@/components/Banners';
 import { ErrorState } from '@/components/States';
@@ -27,39 +31,6 @@ const TARGETS: { key: TargetName; label: string }[] = [
 ];
 const HORIZONS = [30, 60];
 
-function Choice({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <View
-      style={{
-        borderWidth: selected ? 2 : 1,
-        borderColor: selected ? palette.brand : palette.borderStrong,
-        backgroundColor: selected ? palette.brandSurface : palette.surface,
-        borderRadius: radius.md,
-        paddingVertical: spacing.sm,
-        paddingHorizontal: spacing.md,
-      }}
-    >
-      <Text
-        onPress={onPress}
-        accessibilityRole="button"
-        accessibilityState={{ selected }}
-        variant="small"
-        style={{ color: selected ? palette.brandDark : palette.text }}
-      >
-        {label}
-      </Text>
-    </View>
-  );
-}
-
 export default function PatientRisk() {
   const router = useRouter();
   const [target, setTarget] = useState<TargetName>('hypo');
@@ -71,19 +42,20 @@ export default function PatientRisk() {
 
   return (
     <Screen>
-      <Text variant="h1">Estimation de risque</Text>
+      <Header title="Estimation de risque" subtitle="Probabilité fournie par le modèle (API)." />
       <OpenLoopSyntheticBanner />
 
       <Card>
-        <Text variant="h3">Paramètres</Text>
+        <SectionTitle title="Paramètres" />
         <Gap size={spacing.sm} />
         <Text variant="small" tone="secondary">
           Type d'événement
         </Text>
         <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', marginTop: spacing.xs }}>
           {TARGETS.map((t) => (
-            <Choice
+            <SelectChip
               key={t.key}
+              grow
               label={t.label}
               selected={target === t.key}
               onPress={() => setTarget(t.key)}
@@ -97,8 +69,9 @@ export default function PatientRisk() {
         </Text>
         <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs }}>
           {HORIZONS.map((h) => (
-            <Choice
+            <SelectChip
               key={h}
+              grow
               label={`${h} min`}
               selected={horizon === h}
               onPress={() => setHorizon(h)}
@@ -118,63 +91,75 @@ export default function PatientRisk() {
       {m.error ? <ErrorState error={m.error} onRetry={() => m.mutate()} /> : null}
 
       {m.data ? (
-        <Card>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-          >
-            <Text variant="h3">Résultat</Text>
-            <SyntheticBadge />
-          </View>
-
-          {m.data.calculable ? (
-            <View style={{ marginTop: spacing.sm, gap: spacing.xs }}>
-              <Text variant="h2">{formatProbability(m.data.probability)}</Text>
-              <RiskBadge label={m.data.risk_label} />
-              <Text variant="caption" tone="muted">
-                {m.data.target === 'hypo' ? 'Hypoglycémie' : 'Hyperglycémie'} · horizon{' '}
-                {m.data.horizon_min} min · {formatDateTime(m.data.at)}
-              </Text>
-              <Text variant="caption" tone="muted">
-                Modèle : {m.data.model_name} ({m.data.model_version}) ·{' '}
-                {m.data.calibrated ? 'calibré' : 'non calibré'}
-              </Text>
-            </View>
-          ) : (
-            <AlertBanner
-              level="warning"
-              title="Risque non calculable"
-              message={
-                m.data.reason ??
-                'Données insuffisantes pour estimer ce risque actuellement.'
-              }
-            />
-          )}
-
-          <View
-            style={{
-              marginTop: spacing.sm,
-              backgroundColor: palette.surfaceAlt,
-              borderRadius: radius.sm,
-              padding: spacing.sm,
-            }}
-          >
-            <Text variant="caption" tone="secondary">
-              {m.data.open_loop_notice}
-            </Text>
-          </View>
-
-          <Gap size={spacing.md} />
-          <Button
-            label="Voir l'explication (XAI)"
-            variant="secondary"
-            onPress={() =>
-              router.push({
-                pathname: '/(patient)/xai',
-                params: { target: m.data!.target, horizon: String(m.data!.horizon_min) },
-              })
+        m.data.calculable ? (
+          <MetricCard
+            tone="brand"
+            label="Probabilité estimée"
+            value={formatProbability(m.data.probability)}
+            hint={`${m.data.target === 'hypo' ? 'Hypoglycémie' : 'Hyperglycémie'} · horizon ${m.data.horizon_min} min · ${formatDateTime(m.data.at)}`}
+            badge={<SyntheticBadge />}
+            footer={
+              <View style={{ gap: spacing.sm }}>
+                <RiskBadge label={m.data.risk_label} />
+                <Text variant="caption" tone="muted">
+                  Modèle : {m.data.model_name} ({m.data.model_version}) ·{' '}
+                  {m.data.calibrated ? 'calibré' : 'non calibré'}
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: palette.surfaceMuted,
+                    borderRadius: radius.sm,
+                    borderWidth: 1,
+                    borderColor: palette.border,
+                    padding: spacing.sm,
+                  }}
+                >
+                  <Text variant="caption" tone="secondary">
+                    {m.data.open_loop_notice}
+                  </Text>
+                </View>
+                <Button
+                  label="Voir l'explication (XAI)"
+                  variant="secondary"
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(patient)/xai',
+                      params: { target: m.data!.target, horizon: String(m.data!.horizon_min) },
+                    })
+                  }
+                />
+              </View>
             }
           />
-        </Card>
+        ) : (
+          <Card>
+            <SectionTitle title="Résultat" action={<SyntheticBadge />} />
+            <View style={{ marginTop: spacing.sm }}>
+              <AlertBanner
+                level="warning"
+                title="Risque non calculable"
+                message={
+                  m.data.reason ??
+                  'Données insuffisantes pour estimer ce risque actuellement.'
+                }
+              />
+            </View>
+            <View
+              style={{
+                marginTop: spacing.sm,
+                backgroundColor: palette.surfaceMuted,
+                borderRadius: radius.sm,
+                borderWidth: 1,
+                borderColor: palette.border,
+                padding: spacing.sm,
+              }}
+            >
+              <Text variant="caption" tone="secondary">
+                {m.data.open_loop_notice}
+              </Text>
+            </View>
+          </Card>
+        )
       ) : null}
     </Screen>
   );

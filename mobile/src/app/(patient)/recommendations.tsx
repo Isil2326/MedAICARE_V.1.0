@@ -9,7 +9,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { Screen } from '@/components/Screen';
-import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
 import { RecommendationCard } from '@/components/RecommendationCard';
 import { AlertBanner } from '@/components/Banners';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
@@ -24,7 +24,10 @@ export default function PatientRecommendations() {
 
   return (
     <Screen refreshing={q.isFetching} onRefresh={q.refetch}>
-      <Text variant="h1">Mes conseils</Text>
+      <Header
+        title="Mes conseils"
+        subtitle="Validés par un clinicien"
+      />
       <AlertBanner
         level="info"
         title="Validés par un clinicien"
@@ -32,7 +35,7 @@ export default function PatientRecommendations() {
       />
 
       {q.isLoading ? (
-        <LoadingState />
+        <LoadingState skeleton />
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : q.data && q.data.length ? (

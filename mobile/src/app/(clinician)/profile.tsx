@@ -5,40 +5,59 @@ import { View } from 'react-native';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
 import { Button, Gap } from '@/components/Button';
 import { AlertBanner } from '@/components/Banners';
 import { useAuth } from '@/store/auth';
 import { COMPLIANCE } from '@/config/env';
-import { spacing } from '@/theme/theme';
+import { palette, spacing } from '@/theme/theme';
 
 export default function ClinicianProfile() {
   const { user, logout } = useAuth();
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const reminders = [
+    COMPLIANCE.prototype,
+    COMPLIANCE.synthetic,
+    COMPLIANCE.notCertified,
+    COMPLIANCE.openLoop,
+    "La XAI est un support d'affichage/audit, jamais une justification clinique.",
+  ];
+
   return (
     <Screen>
-      <Text variant="h1">Profil</Text>
+      <Header title="Profil" />
 
       <Card>
-        <Text variant="h3">Compte</Text>
+        <SectionTitle title="Compte" />
         {user ? (
-          <View style={{ marginTop: spacing.sm, gap: 2 }}>
-            <Text>{user.email}</Text>
+          <View style={{ marginTop: spacing.md, gap: 2 }}>
+            <Text variant="bodyStrong">{user.email}</Text>
             <Text tone="secondary">Rôle : {user.role}</Text>
           </View>
         ) : null}
       </Card>
 
       <Card>
-        <Text variant="h3">Rappels de conformité</Text>
-        <View style={{ marginTop: spacing.sm, gap: spacing.xs }}>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.prototype}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.synthetic}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.notCertified}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.openLoop}</Text>
-          <Text variant="small" tone="secondary">
-            • La XAI est un support d'affichage/audit, jamais une justification clinique.
-          </Text>
+        <SectionTitle title="Rappels de conformité" />
+        <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
+          {reminders.map((item, i) => (
+            <View key={i} style={{ flexDirection: 'row', gap: spacing.sm }}>
+              <View
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 3,
+                  backgroundColor: palette.brand,
+                  marginTop: 6,
+                }}
+              />
+              <Text variant="small" tone="secondary" style={{ flexShrink: 1 }}>
+                {item}
+              </Text>
+            </View>
+          ))}
         </View>
       </Card>
 

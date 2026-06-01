@@ -6,12 +6,14 @@ import { useQuery } from '@tanstack/react-query';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
 import { SyntheticBadge } from '@/components/Badge';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
 import { CgmChart } from '@/components/CgmChart';
 import { getCgm, getInsulin, getMeals, getActivity } from '@/services/api/timeseries';
 import { formatGlucose, formatDateTime, isoDaysAgo } from '@/utils/format';
-import { spacing } from '@/theme/theme';
+import { palette, spacing } from '@/theme/theme';
 
 const RANGE = { start: isoDaysAgo(2), limit: 12 };
 
@@ -20,15 +22,25 @@ function Row({ left, right }: { left: string; right: string }) {
     <View
       style={{
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        paddingVertical: spacing.xs,
+        paddingVertical: spacing.sm,
         gap: spacing.md,
+        borderBottomWidth: 1,
+        borderBottomColor: palette.border,
       }}
     >
-      <Text variant="small" tone="secondary" style={{ flexShrink: 1 }}>
-        {left}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexShrink: 1 }}>
+        <View
+          style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: palette.brandLight }}
+        />
+        <Text variant="small" tone="secondary" style={{ flexShrink: 1 }}>
+          {left}
+        </Text>
+      </View>
+      <Text variant="small" tone="default" style={{ fontWeight: '600' }}>
+        {right}
       </Text>
-      <Text variant="small">{right}</Text>
     </View>
   );
 }
@@ -44,14 +56,11 @@ function Section<T>({
 }) {
   return (
     <Card>
-      <View
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <Text variant="h3">{title}</Text>
-        <SyntheticBadge />
-      </View>
+      <SectionTitle title={title} action={<SyntheticBadge />} />
       {q.isLoading ? (
-        <LoadingState />
+        <View style={{ marginTop: spacing.sm }}>
+          <LoadingState skeleton />
+        </View>
       ) : q.error ? (
         <ErrorState error={q.error} onRetry={q.refetch} />
       ) : q.data && q.data.length ? (
@@ -89,18 +98,14 @@ export default function PatientData() {
 
   return (
     <Screen refreshing={fetching} onRefresh={refetchAll}>
-      <Text variant="h1">Mes données</Text>
-      <Text tone="secondary">Mesures récentes (données simulées).</Text>
+      <Header title="Mes données" subtitle="Mesures récentes (données simulées)." />
 
       <Card>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <Text variant="h3">Glycémie récente (graphique)</Text>
-          <SyntheticBadge />
-        </View>
+        <SectionTitle title="Glycémie récente (graphique)" action={<SyntheticBadge />} />
         {cgmQ.isLoading ? (
-          <LoadingState />
+          <View style={{ marginTop: spacing.sm }}>
+            <LoadingState skeleton />
+          </View>
         ) : cgmQ.error ? (
           <ErrorState error={cgmQ.error} onRetry={cgmQ.refetch} />
         ) : cgmQ.data && cgmQ.data.length ? (

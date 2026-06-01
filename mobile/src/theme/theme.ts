@@ -10,13 +10,16 @@ export const palette = {
   // Marque — émeraude (cohérent avec l'app web).
   brand: '#059669',
   brandDark: '#047857',
+  brandDeep: '#065F46',
   brandLight: '#10B981',
   brandSurface: '#ECFDF5',
+  brandSurfaceStrong: '#D1FAE5',
 
   // Neutres (slate).
-  bg: '#F8FAFC',
+  bg: '#F6F8FB',
   surface: '#FFFFFF',
   surfaceAlt: '#F1F5F9',
+  surfaceMuted: '#F8FAFC',
   border: '#E2E8F0',
   borderStrong: '#CBD5E1',
 
@@ -79,6 +82,7 @@ export const typography = {
 export const MIN_TOUCH_TARGET = 44;
 
 export const shadow = {
+  // Élévation subtile (cartes au repos).
   card: {
     shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 2 },
@@ -86,6 +90,32 @@ export const shadow = {
     shadowRadius: 8,
     elevation: 2,
   },
+  // Élévation marquée (surfaces mises en avant, hero, métriques clés).
+  elevated: {
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+  },
+  // Élévation discrète (pills, badges flottants).
+  subtle: {
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+} as const;
+
+/**
+ * Durées d'animation (micro-interactions légères uniquement).
+ * Volontairement courtes : feedback fluide sans coût perçu, compatible Expo Web.
+ */
+export const motion = {
+  fast: 120,
+  base: 200,
+  slow: 320,
 } as const;
 
 export type RiskKey = keyof typeof palette.risk;

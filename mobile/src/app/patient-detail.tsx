@@ -13,12 +13,17 @@ import { Redirect, useLocalSearchParams } from 'expo-router';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
+import { MetricCard } from '@/components/MetricCard';
+import { SelectChip } from '@/components/SelectChip';
 import { Button, Gap } from '@/components/Button';
 import { RiskBadge, SyntheticBadge } from '@/components/Badge';
 import { AlertBanner, OpenLoopSyntheticBanner } from '@/components/Banners';
 import { XaiWarningBox } from '@/components/XaiWarningBox';
 import { RecommendationCard } from '@/components/RecommendationCard';
 import { RecommendationActions } from '@/components/RecommendationActions';
+import { ClinicianActionBar } from '@/components/ClinicianActionBar';
 import { LoadingState, ErrorState, EmptyState } from '@/components/States';
 
 import { getPatient } from '@/services/api/patients';
@@ -31,47 +36,14 @@ import {
 import { useAuth } from '@/store/auth';
 import type { TargetName } from '@/types/api';
 import { ApiError } from '@/services/api/client';
+import { palette, spacing } from '@/theme/theme';
 import { formatProbability, ageFromBirth } from '@/utils/format';
-import { palette, radius, spacing } from '@/theme/theme';
 
 const TARGETS: { key: TargetName; label: string }[] = [
   { key: 'hypo', label: 'Hypo (<70)' },
   { key: 'hyper', label: 'Hyper (>180)' },
 ];
 const HORIZONS = [30, 60];
-
-function Chip({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <View
-      style={{
-        borderWidth: selected ? 2 : 1,
-        borderColor: selected ? palette.brand : palette.borderStrong,
-        backgroundColor: selected ? palette.brandSurface : palette.surface,
-        borderRadius: radius.md,
-        paddingVertical: spacing.sm,
-        paddingHorizontal: spacing.md,
-      }}
-    >
-      <Text
-        variant="small"
-        accessibilityRole="button"
-        accessibilityState={{ selected }}
-        onPress={onPress}
-        style={{ color: selected ? palette.brandDark : palette.text }}
-      >
-        {label}
-      </Text>
-    </View>
-  );
-}
 
 export default function PatientDetail() {
   const { role } = useAuth();
@@ -127,6 +99,10 @@ export default function PatientDetail() {
     );
   }
 
+  const patientName = profileQ.data
+    ? `${profileQ.data.first_name} ${profileQ.data.last_name}`
+    : 'Dossier patient';
+
   return (
     <Screen
       refreshing={profileQ.isFetching || recosQ.isFetching}
@@ -135,41 +111,36 @@ export default function PatientDetail() {
         recosQ.refetch();
       }}
     >
+      <Header
+        variant="hero"
+        title={patientName}
+        subtitle={
+          profileQ.data
+            ? `${profileQ.data.diabetes_type ?? 'Type non précisé'}${
+                profileQ.data.birth_date ? ` · ${ageFromBirth(profileQ.data.birth_date)}` : ''
+              }`
+            : 'Données simulées'
+        }
+        right={<SyntheticBadge />}
+      />
+
       <OpenLoopSyntheticBanner />
 
-      {/* Profil */}
-      <Card>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <Text variant="h2">
-            {profileQ.data
-              ? `${profileQ.data.first_name} ${profileQ.data.last_name}`
-              : 'Patient'}
-          </Text>
-          <SyntheticBadge />
-        </View>
-        {profileQ.isLoading ? (
-          <LoadingState />
-        ) : profileQ.error ? (
-          <ErrorState error={profileQ.error} onRetry={profileQ.refetch} />
-        ) : profileQ.data ? (
-          <Text tone="secondary" style={{ marginTop: spacing.xs }}>
-            {profileQ.data.diabetes_type ?? 'Type non précisé'}
-            {profileQ.data.birth_date ? ` · ${ageFromBirth(profileQ.data.birth_date)}` : ''}
-          </Text>
-        ) : null}
-      </Card>
+      {profileQ.isLoading ? (
+        <LoadingState skeleton />
+      ) : profileQ.error ? (
+        <ErrorState error={profileQ.error} onRetry={profileQ.refetch} />
+      ) : null}
 
       {/* Paramètres risque / XAI / génération */}
       <Card>
-        <Text variant="h3">Analyse (cible / horizon)</Text>
-        <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', marginTop: spacing.sm }}>
+        <SectionTitle title="Analyse (cible / horizon)" />
+        <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', marginTop: spacing.md }}>
           {TARGETS.map((t) => (
-            <Chip key={t.key} label={t.label} selected={target === t.key} onPress={() => setTarget(t.key)} />
+            <SelectChip key={t.key} label={t.label} selected={target === t.key} onPress={() => setTarget(t.key)} />
           ))}
           {HORIZONS.map((h) => (
-            <Chip key={h} label={`${h} min`} selected={horizon === h} onPress={() => setHorizon(h)} />
+            <SelectChip key={h} label={`${h} min`} selected={horizon === h} onPress={() => setHorizon(h)} />
           ))}
         </View>
         <Gap size={spacing.md} />
@@ -191,27 +162,37 @@ export default function PatientDetail() {
       {/* Résultat risque */}
       {predictM.error ? <ErrorState error={predictM.error} onRetry={() => predictM.mutate()} /> : null}
       {predictM.data ? (
-        <Card>
-          <Text variant="h3">Risque estimé</Text>
-          {predictM.data.calculable ? (
-            <View style={{ marginTop: spacing.sm, gap: spacing.xs }}>
-              <Text variant="h2">{formatProbability(predictM.data.probability)}</Text>
-              <RiskBadge label={predictM.data.risk_label} />
-              <Text variant="caption" tone="muted">
-                Modèle : {predictM.data.model_name} ({predictM.data.model_version})
-              </Text>
+        predictM.data.calculable ? (
+          <MetricCard
+            tone="brand"
+            label="Risque estimé"
+            value={formatProbability(predictM.data.probability)}
+            hint={`Modèle : ${predictM.data.model_name} (${predictM.data.model_version})`}
+            badge={<SyntheticBadge />}
+            footer={
+              <View style={{ gap: spacing.sm }}>
+                <RiskBadge label={predictM.data.risk_label} />
+                <Text variant="caption" tone="muted">
+                  {predictM.data.open_loop_notice}
+                </Text>
+              </View>
+            }
+          />
+        ) : (
+          <Card>
+            <SectionTitle title="Risque estimé" action={<SyntheticBadge />} />
+            <View style={{ marginTop: spacing.sm }}>
+              <AlertBanner
+                level="warning"
+                title="Non calculable"
+                message={predictM.data.reason ?? 'Données insuffisantes.'}
+              />
             </View>
-          ) : (
-            <AlertBanner
-              level="warning"
-              title="Non calculable"
-              message={predictM.data.reason ?? 'Données insuffisantes.'}
-            />
-          )}
-          <Text variant="caption" tone="muted" style={{ marginTop: spacing.sm }}>
-            {predictM.data.open_loop_notice}
-          </Text>
-        </Card>
+            <Text variant="caption" tone="muted" style={{ marginTop: spacing.sm }}>
+              {predictM.data.open_loop_notice}
+            </Text>
+          </Card>
+        )
       ) : null}
 
       {/* Résultat XAI local */}
@@ -225,8 +206,8 @@ export default function PatientDetail() {
             calibrationNotice={explainM.data.calibration_notice}
           />
           <Card>
-            <Text variant="h3">Explication (clinicien)</Text>
-            <Text style={{ marginTop: spacing.sm }}>
+            <SectionTitle title="Explication (clinicien)" />
+            <Text style={{ marginTop: spacing.md }}>
               {explainM.data.explanation_text_clinician}
             </Text>
             <View style={{ marginTop: spacing.md, gap: spacing.xs }}>
@@ -236,7 +217,7 @@ export default function PatientDetail() {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingVertical: spacing.xs,
+                    paddingVertical: spacing.sm,
                     borderTopWidth: i === 0 ? 0 : 1,
                     borderTopColor: palette.border,
                   }}
@@ -256,8 +237,8 @@ export default function PatientDetail() {
 
       {/* Génération de suggestions */}
       <Card>
-        <Text variant="h3">Générer des suggestions</Text>
-        <Text variant="small" tone="secondary" style={{ marginTop: spacing.xs }}>
+        <SectionTitle title="Générer des suggestions" />
+        <Text variant="small" tone="secondary" style={{ marginTop: spacing.sm }}>
           Les suggestions sont créées en statut « en attente » et nécessitent votre validation.
         </Text>
         {genError ? (
@@ -286,22 +267,27 @@ export default function PatientDetail() {
       </Card>
 
       {/* Recommandations du patient */}
-      <Text variant="h2">Recommandations</Text>
+      <SectionTitle title="Recommandations" />
       {recosQ.isLoading ? (
-        <LoadingState />
+        <LoadingState skeleton />
       ) : recosQ.error ? (
         <ErrorState error={recosQ.error} onRetry={recosQ.refetch} />
       ) : recosQ.data && recosQ.data.length ? (
         recosQ.data.map((rec) => (
           <RecommendationCard key={rec.id} rec={rec}>
-            <RecommendationActions
-              rec={rec}
-              onChanged={() => qc.invalidateQueries({ queryKey: ['patient', id, 'recos'] })}
-            />
+            <ClinicianActionBar>
+              <RecommendationActions
+                rec={rec}
+                onChanged={() => qc.invalidateQueries({ queryKey: ['patient', id, 'recos'] })}
+              />
+            </ClinicianActionBar>
           </RecommendationCard>
         ))
       ) : (
-        <EmptyState message="Aucune recommandation pour ce patient." />
+        <EmptyState
+          title="Aucune recommandation"
+          message="Aucune recommandation pour ce patient."
+        />
       )}
       <Gap />
     </Screen>

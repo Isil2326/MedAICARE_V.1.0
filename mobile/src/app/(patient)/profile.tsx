@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Screen } from '@/components/Screen';
 import { Card } from '@/components/Card';
 import { Text } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { SectionTitle } from '@/components/SectionTitle';
 import { Button, Gap } from '@/components/Button';
 import { SyntheticBadge } from '@/components/Badge';
 import { AlertBanner } from '@/components/Banners';
@@ -14,7 +16,7 @@ import { getMyPatient } from '@/services/api/patients';
 import { useAuth } from '@/store/auth';
 import { COMPLIANCE } from '@/config/env';
 import { formatDate, ageFromBirth } from '@/utils/format';
-import { spacing } from '@/theme/theme';
+import { palette, radius, spacing } from '@/theme/theme';
 
 export default function PatientProfile() {
   const { user, logout } = useAuth();
@@ -23,22 +25,19 @@ export default function PatientProfile() {
 
   return (
     <Screen>
-      <Text variant="h1">Profil</Text>
+      <Header title="Profil" />
 
       <Card>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <Text variant="h3">Identité</Text>
-          <SyntheticBadge />
-        </View>
+        <SectionTitle title="Identité" action={<SyntheticBadge />} />
         {q.isLoading ? (
-          <LoadingState />
+          <View style={{ marginTop: spacing.sm }}>
+            <LoadingState skeleton />
+          </View>
         ) : q.error ? (
           <ErrorState error={q.error} onRetry={q.refetch} />
         ) : q.data ? (
-          <View style={{ marginTop: spacing.sm, gap: 2 }}>
-            <Text>
+          <View style={{ marginTop: spacing.md, gap: 2 }}>
+            <Text variant="bodyStrong">
               {q.data.first_name} {q.data.last_name}
             </Text>
             {q.data.diabetes_type ? (
@@ -52,20 +51,37 @@ export default function PatientProfile() {
           </View>
         ) : null}
         {user ? (
-          <Text variant="caption" tone="muted" style={{ marginTop: spacing.sm }}>
+          <Text variant="caption" tone="muted" style={{ marginTop: spacing.md }}>
             Connecté : {user.email} · rôle {user.role}
           </Text>
         ) : null}
       </Card>
 
       <Card>
-        <Text variant="h3">Conformité</Text>
-        <View style={{ marginTop: spacing.sm, gap: spacing.xs }}>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.prototype}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.synthetic}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.notCertified}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.openLoop}</Text>
-          <Text variant="small" tone="secondary">• {COMPLIANCE.noMedicalAdvice}</Text>
+        <SectionTitle title="Conformité" />
+        <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
+          {[
+            COMPLIANCE.prototype,
+            COMPLIANCE.synthetic,
+            COMPLIANCE.notCertified,
+            COMPLIANCE.openLoop,
+            COMPLIANCE.noMedicalAdvice,
+          ].map((item, i) => (
+            <View key={i} style={{ flexDirection: 'row', gap: spacing.sm }}>
+              <View
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 3,
+                  backgroundColor: palette.brand,
+                  marginTop: 6,
+                }}
+              />
+              <Text variant="small" tone="secondary" style={{ flexShrink: 1 }}>
+                {item}
+              </Text>
+            </View>
+          ))}
         </View>
       </Card>
 

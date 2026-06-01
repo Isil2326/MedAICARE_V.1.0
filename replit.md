@@ -42,6 +42,7 @@ FastAPI (`backend/`), app mobile Expo (`mobile/`).
 | 6 | Application mobile Expo + intégration API | **validée** |
 | 7 | QA mobile, validation E2E, accessibilité, soutenance | **validée** |
 | 8 | Durcissement device, build mobile, QA accessibilité device, pré-release | **livré, à valider** |
+| 8.5 | Refonte UI/UX premium mobile (présentation uniquement) | **livré, à valider** |
 | 9 | — | **NON démarrée — attente validation superviseur** |
 
 > Les statuts « livré, à valider » reflètent l'attente de validation du superviseur.
@@ -111,7 +112,8 @@ cd MedAICare_V.3_10Patients && npm run dev                      # « Start appli
 `DEVICE_TOKEN_STORAGE_VALIDATION.md` · `MOBILE_TLS_PINNING_STRATEGY.md`
 **Ops** (`docs/ops/`) — `PERFORMANCE_NOTES.md` · `TEST_STRATEGY.md` · `VALIDATION_COMMANDS.md`
 **Mobile** (`docs/mobile/`) — `PHASE_6_MOBILE_APP.md` · `MOBILE_API_CONTRACTS.md` ·
-`DEVICE_BUILD_GUIDE.md`
+`DEVICE_BUILD_GUIDE.md` · `PHASE_8_5_UI_UX_POLISH.md` (refonte UI/UX premium —
+présentation uniquement)
 **Conformité** (`docs/compliance/`) — `COMPLIANCE_SCOPE.md` · `SYNTHETIC_DATA_POLICY.md`
 **Frontend web** (`docs/frontend/`) — `REACT_APP_ARCHITECTURE.md` (clinicien v6.0,
 design system, features web)

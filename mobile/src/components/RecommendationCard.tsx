@@ -40,13 +40,22 @@ export function RecommendationCard({ rec, children }: RecommendationCardProps) {
       >
         <StatusBadge status={rec.status} />
         {rec.priority != null ? (
-          <Text variant="caption" tone="muted">
-            Priorité {rec.priority}
-          </Text>
+          <View
+            style={{
+              backgroundColor: palette.surfaceAlt,
+              borderRadius: radius.pill,
+              paddingVertical: 2,
+              paddingHorizontal: spacing.sm,
+            }}
+          >
+            <Text variant="caption" tone="muted">
+              Priorité {rec.priority}
+            </Text>
+          </View>
         ) : null}
       </View>
 
-      <Text variant="h3" style={{ marginTop: spacing.sm }}>
+      <Text variant="h3" style={{ marginTop: spacing.md }}>
         {CATEGORY_LABEL[rec.category] ?? rec.category}
       </Text>
 
@@ -55,7 +64,7 @@ export function RecommendationCard({ rec, children }: RecommendationCardProps) {
       {(rec.target || rec.horizon_min != null || rec.probability != null) && (
         <View
           style={{
-            marginTop: spacing.sm,
+            marginTop: spacing.md,
             paddingTop: spacing.sm,
             borderTopWidth: 1,
             borderTopColor: palette.border,
@@ -84,13 +93,26 @@ export function RecommendationCard({ rec, children }: RecommendationCardProps) {
 
       <View
         style={{
-          marginTop: spacing.sm,
-          backgroundColor: palette.surfaceAlt,
-          borderRadius: radius.sm,
+          marginTop: spacing.md,
+          flexDirection: 'row',
+          gap: spacing.sm,
+          backgroundColor: palette.surfaceMuted,
+          borderRadius: radius.md,
+          borderWidth: 1,
+          borderColor: palette.border,
           padding: spacing.sm,
         }}
       >
-        <Text variant="caption" tone="secondary">
+        <View
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: 3,
+            backgroundColor: palette.brand,
+            marginTop: 5,
+          }}
+        />
+        <Text variant="caption" tone="secondary" style={{ flexShrink: 1 }}>
           {COMPLIANCE.openLoop} {COMPLIANCE.doNotChangeTreatment}
         </Text>
       </View>

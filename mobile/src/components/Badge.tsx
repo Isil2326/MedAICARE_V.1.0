@@ -1,6 +1,7 @@
 /**
  * Badges de statut. L'information n'est JAMAIS portée uniquement par la couleur :
- * un libellé texte explicite accompagne toujours la teinte.
+ * un libellé texte explicite accompagne toujours la teinte (la pastille colorée
+ * n'est qu'un renfort visuel).
  */
 import React from 'react';
 import { View } from 'react-native';
@@ -12,13 +13,17 @@ interface BadgeProps {
   label: string;
   color: string;
   surface: string;
+  dot?: boolean;
 }
 
-function Badge({ label, color, surface }: BadgeProps) {
+function Badge({ label, color, surface, dot = true }: BadgeProps) {
   return (
     <View
       style={{
         alignSelf: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: spacing.xs,
         backgroundColor: surface,
         borderColor: color,
         borderWidth: 1,
@@ -27,7 +32,12 @@ function Badge({ label, color, surface }: BadgeProps) {
         paddingHorizontal: spacing.md,
       }}
     >
-      <Text variant="caption" style={{ color }}>
+      {dot ? (
+        <View
+          style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: color }}
+        />
+      ) : null}
+      <Text variant="caption" style={{ color, fontWeight: '600' }}>
         {label}
       </Text>
     </View>
@@ -38,7 +48,7 @@ function Badge({ label, color, surface }: BadgeProps) {
 export function SyntheticBadge() {
   return (
     <Badge
-      label="● Données simulées"
+      label="Données simulées"
       color={palette.synthetic}
       surface={palette.syntheticSurface}
     />
