@@ -12,7 +12,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import client_ip, client_ua, require_role
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import rate_limiter
 from app.models import User
 from app.recommendations import service as generation_service
 from app.recommendations.service import RecommendationGenerationError
@@ -36,8 +38,18 @@ _GEN_ERROR_CODES = {
     "bad_request": status.HTTP_400_BAD_REQUEST,
 }
 
+generate_rate_limit = rate_limiter(
+    bucket="reco_generate",
+    max_attempts=settings.rate_limit_generate_max,
+    window_seconds=settings.rate_limit_generate_window,
+)
 
-@router.post("/generate", response_model=GenerateResponse)
+
+@router.post(
+    "/generate",
+    response_model=GenerateResponse,
+    dependencies=[Depends(generate_rate_limit)],
+)
 def generate_recommendations(
     body: GenerateRequest,
     request: Request,

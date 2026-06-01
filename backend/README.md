@@ -112,14 +112,23 @@ alembic downgrade -1                               # revenir en arrière
 ## Tests
 
 ```bash
+# Suite complète (peut être lourde en mémoire si d'autres workflows tournent) :
 cd backend && python -m pytest -q
+
+# Par lots (recommandé en environnement de dev — contrainte mémoire) :
+cd backend && bash scripts/run_test_batches.sh
+
+# Smoke contractuel sans serveur (invariants Phase 5) :
+cd backend && APP_ENV=test python scripts/validate_backend.py
 ```
 
 Les tests tournent sur une base **SQLite jetable** (jamais la base PostgreSQL de
 dev), ce qui garantit isolation et reproductibilité. Couverture : modèles,
 authentification (rotation/réutilisation/révocation), RBAC, chaîne d'audit
-(croissance, vérification, détection d'altération), endpoints critiques et flux
-open-loop d'approbation/rejet.
+(croissance, vérification, détection d'altération), endpoints critiques, flux
+open-loop d'approbation/rejet, **parcours E2E patient/clinicien/sécurité** et
+**invariants Phase 5** (OpenAPI durci, rate-limit 429, no-secrets, source-of-truth,
+verrou XAI). **172 tests verts** (158 antérieurs + 14 Phase 5).
 
 ## Endpoints API (v1)
 
@@ -235,8 +244,12 @@ fournie par le client est rejetée (`422`), prédiction non synthétique rejeté
   compromission) et une entrée d'audit.
 - **Rate limiting** : `POST /login` et `POST /refresh` sont limités par IP
   (fenêtre glissante en mémoire ; défauts 5/60 s et 10/60 s, configurables via
-  `RATE_LIMIT_*`). Au-delà : `429 Too Many Requests` + en-tête `Retry-After`.
-  Redis-ready (voir `app/core/rate_limit.py`) pour un déploiement multi-instances.
+  `RATE_LIMIT_*`). **Phase 5** : limitation ajoutée sur les endpoints **coûteux**
+  `POST /ml/predict`, `POST /xai/explain`, `POST /recommendations/generate`
+  (défaut 60/60 s chacun, configurables). Au-delà : `429 Too Many Requests` +
+  en-tête `Retry-After`. Limite connue : par IP (idéal = par-utilisateur derrière
+  proxy de confiance). Redis-ready (voir `app/core/rate_limit.py`) pour un
+  déploiement multi-instances.
 - **Politique mot de passe** : min 12 caractères + lettre + chiffre + caractère
   spécial (validation serveur, `422` sinon). Détail et limites :
   `docs/security/PASSWORD_POLICY.md`.
@@ -251,6 +264,30 @@ fournie par le client est rejetée (`422`), prédiction non synthétique rejeté
   externe (hors périmètre de ce prototype).
 - **En-têtes de sécurité** : `X-Content-Type-Options`, `X-Frame-Options`,
   `Referrer-Policy`.
+
+## Phase 5 — Consolidation backend/API/sécurité/contrats
+
+Consolidation **sans** nouvelle fonctionnalité métier : durcissement mesuré,
+contrats documentés, tests E2E, préparation (non-implémentation) d'un futur client
+mobile. Non-négociables tenus : pas de mobile, pas de données réelles, open-loop
+strict, `is_synthetic=True`, XAI support-only, validation clinicien, migrations
+additives rejouables, tous les tests antérieurs verts.
+
+- **Durcissement** : rate-limit sur les endpoints coûteux ; OpenAPI enrichi
+  (`securitySchemes` Bearer, description open-loop/synthetic, tags, `x-open-loop`,
+  exemples de schémas). En-têtes de sécurité + CORS par environnement déjà en place.
+- **Contrats** : `docs/api/API_V1_CONTRACTS.md`, `docs/api/ERROR_CATALOG.md`.
+- **Sécurité** : `docs/security/RBAC_MATRIX.md`, `docs/security/AUDIT_COVERAGE.md`.
+- **Ops** : `docs/ops/{PERFORMANCE_NOTES,TEST_STRATEGY,VALIDATION_COMMANDS}.md`,
+  scripts `scripts/run_test_batches.sh` et `scripts/validate_backend.py`.
+- **Mobile (préparation seule)** : `docs/mobile/MOBILE_API_CONTRACTS.md`.
+- **Conformité** : `docs/compliance/{COMPLIANCE_SCOPE,SYNTHETIC_DATA_POLICY}.md`.
+- **Rapport** : `docs/migration/PHASE_5_CONSOLIDATION.md` + `docs/migration/RAPPORT_PHASE_5.md`.
+
+> Décision : enveloppe d'erreur uniforme `{"error":{code,message,details}}` **non
+> implémentée** (casserait les contrats/tests existants) — **proposée** comme
+> évolution (la spécification autorise « proposer ou implémenter »). Format actuel :
+> `{"detail": ...}` (défaut FastAPI), documenté dans `docs/api/ERROR_CATALOG.md`.
 
 ## Limites assumées
 

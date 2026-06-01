@@ -15,7 +15,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import client_ip, client_ua, get_current_user
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import rate_limiter
 from app.ml import config
 from app.models import User
 from app.services import audit_service
@@ -31,8 +33,18 @@ router = APIRouter(prefix="/xai", tags=["xai"])
 
 _VALID_METHODS = {"auto", "shap", "lime", "native"}
 
+explain_rate_limit = rate_limiter(
+    bucket="xai_explain",
+    max_attempts=settings.rate_limit_xai_max,
+    window_seconds=settings.rate_limit_xai_window,
+)
 
-@router.post("/explain", response_model=LocalExplanation)
+
+@router.post(
+    "/explain",
+    response_model=LocalExplanation,
+    dependencies=[Depends(explain_rate_limit)],
+)
 def post_explain(
     payload: LocalExplainRequest,
     request: Request,

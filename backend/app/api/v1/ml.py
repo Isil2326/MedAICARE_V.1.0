@@ -15,7 +15,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import client_ip, client_ua, get_current_user
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import rate_limiter
 from app.ml import config, inference_service
 from app.ml.schemas import PredictRequest, PredictResponse
 from app.models import Prediction, User
@@ -24,8 +26,18 @@ from app.services.timeseries_service import TimeseriesError, resolve_read_scope
 
 router = APIRouter(prefix="/ml", tags=["ml"])
 
+predict_rate_limit = rate_limiter(
+    bucket="ml_predict",
+    max_attempts=settings.rate_limit_predict_max,
+    window_seconds=settings.rate_limit_predict_window,
+)
 
-@router.post("/predict", response_model=PredictResponse)
+
+@router.post(
+    "/predict",
+    response_model=PredictResponse,
+    dependencies=[Depends(predict_rate_limit)],
+)
 def post_predict(
     payload: PredictRequest,
     request: Request,

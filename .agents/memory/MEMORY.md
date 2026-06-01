@@ -1,3 +1,1 @@
-- [XAI reliability semantics](xai-reliability-semantics.md) — never fabricate a metric, compute reliability before caching, monotone escalation, physio==0→not_reliable, XAI is display-only not a decision engine.
-- [Recommendation engine safety](recommendation-engine-safety.md) — safety runs on EVERY write path; XAI never a clinical justification (clinical_justification_allowed always false); probability source locked (synthetic DB pred or server ml.predict, extra="forbid"); FORBIDDEN_TERMS is lexical substring matching.
-- [Backend test & migration quirks](backend-test-quirks.md) — tests use SQLite create_all (not alembic, so validate migrations on PG); run pytest in BATCHES to avoid OOM with ML/XAI files; portable partial indexes need both dialects.
+- [Backend test execution (OOM)](backend-test-execution.md) — run `backend/` pytest in batches via scripts/run_test_batches.sh; full single run can OOM with 3 workflows + ML deps.

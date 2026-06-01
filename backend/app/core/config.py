@@ -48,6 +48,17 @@ class Settings(BaseSettings):
     rate_limit_refresh_max: int = int(os.getenv("RATE_LIMIT_REFRESH_MAX", "10"))
     rate_limit_refresh_window: int = int(os.getenv("RATE_LIMIT_REFRESH_WINDOW", "60"))
 
+    # --- Rate limiting (endpoints coûteux : ML / XAI / génération de reco) ---
+    # Limites volontairement GÉNÉREUSES (usage clinicien normal jamais bloqué),
+    # anti-abus léger. Fenêtre glissante par IP (cf. core/rate_limit.py) — la clé
+    # idéale serait par-utilisateur derrière un proxy partagé (documenté Phase 5).
+    rate_limit_predict_max: int = int(os.getenv("RATE_LIMIT_PREDICT_MAX", "60"))
+    rate_limit_predict_window: int = int(os.getenv("RATE_LIMIT_PREDICT_WINDOW", "60"))
+    rate_limit_xai_max: int = int(os.getenv("RATE_LIMIT_XAI_MAX", "60"))
+    rate_limit_xai_window: int = int(os.getenv("RATE_LIMIT_XAI_WINDOW", "60"))
+    rate_limit_generate_max: int = int(os.getenv("RATE_LIMIT_GENERATE_MAX", "60"))
+    rate_limit_generate_window: int = int(os.getenv("RATE_LIMIT_GENERATE_WINDOW", "60"))
+
     # --- CORS (clinicien web / mobile Expo plus tard) ---
     # Liste d'origines autorisées, séparées par des virgules, lue depuis l'env.
     # Vide => défaut localhost en dev ; refus strict en production (pas de `*`).
