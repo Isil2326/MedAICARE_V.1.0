@@ -4,11 +4,13 @@ Entrées : une prédiction (dict normalisé) + une explication XAI optionnelle (
 Sortie : une liste de `GeneratedRecommendation` candidates (statut conceptuel
 `generated`), prêtes à passer la couche `safety` puis à être persistées `pending`.
 
-Garanties open-loop :
+Garanties open-loop (verrou Phase 4.1) :
 - la XAI n'est JAMAIS la condition principale : les règles de risque se déclenchent
   sur la probabilité du modèle ;
-- une XAI `not_reliable_for_clinical_interpretation` n'est pas utilisée comme
-  justification clinique (flag `used_as_clinical_justification=False`) ;
+- la XAI est un support d'AFFICHAGE et d'AUDIT du modèle, JAMAIS une justification
+  clinique — quelle que soit sa fiabilité (`clinical_justification_allowed=False`) ;
+- une XAI `not_reliable_for_clinical_interpretation` ne fait qu'ajouter un avertissement
+  et un renvoi en revue humaine (garde-fou de prudence), jamais une décision ;
 - aucune dose, décision ni action : seulement des suggestions à valider.
 """
 from __future__ import annotations
@@ -61,8 +63,8 @@ def generate_candidates(
 
     out: list[GeneratedRecommendation] = []
     for rule in fired:
-        # La XAI ne sert de justification clinique que si disponible ET fiable.
-        clinical_just = bool(ctx.xai_available and not xai_not_reliable)
+        # Verrou Phase 4.1 : la XAI est un support d'affichage/audit du modèle,
+        # jamais une justification clinique — quelle que soit sa fiabilité.
         principal = utils.principal_features(xai) if ctx.xai_available else []
 
         warnings: list[str] = []
@@ -72,7 +74,8 @@ def generate_candidates(
             )
         elif xai_not_reliable:
             warnings.append(
-                "XAI jugée peu fiable : non utilisée comme justification clinique."
+                "XAI affichée comme explication du modèle uniquement (jamais une "
+                "justification clinique) ; fiabilité insuffisante → revue humaine."
             )
 
         safety_level = _SAFETY_BY_CATEGORY.get(rule.category, SafetyLevel.monitoring)
@@ -111,7 +114,6 @@ def generate_candidates(
             principal=principal,
             scores=scores,
             warnings=warnings,
-            clinical_justification=clinical_just,
         )
 
         out.append(

@@ -199,8 +199,11 @@ Explications **open-loop strictes** (contributions de features = pondération du
 ### Recommandations (`/api/v1/recommendations`) — **Phase 4, simulé, open-loop**
 Suggestions **non prescriptives** (jamais de dose/décision/action auto), **open-loop
 strict** : toute suggestion naît `pending` et exige l'arbitrage d'un clinicien. Données
-synthétiques (`is_synthetic=True`). Le moteur **lit** `xai_reliability_status` et **refuse
-la XAI comme justification clinique** si `not_reliable_for_clinical_interpretation`.
+synthétiques (`is_synthetic=True`). **Verrou Phase 4.1** : la XAI est un **support
+d'affichage/audit**, **jamais** une justification clinique (`clinical_justification_allowed=false`,
+même fiable) ; la **probabilité** provient uniquement d'une prédiction synthétique en base
+(`prediction_id`) ou de `ml.predict` serveur — toute `probability`/`model_name`/`xai_status`
+fournie par le client est rejetée (`422`), prédiction non synthétique rejetée (`400`).
 - `POST /generate` — génère des suggestions (probabilité → règles versionnées → safety →
   `pending`) ; **clinicien/admin** (`patient_id` requis), résout la prédiction par
   `prediction_id` ou via `ml.predict`, XAI best-effort (`include_xai`). Audit

@@ -99,10 +99,16 @@ def validate(reco: GeneratedRecommendation) -> SafetyResult:
     if reco.category.value not in _VALID_CATEGORIES:
         violations.append("categorie_invalide")
 
-    # XAI non fiable : interdiction de l'utiliser comme justification clinique.
-    if reco.xai_reliability_status == "not_reliable_for_clinical_interpretation":
-        xai_block = (reco.rationale or {}).get("xai", {})
+    # Verrou Phase 4.1 : la XAI est un support d'affichage/audit, JAMAIS une
+    # justification clinique — quelle que soit sa fiabilité. L'invariant
+    # `clinical_justification_allowed` doit donc rester False sur tous les chemins.
+    xai_block = (reco.rationale or {}).get("xai", {})
+    if xai_block:
+        # Invariant strict : tout bloc XAI présent DOIT porter explicitement
+        # `clinical_justification_allowed=False` (jamais absent, jamais True).
+        if xai_block.get("clinical_justification_allowed") is not False:
+            violations.append("xai_clinical_justification_not_allowed")
         if xai_block.get("used_as_clinical_justification") is True:
-            violations.append("xai_non_fiable_utilisee_comme_justification")
+            violations.append("xai_legacy_clinical_justification_flag_true")
 
     return SafetyResult(passed=not violations, violations=violations)

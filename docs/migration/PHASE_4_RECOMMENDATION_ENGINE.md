@@ -10,7 +10,7 @@ Construire un moteur qui, à partir d'une **probabilité de risque** (modèle ac
 - **non prescriptives** (jamais de dose, jamais de changement de traitement) ;
 - **explicables et traçables** (règle versionnée + rationale + scores) ;
 - **open-loop strict** : toute suggestion naît `pending` et exige l'arbitrage d'un clinicien ;
-- **honnêtes vis-à-vis de la XAI** : si `xai_reliability_status == not_reliable_for_clinical_interpretation`, l'explication **n'est pas** utilisée comme justification clinique et un **renvoi en revue humaine** est émis.
+- **honnêtes vis-à-vis de la XAI** (verrou Phase 4.1) : la XAI est un **support d'affichage/audit du modèle**, **jamais** une justification clinique — quelle que soit sa fiabilité (`clinical_justification_allowed=false`). Une XAI `not_reliable_for_clinical_interpretation` ne fait qu'ajouter un avertissement et un **renvoi en revue humaine**. Voir `AMENDEMENT_PHASE_4_1_VERROUILLAGE_RECOMMANDATION.md`.
 
 ## 2. Périmètre
 
@@ -27,7 +27,7 @@ Construire un moteur qui, à partir d'une **probabilité de risque** (modèle ac
 - **Pas de Phase 5** : pas de boucle fermée, pas d'exécution automatique, pas de notification active au patient.
 - **Pas de mobile** (aucune interface React Native/Expo).
 - **Aucune donnée réelle**, **aucun réentraînement ML**, **aucun nouveau modèle**.
-- **La XAI reste support uniquement** : jamais une condition suffisante de décision, jamais une justification clinique si elle est jugée non fiable.
+- **La XAI reste support uniquement** : jamais une condition suffisante de décision, **jamais une justification clinique** — y compris lorsqu'elle est jugée fiable (verrou Phase 4.1).
 
 ## 4. Catégories de suggestions (toutes NON prescriptives)
 
@@ -50,7 +50,7 @@ Toutes les règles se déclenchent sur la **probabilité** d'un couple cible/hor
 | `HYPER_RISK_BEHAVIORAL` | `target=hyper AND 0.50<=p<0.80` | `RECOMMENDATION_BEHAVIORAL` | 2 |
 | `XAI_LOW_RELIABILITY` | `xai_reliability_status=not_reliable AND p>=0.40` | `CLINICAL_REFERRAL` | 2 |
 
-**Important** : `XAI_LOW_RELIABILITY` s'ajoute aux règles de risque **sans** les remplacer — le risque reste fondé sur la **probabilité du modèle**, jamais sur la XAI. Quand l'explication est non fiable, la trace marque `used_as_clinical_justification = False`.
+**Important** : `XAI_LOW_RELIABILITY` s'ajoute aux règles de risque **sans** les remplacer — le risque reste fondé sur la **probabilité du modèle**, jamais sur la XAI. Verrou Phase 4.1 : la trace `rationale.xai` porte toujours `clinical_justification_allowed = false` (le champ legacy `used_as_clinical_justification` n'est plus émis), quelle que soit la fiabilité.
 
 ## 6. Garde-fous de sécurité (safety)
 
@@ -112,9 +112,10 @@ cd backend && python -m pytest -q
 
 ## 12. Tests
 
-**150 tests verts** (133 antérieurs + 17 Phase 4) — `tests/test_recommendations_engine.py` :
-- moteur pur : génération hypo/hyper (critical/behavioral), non calculable → vide, aucun message avec dose/terme interdit, XAI fiable → justification utilisée, XAI non fiable → renvoi clinique + `used_as_clinical_justification=False` (XAI **non** condition principale) ;
-- safety : blocage terme interdit, détection de dose ;
+**158 tests verts** (152 antérieurs + 6 nets Phase 4.1) — `tests/test_recommendations_engine.py` :
+- moteur pur : génération hypo/hyper (critical/behavioral), non calculable → vide, aucun message avec dose/terme interdit, **XAI = affichage uniquement quelle que soit la fiabilité** (`clinical_justification_allowed=false`), XAI non fiable → renvoi clinique (XAI **non** condition principale) ;
+- safety : blocage terme interdit, détection de dose, **invariant `clinical_justification_allowed` jamais `true`**, disclaimer négatif autorisé vs instruction bloquée ;
+- source-of-truth (Phase 4.1) : spoof `probability`/`model_name`/`xai_status` → `422`, prédiction non synthétique → `400` ;
 - workflow : transitions valides/invalides ;
 - endpoints/RBAC : patient ne peut ni générer ni approuver, clinicien génère→`pending` (`is_synthetic`, `rule_id`/`rule_version`, catégorie, probabilité), `patient_id` requis pour clinicien, audit `recommendation.generated`, flux complet generate→approve, modify→reject, patient ne voit que l'approuvé (liste + détail 403 avant approbation).
 

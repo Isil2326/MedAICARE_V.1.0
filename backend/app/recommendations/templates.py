@@ -79,7 +79,8 @@ def render_clinician(template_key: str, **ctx) -> str:
     )
     if template_key == "xai_low_reliability":
         base += (
-            " L'explication XAI n'est PAS utilisée comme justification clinique "
-            "(fiabilité insuffisante) : revue humaine requise."
+            " L'explication XAI est affichée uniquement comme support de "
+            "compréhension du modèle (jamais une justification clinique) ; "
+            "fiabilité insuffisante : revue humaine requise."
         )
     return base

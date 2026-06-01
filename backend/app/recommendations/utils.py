@@ -1,9 +1,10 @@
 """Utilitaires purs : extraction de features XAI et construction de la rationale.
 
 La rationale est la TRACE complète d'une recommandation (règle, contexte, scores,
-features, mises en garde). Les features XAI ne sont JAMAIS présentées comme une
-cause médicale ; si la fiabilité XAI est insuffisante, elles ne servent pas de
-justification clinique (`used_as_clinical_justification=False`).
+features, mises en garde). Verrou Phase 4.1 : les features XAI sont un support
+d'AFFICHAGE et d'AUDIT du modèle — JAMAIS une cause médicale, JAMAIS une
+justification clinique, même lorsque la fiabilité est jugée bonne
+(`clinical_justification_allowed` est toujours `False`).
 """
 from __future__ import annotations
 
@@ -39,19 +40,30 @@ def build_rationale(
     principal: list[dict],
     scores: ActionabilityScores,
     warnings: list[str],
-    clinical_justification: bool,
 ) -> dict:
-    """Assemble la trace sérialisable d'une recommandation (audit/affichage)."""
+    """Assemble la trace sérialisable d'une recommandation (audit/affichage).
+
+    Verrou Phase 4.1 : `clinical_justification_allowed` est TOUJOURS `False`. La XAI
+    est attachée comme explication du modèle (affichage/audit), jamais comme
+    justification clinique — quelle que soit `reliability_status`.
+    """
     xai_block = {
-        "available": ctx.xai_available,
+        "included": ctx.xai_available,
+        "usage": (
+            "model_explanation_display_only" if ctx.xai_available else "not_available"
+        ),
+        "clinical_justification_allowed": False,
         "reliability_status": ctx.xai_reliability_status,
-        "used_as_clinical_justification": bool(clinical_justification),
         "principal_features": principal,
         "warnings": list((xai or {}).get("xai_warnings") or []) if ctx.xai_available else [],
+        "limitations": [
+            "XAI describes model behavior, not medical causality.",
+            "XAI must not be used as a treatment justification.",
+        ],
         "note": (
             "Features = contribution au score du modèle (XAI), jamais une cause "
-            "médicale. Non utilisées comme justification clinique si fiabilité "
-            "insuffisante."
+            "médicale. Support d'affichage et d'audit uniquement, jamais une "
+            "justification clinique (même si la fiabilité est jugée bonne)."
         ),
     }
     return {

@@ -50,6 +50,7 @@ def _normalize_db_prediction(pred: Prediction) -> dict:
         "model_name": pred.model_name,
         "model_version": pred.model_version,
         "calibrated": False,
+        "is_synthetic": bool(pred.is_synthetic),
     }
 
 
@@ -106,6 +107,13 @@ def _resolve_predictions(
         if pred.patient_id != patient_id:
             raise RecommendationGenerationError(
                 "La prédiction n'appartient pas au patient ciblé.", "forbidden"
+            )
+        # Verrou Phase 4.1 : source-of-truth = prédiction synthétique en base.
+        # Aucune donnée réelle ne peut alimenter le moteur (prototype open-loop).
+        if not pred.is_synthetic:
+            raise RecommendationGenerationError(
+                "Prédiction non synthétique : interdite en prototype open-loop.",
+                "bad_request",
             )
         return [_normalize_db_prediction(pred)], reasons
 

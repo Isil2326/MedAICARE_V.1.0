@@ -28,9 +28,12 @@
 5. **Règles versionnées et tracées** : `rule_id` + `rule_version` (1.0.0). Seuils = **choix de
    prototype synthétique, NON validés cliniquement**, documentés pour traçabilité.
 6. **XAI lue mais jamais condition principale.** Le risque est fondé sur la **probabilité du
-   modèle**. Si `xai_reliability_status == not_reliable_for_clinical_interpretation`, l'explication
-   est marquée `used_as_clinical_justification = False` et une suggestion `CLINICAL_REFERRAL` est
-   ajoutée (renvoi en revue humaine) — **sans** remplacer la règle de risque.
+   modèle**. Si `xai_reliability_status == not_reliable_for_clinical_interpretation`, une suggestion
+   `CLINICAL_REFERRAL` est ajoutée (renvoi en revue humaine) — **sans** remplacer la règle de
+   risque. **Mise à jour Phase 4.1** : la XAI est un **support d'affichage/audit uniquement**,
+   `clinical_justification_allowed = false` **toujours** (même fiable) ; le champ legacy
+   `used_as_clinical_justification` a été **supprimé**. Voir
+   `AMENDEMENT_PHASE_4_1_VERROUILLAGE_RECOMMANDATION.md`.
 7. **Couche safety défensive.** `FORBIDDEN_TERMS` (dose, posologie, « modifiez votre traitement »,
    « unités d'insuline », etc.) + **regex de dose chiffrée** (`4 unités`, `6 UI`…). Toute violation
    → suggestion **bloquée** (`recommendation.safety_blocked`), jamais persistée/affichée.
@@ -121,8 +124,8 @@ Migration **additive idempotente** `a7b8c9d0e1f2` (down_revision `f6a7b8c9d0e1`)
 `rule_id`, `rule_version`, `trigger_name`, `safety_level`, `xai_reliability_status`,
 `actionability_score`, `is_synthetic` (server_default `true`). Statut `modified` ajouté à
 `RecommendationStatus`. `message` = message patient ; `rationale` (JSON) porte
-`message_clinician` + trace complète (règle, contexte, scores, bloc XAI avec
-`used_as_clinical_justification`).
+`message_clinician` + trace complète (règle, contexte, scores, bloc XAI ; Phase 4.1 :
+`clinical_justification_allowed=false`, l'ancien `used_as_clinical_justification` a été supprimé).
 
 ## 7. Commandes réellement utilisées
 
@@ -165,8 +168,8 @@ Aucun message ne contient de dose ni d'instruction thérapeutique.
 **152 tests verts** (150 antérieurs + 2 non-régression). Couverture Phase 4
 (`tests/test_recommendations_engine.py`) :
 - moteur pur : génération hypo/hyper (critical/behavioral), non calculable → vide, aucun message
-  avec dose/terme interdit, XAI fiable → justification utilisée, XAI non fiable → renvoi clinique
-  + `used_as_clinical_justification=False` ;
+  avec dose/terme interdit, **XAI = affichage uniquement quelle que soit la fiabilité**
+  (`clinical_justification_allowed=false`, Phase 4.1), XAI non fiable → renvoi clinique ;
 - safety : blocage terme interdit, détection de dose, **blocage `modify` (terme interdit + dose)** ;
 - workflow : transitions valides/invalides ;
 - endpoints/RBAC : patient ne peut ni générer ni approuver, clinicien génère→`pending`

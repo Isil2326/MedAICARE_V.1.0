@@ -66,7 +66,7 @@ def test_engine_no_messages_contain_dose_or_forbidden_terms():
             assert safety.check_message(c.message_clinician) == []
 
 
-def test_xai_not_reliable_adds_referral_and_no_clinical_justification():
+def test_xai_not_reliable_adds_referral_and_never_clinical_justification():
     xai = {
         "calculable": True,
         "xai_reliability_status": "not_reliable_for_clinical_interpretation",
@@ -79,10 +79,13 @@ def test_xai_not_reliable_adds_referral_and_no_clinical_justification():
     assert "HYPO_RISK_CRITICAL" in rule_ids
     assert "XAI_LOW_RELIABILITY" in rule_ids
     for c in cands:
-        assert c.rationale["xai"]["used_as_clinical_justification"] is False
+        # Verrou Phase 4.1 : jamais une justification clinique, jamais l'ancien champ.
+        assert c.rationale["xai"]["clinical_justification_allowed"] is False
+        assert "used_as_clinical_justification" not in c.rationale["xai"]
 
 
-def test_xai_reliable_used_as_justification():
+def test_xai_reliable_is_display_only_never_justification():
+    """Verrou Phase 4.1 : même une XAI fiable n'est jamais une justification clinique."""
     xai = {
         "calculable": True,
         "xai_reliability_status": "reliable_for_model_debug",
@@ -91,8 +94,67 @@ def test_xai_reliable_used_as_justification():
     }
     cands = engine.generate_candidates(prediction=_pred("hypo", 0.85), xai=xai)
     risk = [c for c in cands if c.rule_id == "HYPO_RISK_CRITICAL"][0]
-    assert risk.rationale["xai"]["used_as_clinical_justification"] is True
-    assert risk.rationale["xai"]["principal_features"]
+    xai_block = risk.rationale["xai"]
+    assert xai_block["clinical_justification_allowed"] is False
+    assert xai_block["usage"] == "model_explanation_display_only"
+    assert xai_block["included"] is True
+    assert xai_block["principal_features"]
+    assert "used_as_clinical_justification" not in xai_block
+
+
+def test_no_candidate_ever_allows_clinical_justification():
+    """Invariant global : aucune combinaison ne produit clinical_justification_allowed=True."""
+    statuses = (
+        "reliable_for_model_debug",
+        "caution_semantic_limits",
+        "not_reliable_for_clinical_interpretation",
+        None,
+    )
+    for status_ in statuses:
+        xai = None
+        if status_ is not None:
+            xai = {
+                "calculable": True,
+                "xai_reliability_status": status_,
+                "top_features": [{"feature": "f", "contribution": 0.2, "direction": "augmente"}],
+                "xai_warnings": [],
+            }
+        for target, prob in (("hypo", 0.85), ("hyper", 0.85), ("hypo", 0.5)):
+            for c in engine.generate_candidates(prediction=_pred(target, prob), xai=xai):
+                assert c.rationale["xai"]["clinical_justification_allowed"] is False
+                assert safety.validate(c).passed is True
+
+
+def test_safety_allows_negative_disclaimer_but_blocks_instruction():
+    """Le disclaimer négatif est autorisé ; l'instruction thérapeutique est bloquée."""
+    disclaimer = "Ne modifiez jamais votre traitement sans avis médical."
+    instruction = "Modifiez votre traitement dès maintenant."
+    assert safety.check_message(disclaimer) == []
+    assert safety.check_message(instruction) != []
+
+
+def test_safety_blocks_explicit_clinical_justification_flag():
+    """L'invariant safety rejette toute reco marquée justification clinique."""
+    reco = GeneratedRecommendation(
+        patient_id=None, prediction_id=None,
+        category=RecommendationCategory.RECOMMENDATION_BEHAVIORAL,
+        message_patient="Surveillez votre glycémie selon vos habitudes.",
+        message_clinician="Suggestion non prescriptive, à valider.",
+        rationale={"xai": {"clinical_justification_allowed": True}},
+        priority=2, target="hypo", horizon_min=30,
+        probability=0.6, model_name="m", model_version="1", rule_id="R", rule_version="1",
+        trigger_name="t", safety_level=SafetyLevel.monitoring, xai_reliability_status=None,
+        open_loop_notice="ok", is_synthetic=True,
+        actionability=engine.evaluation.score(
+            category=RecommendationCategory.RECOMMENDATION_BEHAVIORAL,
+            safety_level=SafetyLevel.monitoring, probability=0.6, calibrated=False,
+            xai_available=False, xai_reliability_status=None, safety_passed=True,
+            message_len=50,
+        ),
+    )
+    res = safety.validate(reco)
+    assert res.passed is False
+    assert "xai_clinical_justification_not_allowed" in res.violations
 
 
 def test_safety_blocks_forbidden_term():
@@ -341,3 +403,71 @@ def test_patient_cannot_approve(client, db_session):
         f"/api/v1/recommendations/{uuid.uuid4()}/approve", json={}, headers=_auth(pat)
     )
     assert res.status_code == 403
+
+
+# --------------------------------------------------------------------------- #
+# Phase 4.1 — source-of-truth des probabilités
+# --------------------------------------------------------------------------- #
+def test_generate_rejects_client_supplied_probability(client, db_session):
+    """Verrou Phase 4.1 : injecter une probabilité côté client → 422 (extra forbidden)."""
+    _, TestingSessionLocal = db_session
+    register_and_login(client, role="patient", email="g11@test.fr")
+    clin = register_and_login(client, role="clinician", email="gc11@test.fr")
+    pid, pred_id = _seed_patient_prediction(TestingSessionLocal, target="hypo", prob=0.85)
+    res = client.post(
+        "/api/v1/recommendations/generate",
+        json={
+            "patient_id": pid,
+            "prediction_id": pred_id,
+            "include_xai": False,
+            "probability": 0.99,  # tentative de spoof
+        },
+        headers=_auth(clin),
+    )
+    assert res.status_code == 422
+
+
+def test_generate_rejects_client_supplied_model_fields(client, db_session):
+    """Verrou Phase 4.1 : injecter model_name/xai_status côté client → 422."""
+    _, TestingSessionLocal = db_session
+    register_and_login(client, role="patient", email="g12@test.fr")
+    clin = register_and_login(client, role="clinician", email="gc12@test.fr")
+    pid, pred_id = _seed_patient_prediction(TestingSessionLocal, target="hypo", prob=0.85)
+    res = client.post(
+        "/api/v1/recommendations/generate",
+        json={
+            "patient_id": pid,
+            "prediction_id": pred_id,
+            "include_xai": False,
+            "model_name": "fake_model",
+            "xai_status": "reliable_for_model_debug",
+        },
+        headers=_auth(clin),
+    )
+    assert res.status_code == 422
+
+
+def test_generate_rejects_non_synthetic_prediction(client, db_session):
+    """Verrou Phase 4.1 : une prédiction non synthétique est refusée (400)."""
+    _, TestingSessionLocal = db_session
+    register_and_login(client, role="patient", email="g13@test.fr")
+    clin = register_and_login(client, role="clinician", email="gc13@test.fr")
+    db = TestingSessionLocal()
+    try:
+        patient = db.query(Patient).first()
+        pred = Prediction(
+            patient_id=patient.id, ts=datetime.now(timezone.utc),
+            horizon_min=30, predicted_event="hypo", probability=0.85,
+            model_name="seed_model", model_version="1.1.0", is_synthetic=False,
+        )
+        db.add(pred)
+        db.commit()
+        pid, pred_id = str(patient.id), str(pred.id)
+    finally:
+        db.close()
+    res = client.post(
+        "/api/v1/recommendations/generate",
+        json={"patient_id": pid, "prediction_id": pred_id, "include_xai": False},
+        headers=_auth(clin),
+    )
+    assert res.status_code == 400

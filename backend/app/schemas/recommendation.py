@@ -58,10 +58,18 @@ class ModifyRequest(BaseModel):
 
 
 class GenerateRequest(BaseModel):
-    """Demande de génération de suggestions open-loop (clinicien/admin)."""
+    """Demande de génération de suggestions open-loop (clinicien/admin).
+
+    Verrou Phase 4.1 — source-of-truth des probabilités : le client ne fournit
+    JAMAIS la probabilité, le modèle ou un statut XAI. La probabilité est lue depuis
+    une prédiction synthétique en base (`prediction_id`) ou calculée côté serveur
+    (`ml.predict`). `extra="forbid"` rejette (422) toute tentative d'injecter
+    `probability`, `model_name`, `model_version`, `xai_status`, etc.
+    """
 
     model_config = ConfigDict(
         protected_namespaces=(),
+        extra="forbid",
         json_schema_extra={
             "example": {
                 "patient_id": "00000000-0000-0000-0000-000000000000",
