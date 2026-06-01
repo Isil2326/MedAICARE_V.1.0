@@ -13,7 +13,7 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.ml import config
-from app.xai import ebm_explainer, shap_explainer, utils
+from app.xai import ebm_explainer, reliability, shap_explainer, utils
 
 GLOBAL_DIR = Path(config.ARTIFACTS_DIR) / "xai" / "global" if hasattr(config, "ARTIFACTS_DIR") else Path("artifacts/xai/global")
 
@@ -23,7 +23,35 @@ def _global_dir() -> Path:
     return Path(base) / "xai" / "global"
 
 
-def compute_global(db: Session, *, target: str, horizon_min: int, top_k: int = 12) -> dict:
+def _qualify_direction(raw_sign: str, is_ebm: bool) -> tuple[str, str | None]:
+    """Traduit un signe agrégé brut en direction GLOBALE qualifiée (Phase 3.1).
+
+    On ne présente jamais une moyenne signée comme une vérité simple :
+    - EBM (effet dépendant de la valeur) → `not_globalizable` (interpréter localement) ;
+    - SHAP (contribution moyenne signée au score) → `aggregated_signed_effect`.
+    Le signe brut est conservé séparément à titre informatif (`aggregated_sign`).
+    """
+    sign = raw_sign if raw_sign in ("augmente", "diminue", "mixte") else None
+    if is_ebm:
+        return "not_globalizable", sign
+    if sign is None:
+        return "indéterminé", None
+    return "aggregated_signed_effect", sign
+
+
+def _safe_evaluate(db: Session, *, target: str, horizon_min: int, method: str) -> dict | None:
+    """Calcule les métriques d'évaluation réelles (jamais inventées) ; None si échec."""
+    from app.xai import evaluation
+    try:
+        ev = evaluation.evaluate_couple(db, target=target, horizon_min=horizon_min, method=method)
+    except Exception:  # robustesse : l'absence de métrique ne casse pas l'artefact
+        return None
+    return ev
+
+
+def compute_global(
+    db: Session, *, target: str, horizon_min: int, top_k: int = 12, with_evaluation: bool = True
+) -> dict:
     """Importance globale du modèle actif. Renvoie un dict conforme à `GlobalExplanation`."""
     model, entry = utils.load_active_model(target, horizon_min)
     now = datetime.now(timezone.utc)
@@ -44,16 +72,20 @@ def compute_global(db: Session, *, target: str, horizon_min: int, top_k: int = 1
         "synthetic_only": True,
         "n_background": 0,
         "generated_at": now,
+        "direction_semantics": reliability.DIRECTION_SEMANTICS,
+        "evaluation": None,
     }
     if model is None:
         base["xai_method"] = "unavailable"
         base["method_fallback"] = True
+        base.update(_attach_reliability(base, physio=None, stability=None))
         return base
 
     bg = utils.background_matrix(db)
     base["n_background"] = int(bg.shape[0])
+    is_ebm = (entry or {}).get("model_name") == "ebm"
 
-    if (entry or {}).get("model_name") == "ebm":
+    if is_ebm:
         res = ebm_explainer.global_importance(model, entry, db)
     else:
         res = shap_explainer.global_importance(model, entry, db)
@@ -64,18 +96,52 @@ def compute_global(db: Session, *, target: str, horizon_min: int, top_k: int = 1
     directions = res.get("directions") or {}
     if importances:
         ordered = sorted(importances.items(), key=lambda kv: -(kv[1] or 0.0))[:top_k]
-        base["top_features"] = [
-            {
+        feats = []
+        for name, val in ordered:
+            direction, sign = _qualify_direction(directions.get(name, "indéterminé"), is_ebm)
+            feats.append({
                 "feature": name,
                 "mean_abs_importance": float(val) if val is not None else None,
-                "direction": directions.get(name, "indéterminé"),
-            }
-            for name, val in ordered
-        ]
+                "direction": direction,
+                "aggregated_sign": sign,
+            })
+        base["top_features"] = feats
     else:
         # Aucune importance calculable : on n'invente rien, top_features reste vide.
         base["top_features"] = []
+
+    # Évaluation réelle embarquée (physio/stabilité pilotent la fiabilité).
+    physio = stability = None
+    if with_evaluation:
+        method = res.get("method", "shap")
+        ev = _safe_evaluate(db, target=target, horizon_min=horizon_min, method=method)
+        base["evaluation"] = ev
+        if ev is not None:
+            physio = (ev.get("physio_congruence") or {}).get("value")
+            stability = (ev.get("stability") or {}).get("value")
+
+    base.update(_attach_reliability(base, physio=physio, stability=stability))
     return base
+
+
+def _attach_reliability(base: dict, *, physio: float | None, stability: float | None) -> dict:
+    """Dérive le statut de fiabilité sémantique + notices pour l'explication globale."""
+    has_indeterminate = any(
+        (f.get("direction") in reliability.NON_GLOBALIZABLE_DIRECTIONS)
+        for f in base.get("top_features", [])
+    ) or not base.get("top_features")
+    rel = reliability.assess(
+        synthetic_only=True,
+        explains=base.get("explains", "modèle non calibré"),
+        method_fallback=bool(base.get("method_fallback")),
+        xai_method=base.get("xai_method"),
+        has_indeterminate_direction=has_indeterminate,
+        physio_congruence=physio,
+        stability=stability,
+    )
+    rel["calibration_notice"] = reliability.CALIBRATION_NOTICE
+    rel["synthetic_data_notice"] = reliability.SYNTHETIC_DATA_NOTICE
+    return rel
 
 
 def write_artifact(payload: dict) -> Path:

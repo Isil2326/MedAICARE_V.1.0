@@ -154,3 +154,16 @@ cd backend && python -m pytest -q                        # 118 tests
 ## 16. Critères de passage Phase 4 (proposé)
 
 Phase 3 livrée : explicabilité fonctionnelle, sécurisée, auditée, testée, documentée, **open-loop strict**, **synthétique**. **Décision proposée : NE PAS démarrer la Phase 4** (moteur de recommandation thérapeutique) sans validation explicite de ce rapport par le superviseur. Tout passage en Phase 4 supposerait un cadre réglementaire/éthique (données réelles, validation clinique) hors périmètre du prototype actuel.
+
+## 17. Phase 3.1 — Sécurisation sémantique XAI (amendement obligatoire, livré, à valider)
+
+Amendement demandé par le superviseur **avant** Phase 4 : qualifier la **fiabilité sémantique** de chaque explication et exposer ses limites **sans rien corriger artificiellement**. Aucun réentraînement, aucune reco/dose/règle, aucune donnée réelle, open-loop strict.
+
+- **Module pur** `app/xai/reliability.py` → `assess(...)` : `xai_reliability_status` (`reliable_for_model_debug` / `caution_semantic_limits` / `not_reliable_for_clinical_interpretation`, escalade monotone), `xai_warnings[]` **jamais masqués**, `semantic_limitations[]`. Règles : synthétique → warning systématique · modèle non calibré → warning systématique · repli occlusion → caution · direction non globalisable/indéterminée → caution · LIME stabilité < 0.5 → caution · physio < 0.5 → caution · **physio == 0.0 → not_reliable**. Un signal `None` n'escalade pas.
+- **Directions globales clarifiées** : EBM → `not_globalizable` (« interpréter localement ») ; SHAP → `aggregated_signed_effect` (signe brut conservé dans `aggregated_sign`). Disclaimer `direction_semantics`. Artefacts globaux **régénérés**.
+- **Cas hypo 30** : congruence physio **0.000 conservée** (non corrigée) → artefact marqué `not_reliable_for_clinical_interpretation` + warning « analyse technique uniquement ». EBM natif **non remplacé silencieusement**.
+- **API enrichie** (local + global) : `xai_reliability_status`, `xai_warnings`, `semantic_limitations`, `calibration_notice`, `synthetic_data_notice` (+ `direction_semantics`, `evaluation` réelle/`null` côté global). Champs **persistés** (`xai_reliability_status`, `xai_warnings`, `semantic_limitations`) via migration additive `f6a7b8c9d0e1`.
+- **Texte patient renforcé** (non causal) : « Le modèle a surtout utilisé… », « Ces éléments influencent le score du modèle », « Cela ne signifie pas que ces éléments sont la cause médicale », « Ne modifiez jamais votre traitement sans avis médical ». `FORBIDDEN_TERMS` inchangés et testés.
+- **Garde-fou Phase 4** : **« XAI is display/support only, not a decision engine. »** Un futur moteur doit lire `xai_reliability_status` et **refuser** une explication `not_reliable_for_clinical_interpretation`.
+- **Tests** : +14 (module reliability, champs local/global, hypo 30 prudence, scénarios canoniques hypo/hyper, XAI non décisionnelle, persistance fiabilité, texte patient). **133 verts** (119 + 14).
+- **Détails** : `docs/migration/AMENDEMENT_PHASE_3_1_SECURISATION_XAI.md`. **Phase 4 toujours suspendue** jusqu'à validation de cet amendement.

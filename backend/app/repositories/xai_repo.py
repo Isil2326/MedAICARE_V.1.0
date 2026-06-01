@@ -37,6 +37,9 @@ def create_from_result(db: Session, result: dict) -> XaiExplanation:
         baseline=result.get("baseline"),
         explanation_text_patient=result.get("explanation_text_patient"),
         explanation_text_clinician=result.get("explanation_text_clinician"),
+        xai_reliability_status=result.get("xai_reliability_status", "reliable_for_model_debug"),
+        xai_warnings=result.get("xai_warnings"),
+        semantic_limitations=result.get("semantic_limitations"),
         is_synthetic=True,
     )
     db.add(row)

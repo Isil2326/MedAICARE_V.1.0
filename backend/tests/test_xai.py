@@ -298,3 +298,218 @@ def test_no_real_data_in_explanation(client, db_session, xai_artifacts):
     db.commit()
     row = db.get(XaiExplanation, res["explanation_id"])
     assert row.is_synthetic is True
+
+# ===========================================================================
+# Phase 3.1 — Sécurisation sémantique XAI (statut fiabilité, warnings, scénarios)
+# ===========================================================================
+from app.xai import reliability  # noqa: E402
+
+
+# --- Module reliability (pur, déterministe) --------------------------------
+def test_reliability_synthetic_and_calibration_warnings():
+    out = reliability.assess(synthetic_only=True, explains="modèle non calibré")
+    txt = " ".join(out["xai_warnings"]).lower()
+    assert "synthétiques" in txt
+    assert "non calibré" in txt
+    # Sans autre signal de doute : reste « debug modèle ».
+    assert out["xai_reliability_status"] == "reliable_for_model_debug"
+    assert any("decision engine" in s.lower() for s in out["semantic_limitations"])
+
+
+def test_reliability_fallback_escalates_to_caution():
+    out = reliability.assess(method_fallback=True)
+    assert out["xai_reliability_status"] == "caution_semantic_limits"
+    assert any("repli" in w.lower() for w in out["xai_warnings"])
+
+
+def test_reliability_physio_low_caution_and_zero_not_reliable():
+    low = reliability.assess(physio_congruence=0.3)
+    assert low["xai_reliability_status"] == "caution_semantic_limits"
+    zero = reliability.assess(physio_congruence=0.0)
+    assert zero["xai_reliability_status"] == "not_reliable_for_clinical_interpretation"
+    assert any("congruence physiologique" in w.lower() for w in zero["xai_warnings"])
+
+
+def test_reliability_lime_low_stability_warns():
+    out = reliability.assess(xai_method="lime", stability=0.2)
+    assert out["xai_reliability_status"] == "caution_semantic_limits"
+    assert any("lime" in w.lower() for w in out["xai_warnings"])
+    # Stabilité haute : pas d'escalade depuis ce signal.
+    ok = reliability.assess(xai_method="lime", stability=0.9)
+    assert all("lime" not in w.lower() for w in ok["xai_warnings"])
+
+
+def test_reliability_indeterminate_direction_warns():
+    out = reliability.assess(has_indeterminate_direction=True)
+    assert out["xai_reliability_status"] == "caution_semantic_limits"
+
+
+# --- Réponse locale enrichie -----------------------------------------------
+def test_local_response_carries_reliability_fields(client, db_session, xai_artifacts):
+    db, _ = db_session
+    patient = _setup_patient_model(client, db, "rel_loc@test.fr")
+    res = service.explain_local(
+        db, patient_id=patient.id, target="hypo", horizon_min=30,
+        at=datetime.now(timezone.utc),
+    )
+    assert res["xai_reliability_status"] in {
+        "reliable_for_model_debug", "caution_semantic_limits",
+        "not_reliable_for_clinical_interpretation",
+    }
+    # Données synthétiques + modèle non calibré → au moins deux warnings.
+    assert len(res["xai_warnings"]) >= 2
+    assert any("synthétiques" in w.lower() for w in res["xai_warnings"])
+    assert res["calibration_notice"] and res["synthetic_data_notice"]
+    assert any("decision engine" in s.lower() for s in res["semantic_limitations"])
+
+
+def test_local_endpoint_exposes_reliability(client, db_session, xai_artifacts):
+    db, _ = db_session
+    pat = register_and_login(client, role="patient", email="rel_ep@test.fr")
+    patient = get_patient(db, "rel_ep@test.fr")
+    insert_synthetic_series(db, patient.id)
+    training.train_target(db, target="hypo", horizon_min=30,
+                          model_keys=["expert_rules", "logreg"])
+    inference_service.clear_cache(); cache.clear()
+    res = client.post(
+        "/api/v1/xai/explain", json={"target": "hypo", "horizon_min": 30},
+        headers=_auth(pat),
+    )
+    assert res.status_code == 200, res.text
+    body = res.json()
+    assert "xai_reliability_status" in body
+    assert isinstance(body["xai_warnings"], list) and body["xai_warnings"]
+    assert isinstance(body["semantic_limitations"], list)
+
+
+# --- Réponse globale : directions clarifiées + reliability ------------------
+def test_global_directions_clarified_and_reliability(client, db_session, xai_artifacts):
+    db, _ = db_session
+    _setup_patient_model(client, db, "rel_glob@test.fr",
+                         model_keys=["expert_rules", "logreg", "xgboost"])
+    payload = service.get_global(db, target="hypo", horizon_min=30)
+    assert payload["direction_semantics"]
+    assert "xai_reliability_status" in payload
+    # Aucune direction globale présentée comme « augmente/diminue » brute.
+    for f in payload["top_features"]:
+        assert f["direction"] in {
+            "not_globalizable", "aggregated_signed_effect",
+            "context_dependent", "local_only", "indéterminé", "mixte",
+        }
+    # Métriques d'évaluation réelles embarquées (ou None, jamais inventées).
+    assert "evaluation" in payload
+
+
+# --- Cas hypo 30 : congruence faible → prudence (via module pur) ------------
+def test_hypo30_low_congruence_flagged_with_caution():
+    # Reproduit le cas réel rapporté (physio=0.000) sans fabriquer de métrique.
+    out = reliability.assess(synthetic_only=True, physio_congruence=0.0,
+                             explains="modèle non calibré")
+    assert out["xai_reliability_status"] == "not_reliable_for_clinical_interpretation"
+    assert any("analyse technique" in w.lower() for w in out["xai_warnings"])
+
+
+# --- Scénarios canoniques (cohérence sémantique, PAS validation clinique) ---
+def _build_row(db, overrides: dict):
+    import numpy as np
+    from app.xai import utils
+    cols = list(config.FEATURE_COLUMNS)
+    row = utils.median_reference(db).astype(float).copy()
+    for name, val in overrides.items():
+        row[cols.index(name)] = val
+    return row, cols
+
+
+def test_canonical_scenario_hyper(client, db_session, xai_artifacts):
+    """Glycémie haute + pente montante + post-prandial → P(hyper) ne baisse pas."""
+    import numpy as np
+    from app.xai import shap_explainer, utils
+    db, _ = db_session
+    _setup_patient_model(client, db, "scen_hyper@test.fr", target="hyper", horizon=30,
+                         model_keys=["expert_rules", "logreg", "xgboost"])
+    model, entry = utils.load_active_model("hyper", 30)
+    inner = utils.unwrap(model)
+    high, cols = _build_row(db, {"cgm_mean_30": 260.0, "cgm_mean_60": 250.0,
+                                 "cgm_slope_30": 2.5, "post_prandial": 1.0})
+    low, _ = _build_row(db, {"cgm_mean_30": 90.0, "cgm_mean_60": 95.0,
+                             "cgm_slope_30": -1.0, "post_prandial": 0.0})
+    p_high = float(np.asarray(inner.predict_proba(high.reshape(1, -1))).reshape(-1)[0])
+    p_low = float(np.asarray(inner.predict_proba(low.reshape(1, -1))).reshape(-1)[0])
+    assert p_high >= p_low  # le risque hyper va dans le sens attendu
+    # Au moins un facteur glycémique plausible dans l'attribution.
+    import pandas as pd
+    X = pd.DataFrame([high], columns=cols)
+    contribs = shap_explainer.explain_local(model, entry, X, db).get("contributions")
+    top = set(np.argsort(-np.abs(contribs))[:6].tolist())
+    plausible = {cols.index(c) for c in ("cgm_mean_30", "cgm_mean_60", "cgm_slope_30",
+                                         "cgm_delta_30", "cgm_delta_60")}
+    assert top & plausible
+
+
+def test_canonical_scenario_hypo(client, db_session, xai_artifacts):
+    """Glycémie basse + pente descendante + nuit → P(hypo) ne baisse pas."""
+    import numpy as np
+    from app.xai import shap_explainer, utils
+    db, _ = db_session
+    _setup_patient_model(client, db, "scen_hypo@test.fr", target="hypo", horizon=30,
+                         model_keys=["expert_rules", "logreg", "xgboost"])
+    model, entry = utils.load_active_model("hypo", 30)
+    inner = utils.unwrap(model)
+    low, cols = _build_row(db, {"cgm_mean_30": 62.0, "cgm_mean_60": 70.0,
+                                "cgm_slope_30": -2.5, "is_night": 1.0})
+    high, _ = _build_row(db, {"cgm_mean_30": 160.0, "cgm_mean_60": 155.0,
+                              "cgm_slope_30": 1.5, "is_night": 0.0})
+    p_low = float(np.asarray(inner.predict_proba(low.reshape(1, -1))).reshape(-1)[0])
+    p_high = float(np.asarray(inner.predict_proba(high.reshape(1, -1))).reshape(-1)[0])
+    assert p_low >= p_high  # risque hypo plus élevé quand la glycémie est basse
+    import pandas as pd
+    X = pd.DataFrame([low], columns=cols)
+    contribs = shap_explainer.explain_local(model, entry, X, db).get("contributions")
+    top = set(np.argsort(-np.abs(contribs))[:6].tolist())
+    plausible = {cols.index(c) for c in ("cgm_mean_30", "cgm_mean_60", "cgm_slope_30",
+                                         "cgm_delta_30", "cgm_delta_60")}
+    assert top & plausible
+
+
+# --- XAI n'est PAS un moteur de décision -----------------------------------
+def test_xai_not_a_decision_engine(client, db_session, xai_artifacts):
+    db, _ = db_session
+    patient = _setup_patient_model(client, db, "nodec@test.fr")
+    res = service.explain_local(
+        db, patient_id=patient.id, target="hypo", horizon_min=30,
+        at=datetime.now(timezone.utc),
+    )
+    for forbidden_field in ("dose", "decision", "recommendation", "recommandation", "action"):
+        assert forbidden_field not in res
+    # Garde-fou explicite présent dans les limites sémantiques.
+    assert any("decision engine" in s.lower() for s in res["semantic_limitations"])
+
+
+# --- Persistance des champs de fiabilité -----------------------------------
+def test_reliability_persisted(client, db_session, xai_artifacts):
+    db, _ = db_session
+    patient = _setup_patient_model(client, db, "relpers@test.fr")
+    res = service.explain_local(
+        db, patient_id=patient.id, target="hypo", horizon_min=30,
+        at=datetime.now(timezone.utc), persist=True,
+    )
+    db.commit()
+    row = db.get(XaiExplanation, res["explanation_id"])
+    assert row.xai_reliability_status == res["xai_reliability_status"]
+    assert isinstance(row.xai_warnings, list) and row.xai_warnings
+
+
+# --- Texte patient renforcé (anti-ambiguïté, non causal) -------------------
+def test_patient_text_reinforced_non_causal():
+    feats = [
+        {"feature": "cgm_mean_30", "value": 62.0, "contribution": 0.4, "direction": "augmente"},
+    ]
+    txt = translation.build_patient_text(
+        target="hypo", horizon_min=30, probability=0.7, risk_label="élevé",
+        top_features=feats, calculable=True, reason=None,
+    ).lower()
+    assert "ne modifiez jamais votre traitement sans avis médical" in txt
+    assert "cause médicale" in txt  # explicitement nié dans la phrase
+    assert "le modèle a surtout utilisé" in txt
+    for term in FORBIDDEN_TERMS:
+        assert term.lower() not in txt

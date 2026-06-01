@@ -28,6 +28,25 @@ XAI_LIMITATIONS = (
     "transférables à des patients réels. Importance statistique ≠ preuve clinique."
 )
 
+ReliabilityStatus = Literal[
+    "reliable_for_model_debug",
+    "caution_semantic_limits",
+    "not_reliable_for_clinical_interpretation",
+]
+
+# Vocabulaire de direction GLOBALE (Phase 3.1) : une moyenne signée n'est pas une
+# vérité simple. On qualifie plutôt l'interprétabilité de la direction.
+GlobalDirection = Literal[
+    "augmente",
+    "diminue",
+    "mixte",
+    "indéterminé",
+    "context_dependent",
+    "not_globalizable",
+    "local_only",
+    "aggregated_signed_effect",
+]
+
 
 class FeatureContribution(BaseModel):
     """Contribution signée d'une feature au score du modèle (pas une cause)."""
@@ -103,12 +122,20 @@ class LocalExplanation(BaseModel):
     cgm_gap: bool = False
     cached: bool = False
     explanation_id: uuid.UUID | None = None
+    # --- Phase 3.1 : sécurisation sémantique (jamais masquée) ---------------
+    xai_reliability_status: ReliabilityStatus = "reliable_for_model_debug"
+    xai_warnings: list[str] = Field(default_factory=list)
+    semantic_limitations: list[str] = Field(default_factory=list)
+    calibration_notice: str = ""
+    synthetic_data_notice: str = ""
 
 
 class GlobalFeatureImportance(BaseModel):
     feature: str
     mean_abs_importance: float | None = None
-    direction: Literal["augmente", "diminue", "mixte", "indéterminé"] = "indéterminé"
+    direction: GlobalDirection = "indéterminé"
+    # Signe agrégé sous-jacent conservé à titre INFORMATIF (pas une vérité simple).
+    aggregated_sign: Literal["augmente", "diminue", "mixte"] | None = None
 
 
 class GlobalExplanation(BaseModel):
@@ -132,3 +159,12 @@ class GlobalExplanation(BaseModel):
     n_background: int = 0
     generated_at: datetime
     limitations: str = XAI_LIMITATIONS
+    # --- Phase 3.1 : sécurisation sémantique (jamais masquée) ---------------
+    xai_reliability_status: ReliabilityStatus = "reliable_for_model_debug"
+    xai_warnings: list[str] = Field(default_factory=list)
+    semantic_limitations: list[str] = Field(default_factory=list)
+    calibration_notice: str = ""
+    synthetic_data_notice: str = ""
+    direction_semantics: str = ""
+    # Métriques d'évaluation réelles embarquées (None si non calculées).
+    evaluation: dict | None = None

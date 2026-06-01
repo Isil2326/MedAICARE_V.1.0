@@ -13,7 +13,41 @@ from sqlalchemy.orm import Session
 
 from app.ml import config
 from app.repositories import xai_repo
-from app.xai import cache, global_explanations, local_explanations, utils
+from app.xai import cache, global_explanations, local_explanations, reliability, utils
+
+
+def _couple_metrics(target: str, horizon_min: int) -> tuple[float | None, float | None]:
+    """Lit physio/stabilité du couple depuis l'artefact global (None si absent)."""
+    try:
+        art = global_explanations.load_artifact(target, horizon_min)
+    except Exception:
+        return None, None
+    if not art:
+        return None, None
+    ev = art.get("evaluation") or {}
+    physio = (ev.get("physio_congruence") or {}).get("value") if isinstance(ev, dict) else None
+    stab = (ev.get("stability") or {}).get("value") if isinstance(ev, dict) else None
+    return physio, stab
+
+
+def _attach_local_reliability(result: dict, *, target: str, horizon_min: int) -> None:
+    """Enrichit le résultat local avec le statut de fiabilité sémantique (Phase 3.1)."""
+    physio, stability = _couple_metrics(target, horizon_min)
+    has_indeterminate = any(
+        f.get("direction") in ("indéterminé", "neutre") for f in result.get("top_features", [])
+    )
+    rel = reliability.assess(
+        synthetic_only=bool(result.get("synthetic_only", True)),
+        explains=result.get("explains", "modèle non calibré"),
+        method_fallback=bool(result.get("method_fallback", False)),
+        xai_method=result.get("xai_method"),
+        has_indeterminate_direction=has_indeterminate,
+        physio_congruence=physio,
+        stability=stability,
+    )
+    result.update(rel)
+    result["calibration_notice"] = reliability.CALIBRATION_NOTICE
+    result["synthetic_data_notice"] = reliability.SYNTHETIC_DATA_NOTICE
 
 
 def explain_local(
@@ -67,6 +101,9 @@ def explain_local(
     result["calibrated"] = utils.is_calibrated(model) if model is not None else False
     result["cached"] = False
     result["explanation_id"] = None
+    # Sécurisation sémantique (Phase 3.1) : attachée AVANT mise en cache pour que
+    # les hits de cache portent les mêmes warnings (jamais masqués).
+    _attach_local_reliability(result, target=target, horizon_min=horizon_min)
 
     if cache_key is not None:
         to_cache = dict(result)

@@ -175,6 +175,27 @@ aux horizons **30/60 min**, jamais de décision/dose. Données simulées
   migration `d4e5f6a7b8c9`. Détails :
   `docs/migration/AMENDEMENT_PHASE_2_1_BENCHMARK_SYNTHETIQUE.md`.
 
+### XAI — Explicabilité (`/api/v1/xai`) — **Phase 3 + 3.1, simulé, open-loop**
+Explications **open-loop strictes** (contributions de features = pondération du modèle,
+**PAS** causalité). Données synthétiques. SHAP/LIME/EBM natif + repli occlusion documenté.
+- `POST /explain` — explication **locale** d'une prédiction (patient/clinicien). RBAC +
+  ownership identiques à `ml.predict` ; horizon hors {30,60} → **400** ; non authentifié →
+  **401**. Audit `xai.explain`. `persist=true` → table `xai_explanations`
+  (`is_synthetic=True`).
+- `GET /global` — importance **globale** d'un couple actif (réservé clinicien/admin).
+- **Phase 3.1 — sécurisation sémantique (jamais masquée).** Chaque réponse expose
+  `xai_reliability_status` (`reliable_for_model_debug` / `caution_semantic_limits` /
+  `not_reliable_for_clinical_interpretation`), `xai_warnings[]`, `semantic_limitations[]`,
+  `calibration_notice`, `synthetic_data_notice` ; le global ajoute `direction_semantics` +
+  `evaluation` (métriques réelles ou `null`). Directions globales **qualifiées** (EBM →
+  `not_globalizable` ; SHAP → `aggregated_signed_effect`), jamais « augmente/diminue » brut.
+  Cas **hypo 30** (congruence physio = 0.000) marqué `not_reliable_for_clinical_interpretation`
+  (métrique **non corrigée**). Garde-fou : **« XAI is display/support only, not a decision
+  engine. »** Migration additive `f6a7b8c9d0e1`.
+- **CLI** : `python -m app.xai.generate_global` · `python -m app.xai.evaluate`. Détails :
+  `docs/migration/PHASE_3_XAI_CLINIQUE.md`, `RAPPORT_PHASE_3.md`,
+  `AMENDEMENT_PHASE_3_1_SECURISATION_XAI.md`.
+
 ### Audit (`/api/v1/audit-logs`)
 - `GET ` — consultation du journal (clinicien/admin)
 - `GET /verify` — vérification de l'intégrité de la chaîne

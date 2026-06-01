@@ -42,5 +42,12 @@ class XaiExplanation(UUIDMixin, TimestampMixin, Base):
     explanation_text_patient: Mapped[str | None] = mapped_column(Text, nullable=True)
     explanation_text_clinician: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+    # --- Phase 3.1 : sécurisation sémantique (traçabilité des warnings) -------
+    xai_reliability_status: Mapped[str] = mapped_column(
+        String(48), default="reliable_for_model_debug"
+    )
+    xai_warnings: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    semantic_limitations: Mapped[list | None] = mapped_column(JSON, nullable=True)
+
     # Toujours vrai dans ce socle : aucune donnée réelle.
     is_synthetic: Mapped[bool] = mapped_column(Boolean, default=True)

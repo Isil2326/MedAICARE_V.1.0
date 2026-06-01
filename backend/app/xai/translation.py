@@ -82,19 +82,21 @@ def build_patient_text(
     pct = f"{round(probability * 100)} %" if probability is not None else "non chiffrable"
     lead = (
         f"Estimation indicative du risque de {tlabel} dans les {horizon_min} prochaines minutes : "
-        f"niveau {risk_label} ({pct})."
+        f"niveau {risk_label} ({pct}). Cette information est indicative."
     )
     drivers = [f for f in top_features if f.get("direction") in ("augmente", "diminue")][:3]
     if drivers:
         parts = []
         for f in drivers:
             parts.append(f"{feature_label(f['feature'])} ({_dir_word(f['direction'], 'patient')} ce risque)")
-        body = " Éléments que le modèle a le plus pris en compte : " + " ; ".join(parts) + "."
+        body = " Le modèle a surtout utilisé : " + " ; ".join(parts) + "."
     else:
         body = " Le modèle n'a pas dégagé de facteur dominant pour ce point."
     tail = (
-        " Ces éléments décrivent ce que le modèle a observé, pas une cause médicale. "
-        "Parlez-en à votre soignant ; cet outil ne propose aucun traitement."
+        " Ces éléments influencent le score du modèle. Cela ne signifie pas que ces "
+        "éléments sont la cause médicale de votre situation. "
+        "Ne modifiez jamais votre traitement sans avis médical : cet outil est "
+        "informatif, ne propose aucun traitement et ne remplace pas votre soignant."
     )
     return lead + body + tail
 
