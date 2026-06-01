@@ -125,6 +125,11 @@ cd backend && python -m pytest -q
 - **Pas de validation clinique** des messages ni des règles : prototype de thèse.
 - **Journal/persistance non autoritaires** : démo, non certifiée.
 
-## 14. Critères de passage Phase 5 (proposé)
+## 14. Rapport de validation
+
+Rapport structuré destiné au superviseur : `docs/migration/RAPPORT_PHASE_4.md` (synthèse 16 points,
+règles, workflow, safety, API, exemple réel, tests, conformité aux contraintes non négociables).
+
+## 15. Critères de passage Phase 5 (proposé)
 
 Phase 5 **NON démarrée**. Toute suite reste conditionnée à la validation du superviseur de ce rapport et au maintien strict de l'open-loop (aucune boucle fermée sans cadre réglementaire).
