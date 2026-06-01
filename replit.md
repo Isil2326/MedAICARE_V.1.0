@@ -39,8 +39,9 @@ FastAPI (`backend/`), app mobile Expo (`mobile/`).
 | 4 | Moteur de recommandation open-loop | **livré, à valider** |
 | 4.1 | Verrouillage sémantique & source-of-truth | **livré, à valider** |
 | 5 | Consolidation backend/API/sécurité/contrats | **livré, à valider** |
-| 6 | Application mobile Expo + intégration API | **livré, à valider** |
-| 7 | — | **NON démarrée — attente validation superviseur** |
+| 6 | Application mobile Expo + intégration API | **validée** |
+| 7 | QA mobile, validation E2E, accessibilité, soutenance | **livré, à valider** |
+| 8 | — | **NON démarrée — attente validation superviseur** |
 
 > Les statuts « livré, à valider » reflètent l'attente de validation du superviseur.
 > Mettre à jour cette colonne au fil des validations réelles.
@@ -94,10 +95,16 @@ cd MedAICare_V.3_10Patients && npm run dev                      # « Start appli
 - Phase 4.1 : `AMENDEMENT_PHASE_4_1_VERROUILLAGE_RECOMMANDATION.md`
 - Phase 5 : `PHASE_5_CONSOLIDATION.md` · `RAPPORT_PHASE_5.md`
 - Phase 6 : `RAPPORT_PHASE_6.md`
+- Phase 7 : `RAPPORT_PHASE_7.md`
 
+**Démo & soutenance** (`docs/demo/`) — `E2E_DEMO_SCRIPT.md` · `SCREEN_WALKTHROUGH.md` ·
+`SOUTENANCE_SCENARIO.md` (+ `screenshots/`)
+**QA** (`docs/qa/`) — `MOBILE_QA_CHECKLIST.md` · `ACCESSIBILITY_REVIEW.md` ·
+`TRACEABILITY_MATRIX.md`
+**Architecture** (`docs/architecture/`) — `FINAL_ARCHITECTURE.md` (schéma Mermaid)
 **API** (`docs/api/`) — `API_V1_CONTRACTS.md` · `ERROR_CATALOG.md`
 **Sécurité** (`docs/security/`) — `RBAC_MATRIX.md` · `AUDIT_COVERAGE.md` ·
-`AUDIT_CONCURRENCY.md` · `PASSWORD_POLICY.md`
+`AUDIT_CONCURRENCY.md` · `PASSWORD_POLICY.md` · `MOBILE_SECURITY_REVIEW.md`
 **Ops** (`docs/ops/`) — `PERFORMANCE_NOTES.md` · `TEST_STRATEGY.md` · `VALIDATION_COMMANDS.md`
 **Mobile** (`docs/mobile/`) — `PHASE_6_MOBILE_APP.md` · `MOBILE_API_CONTRACTS.md`
 **Conformité** (`docs/compliance/`) — `COMPLIANCE_SCOPE.md` · `SYNTHETIC_DATA_POLICY.md`
@@ -116,7 +123,8 @@ design system, features web)
 - Journal de décision web = `localStorage` non-autoritaire (démo, pas un dossier source).
 
 ## Prochaine phase attendue
-**Phase 7 — NON démarrée.** Ne pas la démarrer sans validation explicite du superviseur.
-Pistes proposées (open-loop, synthétiques, sans changement ML/XAI) : durcissement device
-réel (EAS, Keychain/Keystore, audit lecteur d'écran), graphiques séries temporelles
-mobiles (lecture seule), parcours d'évaluation clinicien A/B porté sur mobile.
+**Phase 8 — NON démarrée.** Ne pas la démarrer sans validation explicite du superviseur.
+Phase 7 (QA/validation E2E/accessibilité/soutenance) livrée, en attente de validation.
+Pistes Phase 8 proposées (open-loop, synthétiques, sans changement ML/XAI) : build
+device réel (EAS, Keychain/Keystore, TLS pinning, audit lecteur d'écran VoiceOver/
+TalkBack), graphiques séries temporelles mobiles (lecture seule).
