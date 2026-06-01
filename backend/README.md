@@ -196,6 +196,28 @@ Explications **open-loop strictes** (contributions de features = pondération du
   `docs/migration/PHASE_3_XAI_CLINIQUE.md`, `RAPPORT_PHASE_3.md`,
   `AMENDEMENT_PHASE_3_1_SECURISATION_XAI.md`.
 
+### Recommandations (`/api/v1/recommendations`) — **Phase 4, simulé, open-loop**
+Suggestions **non prescriptives** (jamais de dose/décision/action auto), **open-loop
+strict** : toute suggestion naît `pending` et exige l'arbitrage d'un clinicien. Données
+synthétiques (`is_synthetic=True`). Le moteur **lit** `xai_reliability_status` et **refuse
+la XAI comme justification clinique** si `not_reliable_for_clinical_interpretation`.
+- `POST /generate` — génère des suggestions (probabilité → règles versionnées → safety →
+  `pending`) ; **clinicien/admin** (`patient_id` requis), résout la prédiction par
+  `prediction_id` ou via `ml.predict`, XAI best-effort (`include_xai`). Audit
+  `recommendation.generated` / `safety_blocked` / `generate_skipped`.
+- `GET ` — liste filtrée (status/patient/category/priority/target/horizon) — **clinicien/admin**.
+- `GET /mine` — le patient lit **uniquement** ses suggestions **approuvées**.
+- `GET /{id}` — détail (patient : seulement la sienne approuvée).
+- `POST /{id}/approve` · `POST /{id}/reject` · `POST /{id}/modify` — arbitrage
+  **clinicien/admin** (transitions `pending → approved|rejected`, `pending → modified →
+  approved|rejected`). Catégories non prescriptives : `ALERT_CRITICAL`,
+  `RECOMMENDATION_BEHAVIORAL`, `CLINICAL_REFERRAL`, `THERAPY_SUGGESTION_REVIEW_ONLY`.
+- **Safety** : `FORBIDDEN_TERMS` + regex dose → message bloqué ; notice open-loop +
+  « Ne modifiez jamais votre traitement sans avis médical » sur chaque suggestion.
+  Migration additive `a7b8c9d0e1f2`.
+- **CLI** : `python -m app.recommendations.generate_demo` (n'écrit rien). Détails :
+  `docs/migration/PHASE_4_RECOMMENDATION_ENGINE.md`.
+
 ### Audit (`/api/v1/audit-logs`)
 - `GET ` — consultation du journal (clinicien/admin)
 - `GET /verify` — vérification de l'intégrité de la chaîne

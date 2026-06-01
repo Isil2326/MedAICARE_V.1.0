@@ -1,1 +1,2 @@
 - [XAI reliability semantics](xai-reliability-semantics.md) — never fabricate a metric, compute reliability before caching, monotone escalation, physio==0→not_reliable, XAI is display-only not a decision engine.
+- [Recommendation engine safety](recommendation-engine-safety.md) — open-loop safety must run on EVERY recommendation write path (incl. clinician modify/edit), not just generation, or it's bypassable.

@@ -18,7 +18,7 @@ Master's thesis SaMD prototype (diabetes), French, honest critical posture. Migr
 
 ## Phase-gating rule
 **Why:** the user explicitly validates each phase report before the next begins.
-**How to apply:** never start phase N+1 until the user validates the phase N report. Each phase delivers a 14-point report under `docs/migration/RAPPORT_PHASE_*.md`. Phase 0 + 0.1 + 1 done & validated as of 2026-05-31.
+**How to apply:** never start phase N+1 until the user validates the phase N report. Each phase delivers a structured report under `docs/migration/` (`RAPPORT_PHASE_*.md` or `PHASE_*` / `AMENDEMENT_*`). Phase 0 + 0.1 + 1 + 2 + 2.1 + 3 + 3.1 + 4 (open-loop recommendation engine) delivered; phases through 3.1 validated. Phase 4 awaiting validation; Phase 5 NOT started.
 
 ## Layout
 - Backend lives in `backend/` (FastAPI, port 8000, workflow "Backend API"), separate from the React app in `MedAICare_V.3_10Patients/` (port 5000).

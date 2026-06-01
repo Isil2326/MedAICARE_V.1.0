@@ -22,6 +22,7 @@ class RecommendationStatus(str, enum.Enum):
     pending = "pending"
     approved = "approved"
     rejected = "rejected"
+    modified = "modified"
 
 
 class Prediction(UUIDMixin, TimestampMixin, Base):
@@ -55,10 +56,27 @@ class Recommendation(UUIDMixin, TimestampMixin, Base):
     status: Mapped[str] = mapped_column(
         String(20), default=RecommendationStatus.pending.value, index=True
     )
-    category: Mapped[str] = mapped_column(String(60))  # education / monitoring / contact_care
+    category: Mapped[str] = mapped_column(String(60))  # ALERT_CRITICAL / RECOMMENDATION_BEHAVIORAL / ...
     message: Mapped[str] = mapped_column(Text)  # formulation prudente, non prescriptive
     rationale: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     priority: Mapped[int] = mapped_column(default=3)  # 1=haute ... 5=basse
+
+    # --- Phase 4 : traçabilité du moteur de recommandation open-loop -----------
+    # Colonnes additives nullables (compat lignes Phase 2). Toute la richesse
+    # détaillée (features principales, contexte, scores, warnings XAI) reste dans
+    # `rationale` (JSON) ; on n'expose en colonnes que les champs interrogeables.
+    target: Mapped[str | None] = mapped_column(String(10), nullable=True)  # hypo / hyper
+    horizon_min: Mapped[int | None] = mapped_column(nullable=True)
+    probability: Mapped[float | None] = mapped_column(Float, nullable=True)
+    model_name: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    model_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    rule_id: Mapped[str | None] = mapped_column(String(60), nullable=True, index=True)
+    rule_version: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    trigger_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    safety_level: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    xai_reliability_status: Mapped[str | None] = mapped_column(String(48), nullable=True)
+    actionability_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    is_synthetic: Mapped[bool] = mapped_column(default=True)
 
     reviewed_by: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("users.id"), nullable=True, index=True
