@@ -21,8 +21,8 @@ export function generateSimulatedIoMTData(scenarioMode: 'normal' | 'hypo' | 'hyp
   let baseSys = 118;
   let baseDia = 76;
   let baseTemp = 36.6;
-  const baseInsulin = 4.5;
-  const baseCarbs = 45;
+  let baseInsulin = 4.5;
+  let baseCarbs = 45;
 
   switch (scenarioMode) {
     case 'hypo':
@@ -443,7 +443,7 @@ export function generateAuditLogs(): AuditLogEntry[] {
     { id: 'LOG-006', timestamp: now - 180000, action: 'Authentification médecin', module: 'Auth', severity: 'INFO', user: 'DR-BENMOUSSA', details: 'Connexion réussie | IP: 192.168.1.xxx | 2FA: Validé', traceId: 'TRC-p6q7r8' },
     { id: 'LOG-007', timestamp: now - 300000, action: 'Versioning modèle IA', module: 'MLOps', severity: 'INFO', user: 'SYSTEM', details: 'Modèle RF v2.3 déployé | Dataset: v4.1 | AUC: 0.96', traceId: 'TRC-s9t0u1' },
     { id: 'LOG-008', timestamp: now - 450000, action: 'Échec synchronisation', module: 'IoMT Gateway', severity: 'ERROR', user: 'CGM-002', details: 'Dexcom G7: Timeout après 30s | Batterie faible: 41%', traceId: 'TRC-v2w3x4' },
-    { id: 'LOG-009', timestamp: now - 600000, action: 'Rapport patient exporté', module: 'Reports', severity: 'INFO', user: 'DR-BENMOUSSA', details: 'Rapport PDF généré pour PAT-001 | Période: 30 jours | Export démo', traceId: 'TRC-y5z6a7' },
+    { id: 'LOG-009', timestamp: now - 600000, action: 'Rapport patient exporté', module: 'Reports', severity: 'INFO', user: 'DR-BENMOUSSA', details: 'Rapport PDF généré pour PAT-001 | Période: 30 jours | Conformité RGPD', traceId: 'TRC-y5z6a7' },
     { id: 'LOG-010', timestamp: now - 900000, action: 'Alerte critique — SpO2 basse', module: 'Alert Engine', severity: 'CRITICAL', user: 'SYSTEM', details: 'Patient PAT-003: SpO2 < 90% | Notification urgente envoyée', traceId: 'TRC-b8c9d0' },
   ];
 }

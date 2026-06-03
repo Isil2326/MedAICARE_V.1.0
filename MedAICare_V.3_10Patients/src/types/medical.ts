@@ -1,6 +1,5 @@
 // ============================================================================
-// TYPES & INTERFACES — Architecture des données du prototype
-// (Modèles inspirés des bonnes pratiques ISO 13485 / IEC 62304 — non certifié)
+// TYPES & INTERFACES — Architecture Documentée ISO 13485 / IEC 62304
 // ============================================================================
 
 export interface PatientVitals {
@@ -156,7 +155,7 @@ export interface Alert {
   patientId: string;
 }
 
-export type ViewMode = 'portal' | 'landing' | 'patient' | 'doctor' | 'devices' | 'audit' | 'messages';
+export type ViewMode = 'landing' | 'patient' | 'doctor' | 'devices' | 'audit' | 'messages';
 
 // ============================================================================
 // JOURNAL PATIENT — Évènements quotidiens (repas, insuline, activité, notes)

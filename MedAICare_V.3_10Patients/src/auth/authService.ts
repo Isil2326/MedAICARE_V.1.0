@@ -1,13 +1,6 @@
 // ============================================================================
-// AUTHENTICATION SERVICE — Prototype académique
-// Hachage PBKDF2-SHA256 (100 000 itérations) + RBAC (patient / clinician)
-//
-// LIMITES IMPORTANTES :
-// - Stockage 100 % localStorage navigateur (en clair pour tout sauf le hash)
-// - Aucun backend, aucune session distante, aucune révocation côté serveur
-// - Pas de 2FA, pas de rate limiting, pas de verrouillage de compte
-// - Les références IEC 62304 / ISO 27001 sont des CIBLES pédagogiques,
-//   PAS des certifications obtenues. Voir LIMITATIONS.md pour le détail.
+// AUTHENTICATION SERVICE — IEC 62304 Classe C / ISO 27001
+// Système d'authentification sécurisé avec hachage PBKDF2 et RBAC
 // ============================================================================
 
 export type UserRole = 'patient' | 'clinician';

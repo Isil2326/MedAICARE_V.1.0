@@ -2,9 +2,8 @@ import { ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 
 /**
- * Design System MediAI Care v5 — Premium Healthtech
- * Direction: minimaliste · lumineux · sobre · rassurant · précis
- * Couleurs: brand-green (accent) · slate (structure) · white (surfaces)
+ * Design System MediAI Care v3
+ * Tokens unifiés pour cohérence visuelle premium dark
  */
 
 // ============= CARD =============
@@ -12,35 +11,25 @@ export function Card({
   children,
   className,
   hover = false,
-  accent,
-  noPad = false,
+  glow = false,
 }: {
   children: ReactNode;
   className?: string;
   hover?: boolean;
-  accent?: 'green' | 'amber' | 'coral' | 'blue' | 'violet' | 'teal' | 'emerald' | 'slate';
-  noPad?: boolean;
   glow?: boolean;
 }) {
-  const accentBorder = {
-    green:   'border-l-[3px] border-l-brand-500',
-    amber:   'border-l-[3px] border-l-amber-400',
-    coral:   'border-l-[3px] border-l-coral-400',
-    blue:    'border-l-[3px] border-l-blue-500',
-    violet:  'border-l-[3px] border-l-violet-500',
-    teal:    'border-l-[3px] border-l-teal-400',
-    emerald: 'border-l-[3px] border-l-emerald-500',
-    slate:   'border-l-[3px] border-l-slate-400',
-  };
-
   return (
-    <div className={cn(
-      'relative bg-white rounded-2xl card-shadow border border-slate-100/80',
-      !noPad && 'p-5',
-      hover && 'transition-all duration-200 hover:shadow-[0_8px_32px_rgba(15,23,42,0.1)] hover:-translate-y-0.5 cursor-pointer',
-      accent && accentBorder[accent],
-      className
-    )}>
+    <div
+      className={cn(
+        'relative rounded-2xl border border-white/[0.08]',
+        'bg-gradient-to-b from-white/[0.04] to-white/[0.01]',
+        'backdrop-blur-xl',
+        'shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset,0_8px_32px_-8px_rgba(0,0,0,0.6)]',
+        hover && 'transition-all duration-300 hover:border-white/[0.14] hover:shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_12px_40px_-8px_rgba(0,0,0,0.7)]',
+        glow && 'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-teal-500/[0.04] before:to-transparent before:pointer-events-none',
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -52,37 +41,40 @@ export function CardHeader({
   subtitle,
   icon: Icon,
   action,
-  accent = 'green',
+  accent = 'teal',
 }: {
   title: string;
   subtitle?: string;
   icon?: React.ComponentType<{ className?: string }>;
   action?: ReactNode;
-  accent?: 'green' | 'amber' | 'coral' | 'blue' | 'violet' | 'sage' | 'teal' | 'emerald' | 'slate';
+  accent?: 'teal' | 'blue' | 'amber' | 'rose' | 'violet' | 'emerald';
 }) {
   const accentMap = {
-    green:   'bg-brand-100 text-brand-700',
-    amber:   'bg-amber-100 text-amber-700',
-    coral:   'bg-coral-100 text-coral-600',
-    blue:    'bg-blue-100 text-blue-700',
-    violet:  'bg-violet-100 text-violet-700',
-    sage:    'bg-sage-100 text-sage-700',
-    teal:    'bg-teal-100 text-teal-700',
-    emerald: 'bg-emerald-100 text-emerald-700',
-    slate:   'bg-slate-100 text-slate-600',
+    teal: 'from-teal-500/20 to-cyan-500/10 text-teal-300 ring-teal-500/20',
+    blue: 'from-blue-500/20 to-indigo-500/10 text-blue-300 ring-blue-500/20',
+    amber: 'from-amber-500/20 to-orange-500/10 text-amber-300 ring-amber-500/20',
+    rose: 'from-rose-500/20 to-pink-500/10 text-rose-300 ring-rose-500/20',
+    violet: 'from-violet-500/20 to-purple-500/10 text-violet-300 ring-violet-500/20',
+    emerald: 'from-emerald-500/20 to-green-500/10 text-emerald-300 ring-emerald-500/20',
   };
 
   return (
-    <div className="flex items-start justify-between pb-4">
+    <div className="flex items-start justify-between p-5 pb-4">
       <div className="flex items-start gap-3">
         {Icon && (
-          <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center shrink-0', accentMap[accent])}>
+          <div
+            className={cn(
+              'w-9 h-9 rounded-xl flex items-center justify-center',
+              'bg-gradient-to-br ring-1',
+              accentMap[accent]
+            )}
+          >
             <Icon className="w-4 h-4" />
           </div>
         )}
         <div>
-          <h3 className="text-[14px] font-semibold text-slate-900 tracking-tight">{title}</h3>
-          {subtitle && <p className="text-[12px] text-slate-400 mt-0.5 font-medium">{subtitle}</p>}
+          <h3 className="text-[14px] font-semibold text-white tracking-tight">{title}</h3>
+          {subtitle && <p className="text-[11.5px] text-white/50 mt-0.5">{subtitle}</p>}
         </div>
       </div>
       {action && <div>{action}</div>}
@@ -98,8 +90,7 @@ export function StatTile({
   trend,
   hint,
   icon: Icon,
-  accent = 'green',
-  onClick,
+  accent = 'teal',
 }: {
   label: string;
   value: string | number;
@@ -107,56 +98,46 @@ export function StatTile({
   trend?: { value: string; direction: 'up' | 'down' | 'flat'; positive?: boolean };
   hint?: string;
   icon?: React.ComponentType<{ className?: string }>;
-  accent?: 'green' | 'amber' | 'coral' | 'blue' | 'violet' | 'sage' | 'slate';
-  onClick?: () => void;
+  accent?: 'teal' | 'blue' | 'amber' | 'rose' | 'violet' | 'emerald';
 }) {
   const accentMap = {
-    green:  'bg-brand-50 text-brand-600',
-    amber:  'bg-amber-50 text-amber-600',
-    coral:  'bg-coral-50 text-coral-500',
-    blue:   'bg-blue-50 text-blue-600',
-    violet: 'bg-violet-50 text-violet-600',
-    sage:   'bg-sage-50 text-sage-600',
-    slate:  'bg-slate-100 text-slate-500',
+    teal: 'from-teal-500/15 to-cyan-500/5 text-teal-300',
+    blue: 'from-blue-500/15 to-indigo-500/5 text-blue-300',
+    amber: 'from-amber-500/15 to-orange-500/5 text-amber-300',
+    rose: 'from-rose-500/15 to-pink-500/5 text-rose-300',
+    violet: 'from-violet-500/15 to-purple-500/5 text-violet-300',
+    emerald: 'from-emerald-500/15 to-green-500/5 text-emerald-300',
   };
 
-  const trendColor = trend
-    ? trend.positive
-      ? 'text-brand-600 bg-brand-50'
-      : trend.direction === 'flat'
-      ? 'text-slate-500 bg-slate-100'
-      : 'text-coral-500 bg-coral-50'
-    : '';
+  const trendColor = trend?.positive
+    ? 'text-emerald-400 bg-emerald-500/10'
+    : trend?.direction === 'down'
+    ? 'text-rose-400 bg-rose-500/10'
+    : 'text-white/60 bg-white/5';
 
   return (
-    <div
-      className={cn(
-        'bg-white rounded-2xl card-shadow border border-slate-100/80 p-5',
-        onClick && 'cursor-pointer transition-all hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)] hover:-translate-y-0.5'
-      )}
-      onClick={onClick}
-    >
+    <Card hover className="p-4">
       <div className="flex items-start justify-between mb-3">
-        <span className="text-[11.5px] font-semibold text-slate-400 uppercase tracking-wider leading-none">{label}</span>
+        <span className="text-[11px] font-medium text-white/55 uppercase tracking-wider">{label}</span>
         {Icon && (
-          <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center shrink-0', accentMap[accent])}>
+          <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br', accentMap[accent])}>
             <Icon className="w-3.5 h-3.5" />
           </div>
         )}
       </div>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-[30px] font-bold text-slate-900 tracking-tight tabular-nums leading-none">{value}</span>
-        {unit && <span className="text-[12px] text-slate-400 font-medium">{unit}</span>}
+        <span className="text-[26px] font-bold text-white tracking-tight tabular-nums">{value}</span>
+        {unit && <span className="text-[12px] text-white/45 font-medium">{unit}</span>}
       </div>
-      <div className="flex items-center justify-between mt-3">
-        {hint && <span className="text-[11px] text-slate-400 font-medium">{hint}</span>}
+      <div className="flex items-center justify-between mt-2.5">
+        {hint && <span className="text-[11px] text-white/45">{hint}</span>}
         {trend && (
-          <span className={cn('text-[10.5px] font-bold px-1.5 py-0.5 rounded-full', trendColor)}>
+          <span className={cn('text-[10.5px] font-semibold px-1.5 py-0.5 rounded', trendColor)}>
             {trend.direction === 'up' ? '↑' : trend.direction === 'down' ? '↓' : '→'} {trend.value}
           </span>
         )}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -173,30 +154,32 @@ export function Badge({
   dot?: boolean;
 }) {
   const variants = {
-    success:  'bg-brand-50  text-brand-700  border border-brand-200/60',
-    warning:  'bg-amber-50  text-amber-700  border border-amber-200/60',
-    danger:   'bg-coral-50  text-coral-600  border border-coral-200/60',
-    info:     'bg-blue-50   text-blue-700   border border-blue-200/60',
-    neutral:  'bg-slate-100 text-slate-600  border border-slate-200/60',
-    critical: 'bg-red-50    text-red-700    border border-red-200/60',
+    success: 'bg-emerald-500/10 text-emerald-300 ring-emerald-500/20',
+    warning: 'bg-amber-500/10 text-amber-300 ring-amber-500/20',
+    danger: 'bg-rose-500/10 text-rose-300 ring-rose-500/20',
+    info: 'bg-blue-500/10 text-blue-300 ring-blue-500/20',
+    neutral: 'bg-white/5 text-white/70 ring-white/10',
+    critical: 'bg-red-500/15 text-red-300 ring-red-500/30',
   };
 
   const dotColor = {
-    success:  'bg-brand-500',
-    warning:  'bg-amber-500',
-    danger:   'bg-coral-500',
-    info:     'bg-blue-500',
-    neutral:  'bg-slate-400',
-    critical: 'bg-red-500 animate-pulse',
+    success: 'bg-emerald-400',
+    warning: 'bg-amber-400',
+    danger: 'bg-rose-400',
+    info: 'bg-blue-400',
+    neutral: 'bg-white/40',
+    critical: 'bg-red-400 animate-pulse',
   };
 
   return (
-    <span className={cn(
-      'inline-flex items-center gap-1.5 rounded-full font-semibold',
-      size === 'xs' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-[11px]',
-      variants[variant]
-    )}>
-      {dot && <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', dotColor[variant])} />}
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full ring-1 font-medium',
+        size === 'xs' ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-0.5 text-[11px]',
+        variants[variant]
+      )}
+    >
+      {dot && <span className={cn('w-1.5 h-1.5 rounded-full', dotColor[variant])} />}
       {children}
     </span>
   );
@@ -213,25 +196,18 @@ export function Button({
   disabled = false,
 }: {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  size?: 'sm' | 'md';
   icon?: React.ComponentType<{ className?: string }>;
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
 }) {
   const variants = {
-    primary:   'bg-brand-600 hover:bg-brand-700 text-white shadow-[0_2px_8px_rgba(16,185,129,0.25)] hover:shadow-[0_4px_14px_rgba(16,185,129,0.35)]',
-    secondary: 'bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200',
-    outline:   'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300',
-    ghost:     'bg-transparent hover:bg-slate-50 text-slate-600 hover:text-slate-900',
-    danger:    'bg-coral-50 hover:bg-coral-100 text-coral-600 border border-coral-200',
-  };
-
-  const sizes = {
-    sm: 'px-3 py-1.5 text-[12px] rounded-lg',
-    md: 'px-4 py-2 text-[13px] rounded-xl',
-    lg: 'px-5 py-2.5 text-[14px] rounded-xl',
+    primary: 'bg-gradient-to-b from-teal-500 to-teal-600 text-white shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_24px_-8px_rgba(20,184,166,0.5)] hover:from-teal-400 hover:to-teal-500',
+    secondary: 'bg-white/[0.06] text-white border border-white/10 hover:bg-white/[0.1]',
+    ghost: 'text-white/70 hover:bg-white/5 hover:text-white',
+    danger: 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30 hover:bg-rose-500/25',
   };
 
   return (
@@ -239,10 +215,10 @@ export function Button({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'inline-flex items-center gap-2 font-semibold transition-all duration-150',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
+        'inline-flex items-center gap-1.5 font-medium rounded-lg transition-all',
+        'disabled:opacity-50 disabled:cursor-not-allowed',
+        size === 'sm' ? 'px-2.5 py-1.5 text-[12px]' : 'px-3.5 py-2 text-[13px]',
         variants[variant],
-        sizes[size],
         className
       )}
     >
@@ -263,10 +239,10 @@ export function SectionTitle({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex items-end justify-between mb-5">
+    <div className="flex items-end justify-between mb-4">
       <div>
-        <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">{title}</h2>
-        {subtitle && <p className="text-[12.5px] text-slate-400 mt-0.5 font-medium">{subtitle}</p>}
+        <h2 className="text-[18px] font-semibold text-white tracking-tight">{title}</h2>
+        {subtitle && <p className="text-[12.5px] text-white/55 mt-0.5">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -286,13 +262,13 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center py-14 text-center">
-      <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center mb-4">
-        <Icon className="w-5 h-5 text-slate-400" />
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <div className="w-12 h-12 rounded-xl bg-white/5 ring-1 ring-white/10 flex items-center justify-center mb-3">
+        <Icon className="w-5 h-5 text-white/40" />
       </div>
-      <h4 className="text-[14px] font-semibold text-slate-700">{title}</h4>
-      {description && <p className="text-[12.5px] text-slate-400 mt-1 max-w-sm font-medium">{description}</p>}
-      {action && <div className="mt-5">{action}</div>}
+      <h4 className="text-[14px] font-semibold text-white/80">{title}</h4>
+      {description && <p className="text-[12px] text-white/45 mt-1 max-w-sm">{description}</p>}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   );
 }
@@ -308,33 +284,30 @@ export function TabBar<T extends string>({
   onChange: (key: T) => void;
 }) {
   return (
-    <div className="flex items-center gap-0 border-b border-slate-200">
-      {tabs.map(({ key, label, icon: Icon, count }) => {
-        const isActive = active === key;
-        return (
-          <button
-            key={key}
-            onClick={() => onChange(key)}
-            className={cn(
-              'flex items-center gap-2 px-4 py-3 text-[13px] font-semibold transition-all relative border-b-2 -mb-px',
-              isActive
-                ? 'text-brand-700 border-brand-600'
-                : 'text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-300'
-            )}
-          >
-            {Icon && <Icon className="w-3.5 h-3.5" />}
-            {label}
-            {count !== undefined && (
-              <span className={cn(
-                'ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold',
-                isActive ? 'bg-brand-100 text-brand-700' : 'bg-slate-100 text-slate-500'
-              )}>
-                {count}
-              </span>
-            )}
-          </button>
-        );
-      })}
+    <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+      {tabs.map(({ key, label, icon: Icon, count }) => (
+        <button
+          key={key}
+          onClick={() => onChange(key)}
+          className={cn(
+            'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition-all',
+            active === key
+              ? 'bg-white/[0.08] text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]'
+              : 'text-white/55 hover:text-white/85'
+          )}
+        >
+          {Icon && <Icon className="w-3.5 h-3.5" />}
+          {label}
+          {count !== undefined && (
+            <span className={cn(
+              'ml-1 px-1.5 py-0.5 rounded text-[10px] font-semibold',
+              active === key ? 'bg-teal-500/20 text-teal-300' : 'bg-white/5 text-white/50'
+            )}>
+              {count}
+            </span>
+          )}
+        </button>
+      ))}
     </div>
   );
 }
@@ -343,83 +316,37 @@ export function TabBar<T extends string>({
 export function ProgressBar({
   value,
   max = 100,
-  variant = 'green',
+  variant = 'teal',
   showLabel = false,
-  label,
 }: {
   value: number;
   max?: number;
-  variant?: 'green' | 'amber' | 'coral' | 'blue' | 'slate';
+  variant?: 'teal' | 'amber' | 'rose' | 'emerald' | 'blue';
   showLabel?: boolean;
-  label?: string;
 }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
   const colors = {
-    green: 'bg-brand-500',
-    amber: 'bg-amber-400',
-    coral: 'bg-coral-400',
-    blue:  'bg-blue-500',
-    slate: 'bg-slate-400',
+    teal: 'from-teal-400 to-cyan-500',
+    amber: 'from-amber-400 to-orange-500',
+    rose: 'from-rose-400 to-pink-500',
+    emerald: 'from-emerald-400 to-green-500',
+    blue: 'from-blue-400 to-indigo-500',
   };
 
   return (
     <div className="w-full">
-      {(showLabel || label) && (
-        <div className="flex justify-between text-[11px] text-slate-500 mb-1.5 font-medium">
-          <span>{label ?? value}</span>
-          <span>{pct.toFixed(0)}%</span>
+      {showLabel && (
+        <div className="flex justify-between text-[10.5px] text-white/55 mb-1">
+          <span>{value}</span>
+          <span>{max}</span>
         </div>
       )}
-      <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+      <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
         <div
-          className={cn('h-full rounded-full transition-all duration-700', colors[variant])}
+          className={cn('h-full rounded-full bg-gradient-to-r transition-all duration-500', colors[variant])}
           style={{ width: `${pct}%` }}
         />
       </div>
-    </div>
-  );
-}
-
-// ============= ALERT BANNER =============
-export function AlertBanner({
-  type,
-  message,
-  detail,
-  onDismiss,
-}: {
-  type: 'success' | 'warning' | 'error' | 'info';
-  message: string;
-  detail?: string;
-  onDismiss?: () => void;
-}) {
-  const styles = {
-    success: 'bg-brand-50  border-brand-200  text-brand-800',
-    warning: 'bg-amber-50  border-amber-200  text-amber-800',
-    error:   'bg-coral-50  border-coral-200  text-coral-700',
-    info:    'bg-blue-50   border-blue-200   text-blue-800',
-  };
-
-  return (
-    <div className={cn('flex items-start gap-3 px-4 py-3.5 rounded-xl border', styles[type])}>
-      <div className="flex-1 min-w-0">
-        <div className="text-[13px] font-semibold">{message}</div>
-        {detail && <div className="text-[12px] opacity-75 mt-0.5 font-medium">{detail}</div>}
-      </div>
-      {onDismiss && (
-        <button onClick={onDismiss} className="text-current opacity-40 hover:opacity-70 transition shrink-0 text-lg leading-none">×</button>
-      )}
-    </div>
-  );
-}
-
-// ============= DIVIDER =============
-export function Divider({ label }: { label?: string }) {
-  if (!label) return <div className="h-px bg-slate-100 my-4" />;
-  return (
-    <div className="flex items-center gap-3 my-5">
-      <div className="flex-1 h-px bg-slate-100" />
-      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">{label}</span>
-      <div className="flex-1 h-px bg-slate-100" />
     </div>
   );
 }

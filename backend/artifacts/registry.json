@@ -1,0 +1,5678 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "model_id": "logreg-hypo-30-20260531225419",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "logreg",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/logreg-hypo-30-20260531225419.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.7688953488372092,
+            "auprc": 0.23244765477425705,
+            "precision": 0.25,
+            "recall": 0.5,
+            "f1": 0.3333333333333333,
+            "specificity": 0.8604651162790697,
+            "sensitivity": 0.5,
+            "brier": 0.1447289882479219,
+            "ece": 0.15314604188907444,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 74,
+              "fp": 12,
+              "fn": 4,
+              "tp": 4
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.9127906976744187,
+            "auprc": 0.6830204517704518,
+            "precision": 0.4375,
+            "recall": 0.875,
+            "f1": 0.5833333333333334,
+            "specificity": 0.8953488372093024,
+            "sensitivity": 0.875,
+            "brier": 0.08266213129373233,
+            "ece": 0.08608234735156348,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 77,
+              "fp": 9,
+              "fn": 1,
+              "tp": 7
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.8691860465116279,
+            "auprc": 0.5098446470786897,
+            "precision": 0.5555555555555556,
+            "recall": 0.625,
+            "f1": 0.5882352941176471,
+            "specificity": 0.9534883720930233,
+            "sensitivity": 0.625,
+            "brier": 0.05297257616059695,
+            "ece": 0.06005218840718248,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 82,
+              "fp": 4,
+              "fn": 3,
+              "tp": 5
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.8561046511627908,
+            "auprc": 0.488710273466371,
+            "precision": 0.5,
+            "recall": 0.75,
+            "f1": 0.6,
+            "specificity": 0.9302325581395349,
+            "sensitivity": 0.75,
+            "brier": 0.0685867236059915,
+            "ece": 0.07661784099918997,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 80,
+              "fp": 6,
+              "fn": 2,
+              "tp": 6
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.9127906976744187,
+            "auprc": 0.5570535714285714,
+            "precision": 0.5454545454545454,
+            "recall": 0.75,
+            "f1": 0.631578947368421,
+            "specificity": 0.9418604651162791,
+            "sensitivity": 0.75,
+            "brier": 0.06084851555055888,
+            "ece": 0.06572006219987797,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 5,
+              "fn": 2,
+              "tp": 6
+            }
+          }
+        },
+        "selected": "logreg",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 95,
+          "positives": 0,
+          "negatives": 95,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 7.89473684210527e-05,
+          "ece": 0.0031578947368421056,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 95,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0031578947368421056,
+            "obs_freq": 0.0,
+            "count": 95
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T22:54:19.526312+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T22:54:19.527828+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "ebm-hypo-60-20260531225431",
+      "target": "hypo",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-60-20260531225431.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.7929901423877328,
+            "auprc": 0.2881192202853947,
+            "precision": 0.3125,
+            "recall": 0.45454545454545453,
+            "f1": 0.3703703703703703,
+            "specificity": 0.8674698795180723,
+            "sensitivity": 0.45454545454545453,
+            "brier": 0.1473978279563752,
+            "ece": 0.15560101542931237,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 11,
+              "fn": 6,
+              "tp": 5
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9780941949616648,
+            "auprc": 0.8040570540570541,
+            "precision": 0.75,
+            "recall": 0.8181818181818182,
+            "f1": 0.7826086956521738,
+            "specificity": 0.963855421686747,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03825300740058777,
+            "ece": 0.04670166362054324,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 80,
+              "fp": 3,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9649507119386638,
+            "auprc": 0.651290243515124,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.043181548552209105,
+            "ece": 0.07645648976947453,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9791894852135816,
+            "auprc": 0.7702787111878021,
+            "precision": 0.8333333333333334,
+            "recall": 0.9090909090909091,
+            "f1": 0.8695652173913043,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.9090909090909091,
+            "brier": 0.03055825083395557,
+            "ece": 0.035862429699726764,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 1,
+              "tp": 10
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9813800657174151,
+            "auprc": 0.8314508723599634,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03914315506394734,
+            "ece": 0.0438382070778437,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 60,
+          "n": 95,
+          "positives": 0,
+          "negatives": 95,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 0.0,
+          "ece": 0.0,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 95,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0,
+            "obs_freq": 0.0,
+            "count": 95
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T22:54:31.262842+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T22:54:31.264114+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "random_forest-hyper-30-20260531225447",
+      "target": "hyper",
+      "horizon_min": 30,
+      "model_name": "random_forest",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/random_forest-hyper-30-20260531225447.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.7274261603375527,
+            "auprc": 0.3519765991194563,
+            "precision": 0.3157894736842105,
+            "recall": 0.4,
+            "f1": 0.35294117647058826,
+            "specificity": 0.8354430379746836,
+            "sensitivity": 0.4,
+            "brier": 0.19974763625842953,
+            "ece": 0.20240845849313852,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 66,
+              "fp": 13,
+              "fn": 9,
+              "tp": 6
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9493670886075949,
+            "auprc": 0.7426022126022126,
+            "precision": 0.6363636363636364,
+            "recall": 0.9333333333333333,
+            "f1": 0.7567567567567568,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.9333333333333333,
+            "brier": 0.07804263181429358,
+            "ece": 0.08925911838933434,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 1,
+              "tp": 14
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9544303797468354,
+            "auprc": 0.7620959595959597,
+            "precision": 0.65,
+            "recall": 0.8666666666666667,
+            "f1": 0.7428571428571429,
+            "specificity": 0.9113924050632911,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.06434049821764755,
+            "ece": 0.06505583959761417,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 7,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9434599156118143,
+            "auprc": 0.6316792684439743,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.08974539194971955,
+            "ece": 0.08061346912290901,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.949367088607595,
+            "auprc": 0.7441329258976317,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.07182321785887859,
+            "ece": 0.07310687521560891,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          }
+        },
+        "selected": "random_forest",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 30,
+          "n": 95,
+          "positives": 14,
+          "negatives": 81,
+          "auroc": 0.9444444444444444,
+          "auprc": 0.6091292765205809,
+          "precision": 0.6,
+          "recall": 0.8571428571428571,
+          "f1": 0.7058823529411764,
+          "specificity": 0.9012345679012346,
+          "sensitivity": 0.8571428571428571,
+          "brier": 0.07330667747513801,
+          "ece": 0.0380742810434964,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 73,
+            "fp": 8,
+            "fn": 2,
+            "tp": 12
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0024895671570692997,
+            "obs_freq": 0.0,
+            "count": 67
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.23249052491988426,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.35263511492283867,
+            "obs_freq": 0.2857142857142857,
+            "count": 7
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5555555555555555,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 6,
+            "mean_pred": 0.625,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.7367917408823511,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 0.6,
+            "count": 5
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T22:54:48.317652+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T22:54:48.318921+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "ebm-hyper-60-20260531225502",
+      "target": "hyper",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hyper-60-20260531225502.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.6986301369863015,
+            "auprc": 0.388280523208479,
+            "precision": 0.3684210526315789,
+            "recall": 0.3333333333333333,
+            "f1": 0.35,
+            "specificity": 0.8356164383561644,
+            "sensitivity": 0.3333333333333333,
+            "brier": 0.22953437835414567,
+            "ece": 0.23220790197434088,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 61,
+              "fp": 12,
+              "fn": 14,
+              "tp": 7
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9765166340508806,
+            "auprc": 0.8823815249821922,
+            "precision": 0.8076923076923077,
+            "recall": 1.0,
+            "f1": 0.8936170212765957,
+            "specificity": 0.9315068493150684,
+            "sensitivity": 1.0,
+            "brier": 0.04405294946510431,
+            "ece": 0.09072115404861016,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 68,
+              "fp": 5,
+              "fn": 0,
+              "tp": 21
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9758643183300718,
+            "auprc": 0.8843797251946781,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.0417030323445802,
+            "ece": 0.06661265877549796,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9673842139595565,
+            "auprc": 0.8313823918402021,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.04784918072600549,
+            "ece": 0.049549910147609996,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9778212654924985,
+            "auprc": 0.8971014805634927,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.043580973916548305,
+            "ece": 0.04928687487492449,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 60,
+          "n": 95,
+          "positives": 18,
+          "negatives": 77,
+          "auroc": 0.9747474747474748,
+          "auprc": 0.8444444444444444,
+          "precision": 0.72,
+          "recall": 1.0,
+          "f1": 0.8372093023255813,
+          "specificity": 0.9090909090909091,
+          "sensitivity": 1.0,
+          "brier": 0.05633317154144718,
+          "ece": 0.05150994314807822,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 70,
+            "fp": 7,
+            "fn": 0,
+            "tp": 18
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0011952998764953903,
+            "obs_freq": 0.0,
+            "count": 68
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.17394436966535234,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.32243036411618237,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8421052631578947,
+            "obs_freq": 0.5882352941176471,
+            "count": 17
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 1.0,
+            "count": 8
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T22:55:02.933111+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T22:55:02.934438+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "logreg-hypo-30-20260531230129",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "logreg",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/logreg-hypo-30-20260531230129.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.7688953488372092,
+            "auprc": 0.23244765477425705,
+            "precision": 0.25,
+            "recall": 0.5,
+            "f1": 0.3333333333333333,
+            "specificity": 0.8604651162790697,
+            "sensitivity": 0.5,
+            "brier": 0.1447289882479219,
+            "ece": 0.15314604188907444,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 74,
+              "fp": 12,
+              "fn": 4,
+              "tp": 4
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.9127906976744187,
+            "auprc": 0.6830204517704518,
+            "precision": 0.4375,
+            "recall": 0.875,
+            "f1": 0.5833333333333334,
+            "specificity": 0.8953488372093024,
+            "sensitivity": 0.875,
+            "brier": 0.08266213129373233,
+            "ece": 0.08608234735156348,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 77,
+              "fp": 9,
+              "fn": 1,
+              "tp": 7
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.8691860465116279,
+            "auprc": 0.5098446470786897,
+            "precision": 0.5555555555555556,
+            "recall": 0.625,
+            "f1": 0.5882352941176471,
+            "specificity": 0.9534883720930233,
+            "sensitivity": 0.625,
+            "brier": 0.05297257616059695,
+            "ece": 0.06005218840718248,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 82,
+              "fp": 4,
+              "fn": 3,
+              "tp": 5
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.8561046511627908,
+            "auprc": 0.488710273466371,
+            "precision": 0.5,
+            "recall": 0.75,
+            "f1": 0.6,
+            "specificity": 0.9302325581395349,
+            "sensitivity": 0.75,
+            "brier": 0.0685867236059915,
+            "ece": 0.07661784099918997,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 80,
+              "fp": 6,
+              "fn": 2,
+              "tp": 6
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 8,
+            "negatives": 86,
+            "auroc": 0.9127906976744187,
+            "auprc": 0.5570535714285714,
+            "precision": 0.5454545454545454,
+            "recall": 0.75,
+            "f1": 0.631578947368421,
+            "specificity": 0.9418604651162791,
+            "sensitivity": 0.75,
+            "brier": 0.06084851555055888,
+            "ece": 0.06572006219987797,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 5,
+              "fn": 2,
+              "tp": 6
+            }
+          }
+        },
+        "selected": "logreg",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 95,
+          "positives": 0,
+          "negatives": 95,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 7.89473684210527e-05,
+          "ece": 0.0031578947368421056,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 95,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0031578947368421056,
+            "obs_freq": 0.0,
+            "count": 95
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:01:29.326434+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:01:29.328763+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "ebm-hypo-60-20260531230141",
+      "target": "hypo",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-60-20260531230141.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.7929901423877328,
+            "auprc": 0.2881192202853947,
+            "precision": 0.3125,
+            "recall": 0.45454545454545453,
+            "f1": 0.3703703703703703,
+            "specificity": 0.8674698795180723,
+            "sensitivity": 0.45454545454545453,
+            "brier": 0.1473978279563752,
+            "ece": 0.15560101542931237,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 11,
+              "fn": 6,
+              "tp": 5
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9780941949616648,
+            "auprc": 0.8040570540570541,
+            "precision": 0.75,
+            "recall": 0.8181818181818182,
+            "f1": 0.7826086956521738,
+            "specificity": 0.963855421686747,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03825300740058777,
+            "ece": 0.04670166362054324,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 80,
+              "fp": 3,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9649507119386638,
+            "auprc": 0.651290243515124,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.043181548552209105,
+            "ece": 0.07645648976947453,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9791894852135816,
+            "auprc": 0.7702787111878021,
+            "precision": 0.8333333333333334,
+            "recall": 0.9090909090909091,
+            "f1": 0.8695652173913043,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.9090909090909091,
+            "brier": 0.03055825083395557,
+            "ece": 0.035862429699726764,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 1,
+              "tp": 10
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 11,
+            "negatives": 83,
+            "auroc": 0.9813800657174151,
+            "auprc": 0.8314508723599634,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9759036144578314,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03914315506394734,
+            "ece": 0.0438382070778437,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 81,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 60,
+          "n": 95,
+          "positives": 0,
+          "negatives": 95,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 0.0,
+          "ece": 0.0,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 95,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0,
+            "obs_freq": 0.0,
+            "count": 95
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:01:41.281374+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:01:41.282818+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "random_forest-hyper-30-20260531230158",
+      "target": "hyper",
+      "horizon_min": 30,
+      "model_name": "random_forest",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/random_forest-hyper-30-20260531230158.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.7274261603375527,
+            "auprc": 0.3519765991194563,
+            "precision": 0.3157894736842105,
+            "recall": 0.4,
+            "f1": 0.35294117647058826,
+            "specificity": 0.8354430379746836,
+            "sensitivity": 0.4,
+            "brier": 0.19974763625842953,
+            "ece": 0.20240845849313852,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 66,
+              "fp": 13,
+              "fn": 9,
+              "tp": 6
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9493670886075949,
+            "auprc": 0.7426022126022126,
+            "precision": 0.6363636363636364,
+            "recall": 0.9333333333333333,
+            "f1": 0.7567567567567568,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.9333333333333333,
+            "brier": 0.07804263181429358,
+            "ece": 0.08925911838933434,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 1,
+              "tp": 14
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9544303797468354,
+            "auprc": 0.7620959595959597,
+            "precision": 0.65,
+            "recall": 0.8666666666666667,
+            "f1": 0.7428571428571429,
+            "specificity": 0.9113924050632911,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.06434049821764755,
+            "ece": 0.06505583959761417,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 7,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.9434599156118143,
+            "auprc": 0.6316792684439743,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.08974539194971955,
+            "ece": 0.08061346912290901,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 94,
+            "positives": 15,
+            "negatives": 79,
+            "auroc": 0.949367088607595,
+            "auprc": 0.7441329258976317,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.8987341772151899,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.07182321785887859,
+            "ece": 0.07310687521560891,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 71,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          }
+        },
+        "selected": "random_forest",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 30,
+          "n": 95,
+          "positives": 14,
+          "negatives": 81,
+          "auroc": 0.9444444444444444,
+          "auprc": 0.6091292765205809,
+          "precision": 0.6,
+          "recall": 0.8571428571428571,
+          "f1": 0.7058823529411764,
+          "specificity": 0.9012345679012346,
+          "sensitivity": 0.8571428571428571,
+          "brier": 0.07330667747513801,
+          "ece": 0.0380742810434964,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 73,
+            "fp": 8,
+            "fn": 2,
+            "tp": 12
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0024895671570692997,
+            "obs_freq": 0.0,
+            "count": 67
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.23249052491988426,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.35263511492283867,
+            "obs_freq": 0.2857142857142857,
+            "count": 7
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5555555555555555,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 6,
+            "mean_pred": 0.625,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.7367917408823511,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 0.6,
+            "count": 5
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:01:59.190026+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:01:59.191346+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "ebm-hyper-60-20260531230213",
+      "target": "hyper",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hyper-60-20260531230213.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.6986301369863015,
+            "auprc": 0.388280523208479,
+            "precision": 0.3684210526315789,
+            "recall": 0.3333333333333333,
+            "f1": 0.35,
+            "specificity": 0.8356164383561644,
+            "sensitivity": 0.3333333333333333,
+            "brier": 0.22953437835414567,
+            "ece": 0.23220790197434088,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 61,
+              "fp": 12,
+              "fn": 14,
+              "tp": 7
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9765166340508806,
+            "auprc": 0.8823815249821922,
+            "precision": 0.8076923076923077,
+            "recall": 1.0,
+            "f1": 0.8936170212765957,
+            "specificity": 0.9315068493150684,
+            "sensitivity": 1.0,
+            "brier": 0.04405294946510431,
+            "ece": 0.09072115404861016,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 68,
+              "fp": 5,
+              "fn": 0,
+              "tp": 21
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9758643183300718,
+            "auprc": 0.8843797251946781,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.0417030323445802,
+            "ece": 0.06661265877549796,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9673842139595565,
+            "auprc": 0.8313823918402021,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.04784918072600549,
+            "ece": 0.049549910147609996,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 94,
+            "positives": 21,
+            "negatives": 73,
+            "auroc": 0.9778212654924985,
+            "auprc": 0.8971014805634927,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.958904109589041,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.043580973916548305,
+            "ece": 0.04928687487492449,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 60,
+          "n": 95,
+          "positives": 18,
+          "negatives": 77,
+          "auroc": 0.9747474747474748,
+          "auprc": 0.8444444444444444,
+          "precision": 0.72,
+          "recall": 1.0,
+          "f1": 0.8372093023255813,
+          "specificity": 0.9090909090909091,
+          "sensitivity": 1.0,
+          "brier": 0.05633317154144718,
+          "ece": 0.05150994314807822,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 70,
+            "fp": 7,
+            "fn": 0,
+            "tp": 18
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0011952998764953903,
+            "obs_freq": 0.0,
+            "count": 68
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.17394436966535234,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.32243036411618237,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8421052631578947,
+            "obs_freq": 0.5882352941176471,
+            "count": 17
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 1.0,
+            "count": 8
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:02:13.848851+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:02:13.850115+00:00",
+      "is_active": false,
+      "status": "archived"
+    },
+    {
+      "model_id": "logreg-hypo-30-20260531233838",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "logreg",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/logreg-hypo-30-20260531233838.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 8,
+            "negatives": 88,
+            "auroc": 0.7670454545454546,
+            "auprc": 0.2300919583400402,
+            "precision": 0.25,
+            "recall": 0.5,
+            "f1": 0.3333333333333333,
+            "specificity": 0.8636363636363636,
+            "sensitivity": 0.5,
+            "brier": 0.14243720133322713,
+            "ece": 0.14696074424651462,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 76,
+              "fp": 12,
+              "fn": 4,
+              "tp": 4
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 8,
+            "negatives": 88,
+            "auroc": 0.9133522727272727,
+            "auprc": 0.6826576070679844,
+            "precision": 0.4375,
+            "recall": 0.875,
+            "f1": 0.5833333333333334,
+            "specificity": 0.8977272727272727,
+            "sensitivity": 0.875,
+            "brier": 0.08094015559487476,
+            "ece": 0.08424765001997452,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 79,
+              "fp": 9,
+              "fn": 1,
+              "tp": 7
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 8,
+            "negatives": 88,
+            "auroc": 0.8700284090909092,
+            "auprc": 0.509623015873016,
+            "precision": 0.5555555555555556,
+            "recall": 0.625,
+            "f1": 0.5882352941176471,
+            "specificity": 0.9545454545454546,
+            "sensitivity": 0.625,
+            "brier": 0.051869443786880805,
+            "ece": 0.05873165670425507,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 84,
+              "fp": 4,
+              "fn": 3,
+              "tp": 5
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 8,
+            "negatives": 88,
+            "auroc": 0.8565340909090909,
+            "auprc": 0.4884199134199134,
+            "precision": 0.5,
+            "recall": 0.75,
+            "f1": 0.6,
+            "specificity": 0.9318181818181818,
+            "sensitivity": 0.75,
+            "brier": 0.06715786733775501,
+            "ece": 0.07499642752281943,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 82,
+              "fp": 6,
+              "fn": 2,
+              "tp": 6
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 8,
+            "negatives": 88,
+            "auroc": 0.9133522727272727,
+            "auprc": 0.5566614145658264,
+            "precision": 0.5454545454545454,
+            "recall": 0.75,
+            "f1": 0.631578947368421,
+            "specificity": 0.9431818181818182,
+            "sensitivity": 0.75,
+            "brier": 0.05958083814327728,
+            "ece": 0.0643508786925391,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 83,
+              "fp": 5,
+              "fn": 2,
+              "tp": 6
+            }
+          }
+        },
+        "selected": "logreg",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 93,
+          "positives": 0,
+          "negatives": 93,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 7.036262337446355e-05,
+          "ece": 0.002884867558353003,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 93,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.002884867558353003,
+            "obs_freq": 0.0,
+            "count": 93
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:38:38.702149+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:38:38.703659+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.0.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "ebm-hypo-60-20260531233850",
+      "target": "hypo",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-60-20260531233850.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 11,
+            "negatives": 85,
+            "auroc": 0.7914438502673796,
+            "auprc": 0.2845164376040916,
+            "precision": 0.3125,
+            "recall": 0.45454545454545453,
+            "f1": 0.3703703703703703,
+            "specificity": 0.8705882352941177,
+            "sensitivity": 0.45454545454545453,
+            "brier": 0.145050440214421,
+            "ece": 0.14910057500048704,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 74,
+              "fp": 11,
+              "fn": 6,
+              "tp": 5
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 11,
+            "negatives": 85,
+            "auroc": 0.9786096256684491,
+            "auprc": 0.8040570540570541,
+            "precision": 0.75,
+            "recall": 0.8181818181818182,
+            "f1": 0.7826086956521738,
+            "specificity": 0.9647058823529412,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03745606986284435,
+            "ece": 0.04572983118504532,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 82,
+              "fp": 3,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 11,
+            "negatives": 85,
+            "auroc": 0.9657754010695188,
+            "auprc": 0.651290243515124,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9764705882352941,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.04228204869811216,
+            "ece": 0.07489836845483272,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 83,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 11,
+            "negatives": 85,
+            "auroc": 0.9796791443850267,
+            "auprc": 0.7702787111878021,
+            "precision": 0.8333333333333334,
+            "recall": 0.9090909090909091,
+            "f1": 0.8695652173913043,
+            "specificity": 0.9764705882352941,
+            "sensitivity": 0.9090909090909091,
+            "brier": 0.029921648365920248,
+            "ece": 0.03513882240804378,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 83,
+              "fp": 2,
+              "fn": 1,
+              "tp": 10
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 11,
+            "negatives": 85,
+            "auroc": 0.9818181818181818,
+            "auprc": 0.8314508723599633,
+            "precision": 0.8181818181818182,
+            "recall": 0.8181818181818182,
+            "f1": 0.8181818181818182,
+            "specificity": 0.9764705882352941,
+            "sensitivity": 0.8181818181818182,
+            "brier": 0.03832767266678177,
+            "ece": 0.04292491097125743,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 83,
+              "fp": 2,
+              "fn": 2,
+              "tp": 9
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 60,
+          "n": 93,
+          "positives": 0,
+          "negatives": 93,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": 1.0,
+          "sensitivity": null,
+          "brier": 0.0,
+          "ece": 0.0,
+          "notes": [
+            "seuil de décision = 0.5",
+            "AUROC/AUPRC non calculables : une seule classe présente dans le jeu de test.",
+            "précision non calculable : aucun positif prédit au seuil.",
+            "rappel/sensibilité non calculables : aucun positif réel."
+          ],
+          "confusion": {
+            "tn": 93,
+            "fp": 0,
+            "fn": 0,
+            "tp": 0
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0,
+            "obs_freq": 0.0,
+            "count": 93
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:38:50.496096+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:38:50.497436+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.0.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "random_forest-hyper-30-20260531233907",
+      "target": "hyper",
+      "horizon_min": 30,
+      "model_name": "random_forest",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/random_forest-hyper-30-20260531233907.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 15,
+            "negatives": 81,
+            "auroc": 0.7325102880658436,
+            "auprc": 0.3515643259932878,
+            "precision": 0.3157894736842105,
+            "recall": 0.4,
+            "f1": 0.35294117647058826,
+            "specificity": 0.8395061728395061,
+            "sensitivity": 0.4,
+            "brier": 0.1955884829685061,
+            "ece": 0.1980290219573845,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 68,
+              "fp": 13,
+              "fn": 9,
+              "tp": 6
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 15,
+            "negatives": 81,
+            "auroc": 0.9506172839506173,
+            "auprc": 0.7426022126022127,
+            "precision": 0.6363636363636364,
+            "recall": 0.9333333333333333,
+            "f1": 0.7567567567567568,
+            "specificity": 0.9012345679012346,
+            "sensitivity": 0.9333333333333333,
+            "brier": 0.07722044402288046,
+            "ece": 0.09035421924102516,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 73,
+              "fp": 8,
+              "fn": 1,
+              "tp": 14
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 15,
+            "negatives": 81,
+            "auroc": 0.9555555555555555,
+            "auprc": 0.7620959595959595,
+            "precision": 0.65,
+            "recall": 0.8666666666666667,
+            "f1": 0.7428571428571429,
+            "specificity": 0.9135802469135802,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.0630515758010762,
+            "ece": 0.06449912071710832,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 74,
+              "fp": 7,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 15,
+            "negatives": 81,
+            "auroc": 0.9448559670781893,
+            "auprc": 0.6316792684439743,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.9012345679012346,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.08787751897507297,
+            "ece": 0.07876702618280737,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 73,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 96,
+            "positives": 15,
+            "negatives": 81,
+            "auroc": 0.9506172839506172,
+            "auprc": 0.7441329258976318,
+            "precision": 0.6190476190476191,
+            "recall": 0.8666666666666667,
+            "f1": 0.7222222222222222,
+            "specificity": 0.9012345679012346,
+            "sensitivity": 0.8666666666666667,
+            "brier": 0.07034480408555226,
+            "ece": 0.07203041092318074,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 73,
+              "fp": 8,
+              "fn": 2,
+              "tp": 13
+            }
+          }
+        },
+        "selected": "random_forest",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 30,
+          "n": 93,
+          "positives": 14,
+          "negatives": 79,
+          "auroc": 0.9430379746835443,
+          "auprc": 0.6091292765205809,
+          "precision": 0.6,
+          "recall": 0.8571428571428571,
+          "f1": 0.7058823529411764,
+          "specificity": 0.8987341772151899,
+          "sensitivity": 0.8571428571428571,
+          "brier": 0.07478418602519585,
+          "ece": 0.037787172115466214,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 71,
+            "fp": 8,
+            "fn": 2,
+            "tp": 12
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0011097673238628122,
+            "obs_freq": 0.0,
+            "count": 65
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.2243069559986436,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.35263511492283867,
+            "obs_freq": 0.2857142857142857,
+            "count": 7
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5555555555555555,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 6,
+            "mean_pred": 0.625,
+            "obs_freq": 0.5714285714285714,
+            "count": 7
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.7367917408823511,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 0.6,
+            "count": 5
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:39:08.015793+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:39:08.017112+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.0.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "ebm-hyper-60-20260531233922",
+      "target": "hyper",
+      "horizon_min": 60,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hyper-60-20260531233922.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 21,
+            "negatives": 75,
+            "auroc": 0.7034920634920634,
+            "auprc": 0.38733466367184194,
+            "precision": 0.3684210526315789,
+            "recall": 0.3333333333333333,
+            "f1": 0.35,
+            "specificity": 0.84,
+            "sensitivity": 0.3333333333333333,
+            "brier": 0.2247546679372281,
+            "ece": 0.22720764369939514,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 63,
+              "fp": 12,
+              "fn": 14,
+              "tp": 7
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 21,
+            "negatives": 75,
+            "auroc": 0.9771428571428571,
+            "auprc": 0.8823815249821922,
+            "precision": 0.8076923076923077,
+            "recall": 1.0,
+            "f1": 0.8936170212765957,
+            "specificity": 0.9333333333333333,
+            "sensitivity": 1.0,
+            "brier": 0.044500503533831004,
+            "ece": 0.09266638102699445,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 70,
+              "fp": 5,
+              "fn": 0,
+              "tp": 21
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 21,
+            "negatives": 75,
+            "auroc": 0.9765079365079364,
+            "auprc": 0.8843797251946781,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.96,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.04101952009666071,
+            "ece": 0.06664850616211954,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 21,
+            "negatives": 75,
+            "auroc": 0.9682539682539681,
+            "auprc": 0.8313823918402021,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.96,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.046853293190016826,
+            "ece": 0.04838656222212498,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 96,
+            "positives": 21,
+            "negatives": 75,
+            "auroc": 0.9784126984126984,
+            "auprc": 0.8971014805634923,
+            "precision": 0.8636363636363636,
+            "recall": 0.9047619047619048,
+            "f1": 0.8837209302325582,
+            "specificity": 0.96,
+            "sensitivity": 0.9047619047619048,
+            "brier": 0.04268401325072926,
+            "ece": 0.0485983474913622,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 72,
+              "fp": 3,
+              "fn": 2,
+              "tp": 19
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 60,
+          "n": 93,
+          "positives": 18,
+          "negatives": 75,
+          "auroc": 0.9740740740740741,
+          "auprc": 0.8444444444444444,
+          "precision": 0.72,
+          "recall": 1.0,
+          "f1": 0.8372093023255813,
+          "specificity": 0.9066666666666666,
+          "sensitivity": 1.0,
+          "brier": 0.05737347065927918,
+          "ece": 0.051879281987349146,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 68,
+            "fp": 7,
+            "fn": 0,
+            "tp": 18
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0006339040276922547,
+            "obs_freq": 0.0,
+            "count": 66
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.157503174678625,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.30964291063294735,
+            "obs_freq": 0.0,
+            "count": 1
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8421052631578947,
+            "obs_freq": 0.5882352941176471,
+            "count": 17
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 1.0,
+            "count": 8
+          }
+        ]
+      },
+      "dataset_meta": {
+        "n_rows": 472,
+        "n_patients": 4,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:39:22.869426+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 472,
+            "positives": 25,
+            "negatives": 447,
+            "prevalence": 0.05296610169491525
+          },
+          "label_hypo_60": {
+            "labeled": 472,
+            "positives": 34,
+            "negatives": 438,
+            "prevalence": 0.07203389830508475
+          },
+          "label_hyper_30": {
+            "labeled": 472,
+            "positives": 101,
+            "negatives": 371,
+            "prevalence": 0.21398305084745764
+          },
+          "label_hyper_60": {
+            "labeled": 472,
+            "positives": 124,
+            "negatives": 348,
+            "prevalence": 0.2627118644067797
+          }
+        },
+        "time_range": {
+          "start": "2026-05-28 23:07:00+00:00",
+          "end": "2026-05-31 21:37:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:39:22.870835+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.0.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "expert_rules-hypo-30-20260531234601",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "expert_rules",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/expert_rules-hypo-30-20260531234601.joblib",
+      "calibrated": false,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 0,
+            "positives": 0,
+            "negatives": 0,
+            "auroc": null,
+            "auprc": null,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "specificity": null,
+            "sensitivity": null,
+            "brier": null,
+            "ece": null,
+            "notes": [
+              "seuil de décision = 0.5",
+              "jeu vide : aucune métrique calculable."
+            ]
+          }
+        },
+        "selected": "expert_rules",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 0,
+          "positives": 0,
+          "negatives": 0,
+          "auroc": null,
+          "auprc": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "specificity": null,
+          "sensitivity": null,
+          "brier": null,
+          "ece": null,
+          "notes": [
+            "seuil de décision = 0.5",
+            "jeu vide : aucune métrique calculable."
+          ]
+        },
+        "reliability_curve": []
+      },
+      "dataset_meta": {
+        "n_rows": 10,
+        "n_patients": 1,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-05-31T23:46:01.356169+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 10,
+            "positives": 5,
+            "negatives": 5,
+            "prevalence": 0.5
+          }
+        },
+        "time_range": {
+          "start": "2026-01-01 00:00:00+00:00",
+          "end": "2026-01-01 00:00:00+00:00"
+        }
+      },
+      "created_at": "2026-05-31T23:46:01.356878+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.0.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "ebm-hypo-30-20260601005205",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-30-20260601005205.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9104749326241768,
+            "auprc": 0.5506138622068175,
+            "precision": 0.5087719298245614,
+            "recall": 0.6744186046511628,
+            "f1": 0.58,
+            "specificity": 0.9785111281657713,
+            "sensitivity": 0.6744186046511628,
+            "brier": 0.029621103125239457,
+            "ece": 0.029700704219660187,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1275,
+              "fp": 28,
+              "fn": 14,
+              "tp": 29
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9756554641346445,
+            "auprc": 0.771777556437445,
+            "precision": 0.22485207100591717,
+            "recall": 0.8837209302325582,
+            "f1": 0.3584905660377359,
+            "specificity": 0.8994627782041443,
+            "sensitivity": 0.8837209302325582,
+            "brier": 0.06128709858378276,
+            "ece": 0.09724752074096008,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1172,
+              "fp": 131,
+              "fn": 5,
+              "tp": 38
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9805190169376572,
+            "auprc": 0.9036558957952231,
+            "precision": 0.9473684210526315,
+            "recall": 0.8372093023255814,
+            "f1": 0.8888888888888888,
+            "specificity": 0.9984650805832693,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.010145520941616413,
+            "ece": 0.023670127612877092,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1301,
+              "fp": 2,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9795463063770548,
+            "auprc": 0.9132873326758967,
+            "precision": 0.9,
+            "recall": 0.8372093023255814,
+            "f1": 0.8674698795180723,
+            "specificity": 0.9969301611665388,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.006204112507296707,
+            "ece": 0.004769848151135496,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1299,
+              "fp": 4,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9809205946920345,
+            "auprc": 0.9161204413185859,
+            "precision": 0.9736842105263158,
+            "recall": 0.8604651162790697,
+            "f1": 0.9135802469135803,
+            "specificity": 0.9992325402916347,
+            "sensitivity": 0.8604651162790697,
+            "brier": 0.005177400158778924,
+            "ece": 0.005400538560554347,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1302,
+              "fp": 1,
+              "fn": 6,
+              "tp": 37
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 1327,
+          "positives": 30,
+          "negatives": 1297,
+          "auroc": 0.9995116936520174,
+          "auprc": 0.9590431161005873,
+          "precision": 0.9655172413793104,
+          "recall": 0.9333333333333333,
+          "f1": 0.9491525423728815,
+          "specificity": 0.9992289899768697,
+          "sensitivity": 0.9333333333333333,
+          "brier": 0.001844711836451137,
+          "ece": 0.005061164574922169,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1296,
+            "fp": 1,
+            "fn": 2,
+            "tp": 28
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9995540257628118,
+            "lo": 0.9986404843032508,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9631217328044914,
+            "lo": 0.8914122213123291,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9480790848875563,
+            "lo": 0.8845338983050848,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.0017886563633860042,
+            "lo": 0.0003146874982175029,
+            "hi": 0.0038719547957046757,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.00272199094455787,
+            "obs_freq": 0.0,
+            "count": 1290
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.10687444612610711,
+            "obs_freq": 0.0,
+            "count": 4
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.20000000000000004,
+            "obs_freq": 0.3333333333333333,
+            "count": 3
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.31248868726938317,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.75,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8074858245982919,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 0.9998951461463582,
+            "obs_freq": 0.9615384615384616,
+            "count": 26
+          }
+        ],
+        "split_sizes": {
+          "train": 4019,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 133,
+          "val": 43,
+          "test": 30
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6692,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:52:05.970782+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6692,
+            "positives": 272,
+            "negatives": 6420,
+            "prevalence": 0.04064554692169755
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6692,
+            "positives": 1347,
+            "negatives": 5345,
+            "prevalence": 0.2012851165570831
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:52:05.972437+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "random_forest-hypo-60-20260601005244",
+      "target": "hypo",
+      "horizon_min": 60,
+      "model_name": "random_forest",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/random_forest-hypo-60-20260601005244.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.8370368387234954,
+            "auprc": 0.43691575832100354,
+            "precision": 0.5087719298245614,
+            "recall": 0.5,
+            "f1": 0.5043478260869565,
+            "specificity": 0.9782608695652174,
+            "sensitivity": 0.5,
+            "brier": 0.04030141293139606,
+            "ece": 0.030095385315116616,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1260,
+              "fp": 28,
+              "fn": 29,
+              "tp": 29
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9491325765688585,
+            "auprc": 0.6482285171303117,
+            "precision": 0.2217573221757322,
+            "recall": 0.9137931034482759,
+            "f1": 0.3569023569023569,
+            "specificity": 0.8555900621118012,
+            "sensitivity": 0.9137931034482759,
+            "brier": 0.08509317895660003,
+            "ece": 0.1193059782100792,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1102,
+              "fp": 186,
+              "fn": 5,
+              "tp": 53
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9696669522381667,
+            "auprc": 0.8544755724628423,
+            "precision": 0.5764705882352941,
+            "recall": 0.8448275862068966,
+            "f1": 0.6853146853146852,
+            "specificity": 0.9720496894409938,
+            "sensitivity": 0.8448275862068966,
+            "brier": 0.02415307503440134,
+            "ece": 0.041923306232974064,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1252,
+              "fp": 36,
+              "fn": 9,
+              "tp": 49
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9579674448490041,
+            "auprc": 0.899549448631016,
+            "precision": 0.8448275862068966,
+            "recall": 0.8448275862068966,
+            "f1": 0.8448275862068967,
+            "specificity": 0.9930124223602484,
+            "sensitivity": 0.8448275862068966,
+            "brier": 0.010829977065695048,
+            "ece": 0.008017721560121299,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1279,
+              "fp": 9,
+              "fn": 9,
+              "tp": 49
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9550224887556222,
+            "auprc": 0.8997150338363853,
+            "precision": 0.9411764705882353,
+            "recall": 0.8275862068965517,
+            "f1": 0.8807339449541284,
+            "specificity": 0.9976708074534162,
+            "sensitivity": 0.8275862068965517,
+            "brier": 0.008649027613261561,
+            "ece": 0.008325501320526948,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1285,
+              "fp": 3,
+              "fn": 10,
+              "tp": 48
+            }
+          }
+        },
+        "selected": "random_forest",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 60,
+          "n": 1327,
+          "positives": 40,
+          "negatives": 1287,
+          "auroc": 0.993405205905206,
+          "auprc": 0.904334091604248,
+          "precision": 0.9459459459459459,
+          "recall": 0.875,
+          "f1": 0.9090909090909091,
+          "specificity": 0.9984459984459985,
+          "sensitivity": 0.875,
+          "brier": 0.0053919673605289115,
+          "ece": 0.0073037007620861474,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1285,
+            "fp": 2,
+            "fn": 5,
+            "tp": 35
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9935107943637155,
+            "lo": 0.9837381433185807,
+            "hi": 0.9990943154140417,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9055714510110187,
+            "lo": 0.8239590169637738,
+            "hi": 0.9652314925137816,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9056086598614286,
+            "lo": 0.8285467980295566,
+            "hi": 0.9620923306031275,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.005299457897572921,
+            "lo": 0.002801160766092086,
+            "hi": 0.008436604069465703,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.005015913139199035,
+            "obs_freq": 0.0007955449482895784,
+            "count": 1257
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.15197132616487455,
+            "obs_freq": 0.12121212121212122,
+            "count": 33
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5294394753995313,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 6,
+            "mean_pred": 0.6716410337608942,
+            "obs_freq": 0.8333333333333334,
+            "count": 6
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.7696602573806519,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 0.9629629629629629,
+            "count": 27
+          }
+        ],
+        "split_sizes": {
+          "train": 4020,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 174,
+          "val": 58,
+          "test": 40
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6693,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:52:45.148797+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6693,
+            "positives": 272,
+            "negatives": 6421,
+            "prevalence": 0.040639474077394294
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6693,
+            "positives": 1347,
+            "negatives": 5346,
+            "prevalence": 0.20125504258180188
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:52:45.150722+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "ebm-hypo-30-20260601005456",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-30-20260601005456.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9104749326241768,
+            "auprc": 0.5506138622068175,
+            "precision": 0.5087719298245614,
+            "recall": 0.6744186046511628,
+            "f1": 0.58,
+            "specificity": 0.9785111281657713,
+            "sensitivity": 0.6744186046511628,
+            "brier": 0.029621103125239457,
+            "ece": 0.029700704219660187,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1275,
+              "fp": 28,
+              "fn": 14,
+              "tp": 29
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9756554641346445,
+            "auprc": 0.771777556437445,
+            "precision": 0.22485207100591717,
+            "recall": 0.8837209302325582,
+            "f1": 0.3584905660377359,
+            "specificity": 0.8994627782041443,
+            "sensitivity": 0.8837209302325582,
+            "brier": 0.06128709858378276,
+            "ece": 0.09724752074096008,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1172,
+              "fp": 131,
+              "fn": 5,
+              "tp": 38
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9805190169376572,
+            "auprc": 0.9036558957952231,
+            "precision": 0.9473684210526315,
+            "recall": 0.8372093023255814,
+            "f1": 0.8888888888888888,
+            "specificity": 0.9984650805832693,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.010145520941616415,
+            "ece": 0.023670127612877092,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1301,
+              "fp": 2,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9795463063770548,
+            "auprc": 0.9132873326758967,
+            "precision": 0.9,
+            "recall": 0.8372093023255814,
+            "f1": 0.8674698795180723,
+            "specificity": 0.9969301611665388,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.006204112507296707,
+            "ece": 0.004769848151135496,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1299,
+              "fp": 4,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9809205946920345,
+            "auprc": 0.9161204413185859,
+            "precision": 0.9736842105263158,
+            "recall": 0.8604651162790697,
+            "f1": 0.9135802469135803,
+            "specificity": 0.9992325402916347,
+            "sensitivity": 0.8604651162790697,
+            "brier": 0.005177400158778924,
+            "ece": 0.005400538560554347,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1302,
+              "fp": 1,
+              "fn": 6,
+              "tp": 37
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 1327,
+          "positives": 30,
+          "negatives": 1297,
+          "auroc": 0.9995116936520174,
+          "auprc": 0.9590431161005873,
+          "precision": 0.9655172413793104,
+          "recall": 0.9333333333333333,
+          "f1": 0.9491525423728815,
+          "specificity": 0.9992289899768697,
+          "sensitivity": 0.9333333333333333,
+          "brier": 0.001844711836451137,
+          "ece": 0.005061164574922169,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1296,
+            "fp": 1,
+            "fn": 2,
+            "tp": 28
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9995540257628118,
+            "lo": 0.9986404843032508,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9631217328044914,
+            "lo": 0.8914122213123291,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9480790848875563,
+            "lo": 0.8845338983050848,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.0017886563633860042,
+            "lo": 0.0003146874982175029,
+            "hi": 0.0038719547957046757,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.00272199094455787,
+            "obs_freq": 0.0,
+            "count": 1290
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.10687444612610711,
+            "obs_freq": 0.0,
+            "count": 4
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.20000000000000004,
+            "obs_freq": 0.3333333333333333,
+            "count": 3
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.31248868726938317,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.75,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8074858245982919,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 0.9998951461463582,
+            "obs_freq": 0.9615384615384616,
+            "count": 26
+          }
+        ],
+        "split_sizes": {
+          "train": 4019,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 133,
+          "val": 43,
+          "test": 30
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6692,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:54:56.291769+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6692,
+            "positives": 272,
+            "negatives": 6420,
+            "prevalence": 0.04064554692169755
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6692,
+            "positives": 1347,
+            "negatives": 5345,
+            "prevalence": 0.2012851165570831
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:54:56.293448+00:00",
+      "is_active": false,
+      "status": "archived",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "ebm-hypo-30-20260601005614",
+      "target": "hypo",
+      "horizon_min": 30,
+      "model_name": "ebm",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/ebm-hypo-30-20260601005614.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9104749326241768,
+            "auprc": 0.5506138622068175,
+            "precision": 0.5087719298245614,
+            "recall": 0.6744186046511628,
+            "f1": 0.58,
+            "specificity": 0.9785111281657713,
+            "sensitivity": 0.6744186046511628,
+            "brier": 0.029621103125239457,
+            "ece": 0.029700704219660187,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1275,
+              "fp": 28,
+              "fn": 14,
+              "tp": 29
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9756554641346445,
+            "auprc": 0.771777556437445,
+            "precision": 0.22485207100591717,
+            "recall": 0.8837209302325582,
+            "f1": 0.3584905660377359,
+            "specificity": 0.8994627782041443,
+            "sensitivity": 0.8837209302325582,
+            "brier": 0.06128709858378276,
+            "ece": 0.09724752074096008,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1172,
+              "fp": 131,
+              "fn": 5,
+              "tp": 38
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9805190169376572,
+            "auprc": 0.9036558957952231,
+            "precision": 0.9473684210526315,
+            "recall": 0.8372093023255814,
+            "f1": 0.8888888888888888,
+            "specificity": 0.9984650805832693,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.010145520941616413,
+            "ece": 0.023670127612877092,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1301,
+              "fp": 2,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9795463063770548,
+            "auprc": 0.9132873326758967,
+            "precision": 0.9,
+            "recall": 0.8372093023255814,
+            "f1": 0.8674698795180723,
+            "specificity": 0.9969301611665388,
+            "sensitivity": 0.8372093023255814,
+            "brier": 0.006204112507296707,
+            "ece": 0.004769848151135496,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1299,
+              "fp": 4,
+              "fn": 7,
+              "tp": 36
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 43,
+            "negatives": 1303,
+            "auroc": 0.9809205946920345,
+            "auprc": 0.9161204413185859,
+            "precision": 0.9736842105263158,
+            "recall": 0.8604651162790697,
+            "f1": 0.9135802469135803,
+            "specificity": 0.9992325402916347,
+            "sensitivity": 0.8604651162790697,
+            "brier": 0.005177400158778924,
+            "ece": 0.005400538560554347,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1302,
+              "fp": 1,
+              "fn": 6,
+              "tp": 37
+            }
+          }
+        },
+        "selected": "ebm",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 30,
+          "n": 1327,
+          "positives": 30,
+          "negatives": 1297,
+          "auroc": 0.9995116936520174,
+          "auprc": 0.9590431161005873,
+          "precision": 0.9655172413793104,
+          "recall": 0.9333333333333333,
+          "f1": 0.9491525423728815,
+          "specificity": 0.9992289899768697,
+          "sensitivity": 0.9333333333333333,
+          "brier": 0.001844711836451137,
+          "ece": 0.005061164574922169,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1296,
+            "fp": 1,
+            "fn": 2,
+            "tp": 28
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9995540257628118,
+            "lo": 0.9986404843032508,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9631217328044914,
+            "lo": 0.8914122213123291,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9480790848875563,
+            "lo": 0.8845338983050848,
+            "hi": 1.0,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.0017886563633860042,
+            "lo": 0.0003146874982175029,
+            "hi": 0.0038719547957046757,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.00272199094455787,
+            "obs_freq": 0.0,
+            "count": 1290
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.10687444612610711,
+            "obs_freq": 0.0,
+            "count": 4
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.20000000000000004,
+            "obs_freq": 0.3333333333333333,
+            "count": 3
+          },
+          {
+            "bin": 3,
+            "mean_pred": 0.31248868726938317,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.75,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.8074858245982919,
+            "obs_freq": 1.0,
+            "count": 1
+          },
+          {
+            "bin": 9,
+            "mean_pred": 0.9998951461463582,
+            "obs_freq": 0.9615384615384616,
+            "count": 26
+          }
+        ],
+        "split_sizes": {
+          "train": 4019,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 133,
+          "val": 43,
+          "test": 30
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6692,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:56:14.173971+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6692,
+            "positives": 272,
+            "negatives": 6420,
+            "prevalence": 0.04064554692169755
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6692,
+            "positives": 1347,
+            "negatives": 5345,
+            "prevalence": 0.2012851165570831
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:56:14.175694+00:00",
+      "is_active": true,
+      "status": "active",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "random_forest-hypo-60-20260601005725",
+      "target": "hypo",
+      "horizon_min": 60,
+      "model_name": "random_forest",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/random_forest-hypo-60-20260601005725.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.8370368387234954,
+            "auprc": 0.43691575832100354,
+            "precision": 0.5087719298245614,
+            "recall": 0.5,
+            "f1": 0.5043478260869565,
+            "specificity": 0.9782608695652174,
+            "sensitivity": 0.5,
+            "brier": 0.04030141293139606,
+            "ece": 0.030095385315116616,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1260,
+              "fp": 28,
+              "fn": 29,
+              "tp": 29
+            }
+          },
+          "logreg": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9491325765688585,
+            "auprc": 0.6482285171303117,
+            "precision": 0.2217573221757322,
+            "recall": 0.9137931034482759,
+            "f1": 0.3569023569023569,
+            "specificity": 0.8555900621118012,
+            "sensitivity": 0.9137931034482759,
+            "brier": 0.08509317895660003,
+            "ece": 0.1193059782100792,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1102,
+              "fp": 186,
+              "fn": 5,
+              "tp": 53
+            }
+          },
+          "random_forest": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9696669522381667,
+            "auprc": 0.8544755724628423,
+            "precision": 0.5764705882352941,
+            "recall": 0.8448275862068966,
+            "f1": 0.6853146853146852,
+            "specificity": 0.9720496894409938,
+            "sensitivity": 0.8448275862068966,
+            "brier": 0.02415307503440134,
+            "ece": 0.041923306232974064,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1252,
+              "fp": 36,
+              "fn": 9,
+              "tp": 49
+            }
+          },
+          "xgboost": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9579674448490041,
+            "auprc": 0.899549448631016,
+            "precision": 0.8448275862068966,
+            "recall": 0.8448275862068966,
+            "f1": 0.8448275862068967,
+            "specificity": 0.9930124223602484,
+            "sensitivity": 0.8448275862068966,
+            "brier": 0.010829977065695048,
+            "ece": 0.008017721560121299,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1279,
+              "fp": 9,
+              "fn": 9,
+              "tp": 49
+            }
+          },
+          "ebm": {
+            "target": "hypo",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 58,
+            "negatives": 1288,
+            "auroc": 0.9550224887556222,
+            "auprc": 0.8997150338363853,
+            "precision": 0.9411764705882353,
+            "recall": 0.8275862068965517,
+            "f1": 0.8807339449541284,
+            "specificity": 0.9976708074534162,
+            "sensitivity": 0.8275862068965517,
+            "brier": 0.008649027613261561,
+            "ece": 0.008325501320526948,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1285,
+              "fp": 3,
+              "fn": 10,
+              "tp": 48
+            }
+          }
+        },
+        "selected": "random_forest",
+        "test": {
+          "target": "hypo",
+          "horizon_min": 60,
+          "n": 1327,
+          "positives": 40,
+          "negatives": 1287,
+          "auroc": 0.993405205905206,
+          "auprc": 0.904334091604248,
+          "precision": 0.9459459459459459,
+          "recall": 0.875,
+          "f1": 0.9090909090909091,
+          "specificity": 0.9984459984459985,
+          "sensitivity": 0.875,
+          "brier": 0.005391967360528899,
+          "ece": 0.0073037007620861336,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1285,
+            "fp": 2,
+            "fn": 5,
+            "tp": 35
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9935107943637155,
+            "lo": 0.9837381433185807,
+            "hi": 0.9990943154140417,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9055714510110187,
+            "lo": 0.8239590169637738,
+            "hi": 0.9652314925137816,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9056086598614286,
+            "lo": 0.8285467980295566,
+            "hi": 0.9620923306031275,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.005299457897572909,
+            "lo": 0.0028011607660920796,
+            "hi": 0.00843660406946569,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0050159131391990346,
+            "obs_freq": 0.0007955449482895784,
+            "count": 1257
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.15197132616487455,
+            "obs_freq": 0.12121212121212122,
+            "count": 33
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5294394753995402,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 6,
+            "mean_pred": 0.6716410337608946,
+            "obs_freq": 0.8333333333333334,
+            "count": 6
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.7696602573806514,
+            "obs_freq": 1.0,
+            "count": 2
+          },
+          {
+            "bin": 9,
+            "mean_pred": 1.0,
+            "obs_freq": 0.9629629629629629,
+            "count": 27
+          }
+        ],
+        "split_sizes": {
+          "train": 4020,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 174,
+          "val": 58,
+          "test": 40
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6693,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:57:25.464796+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6693,
+            "positives": 272,
+            "negatives": 6421,
+            "prevalence": 0.040639474077394294
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6693,
+            "positives": 1347,
+            "negatives": 5346,
+            "prevalence": 0.20125504258180188
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:57:25.466818+00:00",
+      "is_active": true,
+      "status": "active",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "xgboost-hyper-30-20260601005826",
+      "target": "hyper",
+      "horizon_min": 30,
+      "model_name": "xgboost",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/xgboost-hyper-30-20260601005826.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 221,
+            "negatives": 1125,
+            "auroc": 0.9366676721970839,
+            "auprc": 0.7265736601629718,
+            "precision": 0.6994535519125683,
+            "recall": 0.579185520361991,
+            "f1": 0.6336633663366337,
+            "specificity": 0.9511111111111111,
+            "sensitivity": 0.579185520361991,
+            "brier": 0.07443291403428605,
+            "ece": 0.04953171421117839,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1070,
+              "fp": 55,
+              "fn": 93,
+              "tp": 128
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 221,
+            "negatives": 1125,
+            "auroc": 0.9897596782302664,
+            "auprc": 0.9519555496302506,
+            "precision": 0.7819548872180451,
+            "recall": 0.9411764705882353,
+            "f1": 0.8542094455852156,
+            "specificity": 0.9484444444444444,
+            "sensitivity": 0.9411764705882353,
+            "brier": 0.037019786743326184,
+            "ece": 0.04349884380110695,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1067,
+              "fp": 58,
+              "fn": 13,
+              "tp": 208
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 221,
+            "negatives": 1125,
+            "auroc": 0.9960904977375565,
+            "auprc": 0.9798055174691662,
+            "precision": 0.896551724137931,
+            "recall": 0.9411764705882353,
+            "f1": 0.9183222958057395,
+            "specificity": 0.9786666666666667,
+            "sensitivity": 0.9411764705882353,
+            "brier": 0.018839642966769467,
+            "ece": 0.017605995143634902,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1101,
+              "fp": 24,
+              "fn": 13,
+              "tp": 208
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 221,
+            "negatives": 1125,
+            "auroc": 0.9965289089994972,
+            "auprc": 0.9809279053332054,
+            "precision": 0.9126637554585153,
+            "recall": 0.9457013574660633,
+            "f1": 0.9288888888888889,
+            "specificity": 0.9822222222222222,
+            "sensitivity": 0.9457013574660633,
+            "brier": 0.017078726430432428,
+            "ece": 0.013892354812051843,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1105,
+              "fp": 20,
+              "fn": 12,
+              "tp": 209
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 30,
+            "n": 1346,
+            "positives": 221,
+            "negatives": 1125,
+            "auroc": 0.9959698340874812,
+            "auprc": 0.9768608803599798,
+            "precision": 0.9400921658986175,
+            "recall": 0.9230769230769231,
+            "f1": 0.9315068493150684,
+            "specificity": 0.9884444444444445,
+            "sensitivity": 0.9230769230769231,
+            "brier": 0.01735964319686056,
+            "ece": 0.008677110340119152,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1112,
+              "fp": 13,
+              "fn": 17,
+              "tp": 204
+            }
+          }
+        },
+        "selected": "xgboost",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 30,
+          "n": 1327,
+          "positives": 215,
+          "negatives": 1112,
+          "auroc": 0.9953195583068427,
+          "auprc": 0.9814625907473461,
+          "precision": 0.9530516431924883,
+          "recall": 0.9441860465116279,
+          "f1": 0.9485981308411214,
+          "specificity": 0.9910071942446043,
+          "sensitivity": 0.9441860465116279,
+          "brier": 0.014842536639015514,
+          "ece": 0.009442313016808692,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1102,
+            "fp": 10,
+            "fn": 12,
+            "tp": 203
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9950308526483365,
+            "lo": 0.9885861018738767,
+            "hi": 0.9986307197260491,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9807565391438896,
+            "lo": 0.9681779234730716,
+            "hi": 0.9912374641756158,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9481291826535696,
+            "lo": 0.9266902040942736,
+            "hi": 0.9673233014135887,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.014986000373160563,
+            "lo": 0.010654024441744372,
+            "hi": 0.020875282137661377,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0008034026465028356,
+            "obs_freq": 0.000945179584120983,
+            "count": 1058
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.11111111111111113,
+            "obs_freq": 0.0,
+            "count": 13
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.22825798780555775,
+            "obs_freq": 0.38095238095238093,
+            "count": 21
+          },
+          {
+            "bin": 4,
+            "mean_pred": 0.4444444444444445,
+            "obs_freq": 0.13636363636363635,
+            "count": 22
+          },
+          {
+            "bin": 7,
+            "mean_pred": 0.75,
+            "obs_freq": 0.75,
+            "count": 16
+          },
+          {
+            "bin": 9,
+            "mean_pred": 0.9743712938832468,
+            "obs_freq": 0.9695431472081218,
+            "count": 197
+          }
+        ],
+        "split_sizes": {
+          "train": 4019,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 657,
+          "val": 221,
+          "test": 215
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6692,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:58:26.731091+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6692,
+            "positives": 272,
+            "negatives": 6420,
+            "prevalence": 0.04064554692169755
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6692,
+            "positives": 1347,
+            "negatives": 5345,
+            "prevalence": 0.2012851165570831
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:58:26.732914+00:00",
+      "is_active": true,
+      "status": "active",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    },
+    {
+      "model_id": "xgboost-hyper-60-20260601005934",
+      "target": "hyper",
+      "horizon_min": 60,
+      "model_name": "xgboost",
+      "model_version": "1.0.0",
+      "artifact_path": "/home/runner/workspace/backend/artifacts/models/xgboost-hyper-60-20260601005934.joblib",
+      "calibrated": true,
+      "feature_columns": [
+        "cgm_mean_30",
+        "cgm_mean_60",
+        "cgm_std_30",
+        "cgm_slope_30",
+        "cgm_dg_dt",
+        "cgm_delta_15",
+        "cgm_delta_30",
+        "cgm_delta_60",
+        "tir_60",
+        "minutes_since_meal",
+        "minutes_since_insulin",
+        "post_prandial",
+        "post_insulin",
+        "hour_of_day",
+        "day_of_week",
+        "is_night",
+        "cgm_count_60",
+        "cgm_gap_60"
+      ],
+      "evaluation_status": "evaluated",
+      "metrics": {
+        "validation": {
+          "expert_rules": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 276,
+            "negatives": 1070,
+            "auroc": 0.9355648110524176,
+            "auprc": 0.7545012176405177,
+            "precision": 0.7486338797814208,
+            "recall": 0.4963768115942029,
+            "f1": 0.5969498910675383,
+            "specificity": 0.9570093457943926,
+            "sensitivity": 0.4963768115942029,
+            "brier": 0.08784415227587032,
+            "ece": 0.06260134408134503,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1024,
+              "fp": 46,
+              "fn": 139,
+              "tp": 137
+            }
+          },
+          "logreg": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 276,
+            "negatives": 1070,
+            "auroc": 0.9869565217391305,
+            "auprc": 0.9507728801372398,
+            "precision": 0.819935691318328,
+            "recall": 0.9239130434782609,
+            "f1": 0.868824531516184,
+            "specificity": 0.9476635514018692,
+            "sensitivity": 0.9239130434782609,
+            "brier": 0.04088099477259237,
+            "ece": 0.040983438306548776,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1014,
+              "fp": 56,
+              "fn": 21,
+              "tp": 255
+            }
+          },
+          "random_forest": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 276,
+            "negatives": 1070,
+            "auroc": 0.9950121901665989,
+            "auprc": 0.9807245506240874,
+            "precision": 0.9247311827956989,
+            "recall": 0.9347826086956522,
+            "f1": 0.9297297297297297,
+            "specificity": 0.9803738317757009,
+            "sensitivity": 0.9347826086956522,
+            "brier": 0.02320023012684188,
+            "ece": 0.028901640325947525,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1049,
+              "fp": 21,
+              "fn": 18,
+              "tp": 258
+            }
+          },
+          "xgboost": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 276,
+            "negatives": 1070,
+            "auroc": 0.9964987132601923,
+            "auprc": 0.9837765860392906,
+            "precision": 0.9295774647887324,
+            "recall": 0.9565217391304348,
+            "f1": 0.9428571428571428,
+            "specificity": 0.9813084112149533,
+            "sensitivity": 0.9565217391304348,
+            "brier": 0.017032773664577817,
+            "ece": 0.01168923840383385,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1050,
+              "fp": 20,
+              "fn": 12,
+              "tp": 264
+            }
+          },
+          "ebm": {
+            "target": "hyper",
+            "horizon_min": 60,
+            "n": 1346,
+            "positives": 276,
+            "negatives": 1070,
+            "auroc": 0.9958079371529188,
+            "auprc": 0.9791940356369778,
+            "precision": 0.9479553903345725,
+            "recall": 0.9239130434782609,
+            "f1": 0.9357798165137616,
+            "specificity": 0.9869158878504672,
+            "sensitivity": 0.9239130434782609,
+            "brier": 0.017864609648868737,
+            "ece": 0.009325618017172074,
+            "notes": [
+              "seuil de décision = 0.5"
+            ],
+            "confusion": {
+              "tn": 1056,
+              "fp": 14,
+              "fn": 21,
+              "tp": 255
+            }
+          }
+        },
+        "selected": "xgboost",
+        "test": {
+          "target": "hyper",
+          "horizon_min": 60,
+          "n": 1327,
+          "positives": 263,
+          "negatives": 1064,
+          "auroc": 0.9958778838731811,
+          "auprc": 0.9807243839555495,
+          "precision": 0.9,
+          "recall": 0.9581749049429658,
+          "f1": 0.9281767955801105,
+          "specificity": 0.9736842105263158,
+          "sensitivity": 0.9581749049429658,
+          "brier": 0.020531578430121267,
+          "ece": 0.012089018245376745,
+          "notes": [
+            "seuil de décision = 0.5"
+          ],
+          "confusion": {
+            "tn": 1036,
+            "fp": 28,
+            "fn": 11,
+            "tp": 252
+          }
+        },
+        "test_bootstrap": {
+          "n_boot": 200,
+          "ci": 0.95,
+          "method": "bootstrap percentile (rééchantillonnage du test avec remise)",
+          "auroc": {
+            "mean": 0.9958756062052728,
+            "lo": 0.9936547962881777,
+            "hi": 0.9976380577450288,
+            "n_valid": 200
+          },
+          "auprc": {
+            "mean": 0.9806345594002499,
+            "lo": 0.9693009097874019,
+            "hi": 0.9886702580314137,
+            "n_valid": 200
+          },
+          "f1": {
+            "mean": 0.9284457500867588,
+            "lo": 0.9021840711640303,
+            "hi": 0.9473779042200096,
+            "n_valid": 200
+          },
+          "brier": {
+            "mean": 0.02056944931109209,
+            "lo": 0.015527099085577626,
+            "hi": 0.026495141238720578,
+            "n_valid": 200
+          }
+        },
+        "reliability_curve": [
+          {
+            "bin": 0,
+            "mean_pred": 0.0028695741770097707,
+            "obs_freq": 0.005940594059405941,
+            "count": 1010
+          },
+          {
+            "bin": 1,
+            "mean_pred": 0.11764705882352941,
+            "obs_freq": 0.05555555555555555,
+            "count": 18
+          },
+          {
+            "bin": 2,
+            "mean_pred": 0.2,
+            "obs_freq": 0.2,
+            "count": 5
+          },
+          {
+            "bin": 4,
+            "mean_pred": 0.4707325310001579,
+            "obs_freq": 0.21428571428571427,
+            "count": 14
+          },
+          {
+            "bin": 5,
+            "mean_pred": 0.5,
+            "obs_freq": 0.3333333333333333,
+            "count": 21
+          },
+          {
+            "bin": 8,
+            "mean_pred": 0.830686294787748,
+            "obs_freq": 0.7368421052631579,
+            "count": 38
+          },
+          {
+            "bin": 9,
+            "mean_pred": 0.987178350387487,
+            "obs_freq": 0.9819004524886877,
+            "count": 221
+          }
+        ],
+        "split_sizes": {
+          "train": 4020,
+          "val": 1346,
+          "test": 1327
+        },
+        "split_positives": {
+          "train": 808,
+          "val": 276,
+          "test": 263
+        }
+      },
+      "dataset_meta": {
+        "n_rows": 6693,
+        "n_patients": 11,
+        "feature_columns": [
+          "cgm_mean_30",
+          "cgm_mean_60",
+          "cgm_std_30",
+          "cgm_slope_30",
+          "cgm_dg_dt",
+          "cgm_delta_15",
+          "cgm_delta_30",
+          "cgm_delta_60",
+          "tir_60",
+          "minutes_since_meal",
+          "minutes_since_insulin",
+          "post_prandial",
+          "post_insulin",
+          "hour_of_day",
+          "day_of_week",
+          "is_night",
+          "cgm_count_60",
+          "cgm_gap_60"
+        ],
+        "stride_min": 30,
+        "warmup_min": 60,
+        "generated_at": "2026-06-01T00:59:34.125423+00:00",
+        "is_synthetic": true,
+        "labels": {
+          "label_hypo_30": {
+            "labeled": 6692,
+            "positives": 206,
+            "negatives": 6486,
+            "prevalence": 0.03078302450687388
+          },
+          "label_hypo_60": {
+            "labeled": 6693,
+            "positives": 272,
+            "negatives": 6421,
+            "prevalence": 0.040639474077394294
+          },
+          "label_hyper_30": {
+            "labeled": 6692,
+            "positives": 1093,
+            "negatives": 5599,
+            "prevalence": 0.163329348475792
+          },
+          "label_hyper_60": {
+            "labeled": 6693,
+            "positives": 1347,
+            "negatives": 5346,
+            "prevalence": 0.20125504258180188
+          }
+        },
+        "time_range": {
+          "start": "2026-05-18 01:50:00+00:00",
+          "end": "2026-06-01 00:20:34.930192+00:00"
+        }
+      },
+      "created_at": "2026-06-01T00:59:34.128625+00:00",
+      "is_active": true,
+      "status": "active",
+      "synthetic_only": true,
+      "dataset_version": "1.1.0",
+      "features_version": "1.0.0"
+    }
+  ]
+}

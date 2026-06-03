@@ -1,0 +1,147 @@
+{
+  "target": "hyper",
+  "horizon_min": 60,
+  "model_id": "/home/runner/workspace/backend/artifacts/models/xgboost-hyper-60-20260601005934.joblib",
+  "model_name": "xgboost",
+  "model_version": "1.0.0",
+  "xai_method": "shap",
+  "method_fallback": false,
+  "calibrated": true,
+  "explains": "modèle non calibré",
+  "top_features": [
+    {
+      "feature": "cgm_mean_30",
+      "mean_abs_importance": 3.7159913291223345,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_delta_60",
+      "mean_abs_importance": 1.1682133132545278,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "hour_of_day",
+      "mean_abs_importance": 0.9162424118630588,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "minutes_since_meal",
+      "mean_abs_importance": 0.7255745502957143,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "minutes_since_insulin",
+      "mean_abs_importance": 0.5943789221486077,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_mean_60",
+      "mean_abs_importance": 0.5164005674887449,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_std_30",
+      "mean_abs_importance": 0.2663647900731303,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "tir_60",
+      "mean_abs_importance": 0.20252932062838228,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_dg_dt",
+      "mean_abs_importance": 0.19872890266939067,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_delta_15",
+      "mean_abs_importance": 0.17269114174530842,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_slope_30",
+      "mean_abs_importance": 0.16992911711335182,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    },
+    {
+      "feature": "cgm_count_60",
+      "mean_abs_importance": 0.16867925385478885,
+      "direction": "aggregated_signed_effect",
+      "aggregated_sign": "diminue"
+    }
+  ],
+  "dataset_version": "1.1.0",
+  "features_version": "1.0.0",
+  "synthetic_only": true,
+  "n_background": 200,
+  "generated_at": "2026-06-01T02:40:07.821524+00:00",
+  "direction_semantics": "Une direction globale n'est PAS une relation médicale monotone. SHAP : contribution moyenne signée au score du modèle (aggregated_signed_effect). EBM : effet dépendant de la valeur, non globalisable — interpréter localement.",
+  "evaluation": {
+    "target": "hyper",
+    "horizon_min": 60,
+    "model_name": "xgboost",
+    "method": "shap",
+    "synthetic_only": true,
+    "stability": {
+      "metric": "stability_topk_jaccard",
+      "value": 0.8634920634920634,
+      "n": 75,
+      "k": 5,
+      "method": "shap",
+      "reason": null
+    },
+    "deletion": {
+      "metric": "deletion_delta",
+      "value": 0.3821824403074667,
+      "delta_top_mean": 0.3821824403074667,
+      "delta_bottom_mean": 0.0016044267249526456,
+      "faithfulness_win_rate": 1.0,
+      "n": 15,
+      "m": 3,
+      "method": "shap",
+      "reason": null
+    },
+    "agreement": {
+      "metric": "agreement_topk_jaccard",
+      "value": 0.2883597883597883,
+      "n": 15,
+      "pair": "shap_vs_lime",
+      "k": 5,
+      "reason": null
+    },
+    "physio_congruence": {
+      "metric": "physio_congruence",
+      "value": 0.5333333333333333,
+      "n": 15,
+      "method": "shap",
+      "note": "Heuristique de cohérence directionnelle, PAS une validation clinique.",
+      "reason": null
+    },
+    "disclaimer": "Métriques techniques sur données synthétiques. Aucune validité clinique."
+  },
+  "xai_reliability_status": "caution_semantic_limits",
+  "xai_warnings": [
+    "Explication calculée sur données 100 % synthétiques (is_synthetic=True). Aucune validité clinique ; résultats non transférables à des patients réels.",
+    "L'attribution explique le modèle NON calibré (predict_proba interne), alors que la probabilité affichée est la probabilité CALIBRÉE du bundle. Les contributions ne portent donc pas sur la probabilité affichée.",
+    "La direction globale de certaines variables n'est pas interprétable comme une relation causale (non globalisable / effet agrégé signé)."
+  ],
+  "semantic_limitations": [
+    "XAI décrit le comportement du modèle, pas une cause médicale.",
+    "Ne pas utiliser pour ajuster un traitement.",
+    "XAI is display/support only, not a decision engine. Une explication ne décide pas, ne détermine aucune recommandation, ne justifie aucune dose ; elle peut seulement accompagner une prédiction open-loop pour affichage ou audit."
+  ],
+  "calibration_notice": "L'attribution explique le modèle NON calibré (predict_proba interne), alors que la probabilité affichée est la probabilité CALIBRÉE du bundle. Les contributions ne portent donc pas sur la probabilité affichée.",
+  "synthetic_data_notice": "Explication calculée sur données 100 % synthétiques (is_synthetic=True). Aucune validité clinique ; résultats non transférables à des patients réels."
+}

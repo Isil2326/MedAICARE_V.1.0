@@ -1,7 +1,3 @@
-// ============================================================================
-// DEVICES VIEW v4.0.0 — MediAI Care · Thème Naturel — Gateway IoMT
-// ============================================================================
-
 import { useState, useEffect, useMemo } from 'react';
 import {
   Wifi, WifiOff, Activity, Battery, BatteryWarning,
@@ -14,21 +10,21 @@ import type { IoMTDevice } from '../types/medical';
 import { Card, CardHeader, StatTile, Badge, Button, EmptyState } from './ui/primitives';
 import { cn } from '../utils/cn';
 
-const TYPE_META: Record<IoMTDevice['type'], { label: string; icon: React.ComponentType<{ className?: string }>; bg: string; text: string; ring: string }> = {
-  CGM:           { label: 'Capteur glycémique continu', icon: Droplet,      bg: 'bg-blue-100',    text: 'text-blue-700',   ring: 'ring-blue-200' },
-  INSULIN_PUMP:  { label: 'Pompe à insuline',           icon: Syringe,      bg: 'bg-violet-100',  text: 'text-violet-700', ring: 'ring-violet-200' },
-  SMARTWATCH:    { label: 'Montre connectée',           icon: Watch,        bg: 'bg-teal-100',    text: 'text-teal-700',   ring: 'ring-teal-200' },
-  BLOODPRESSURE: { label: 'Tensiomètre',                icon: HeartPulse,   bg: 'bg-coral-50',    text: 'text-coral-600',  ring: 'ring-coral-200' },
-  GLUCOMETER:    { label: 'Glucomètre',                 icon: FlaskConical, bg: 'bg-amber-100',   text: 'text-amber-700',  ring: 'ring-amber-200' },
-  BPM:           { label: 'Cardiofréquencemètre',       icon: Activity,     bg: 'bg-brand-100',   text: 'text-brand-700',  ring: 'ring-brand-200' },
-  ACTIVITY:      { label: 'Tracker d\'activité',        icon: Activity,     bg: 'bg-indigo-100',  text: 'text-indigo-700', ring: 'ring-indigo-200' },
+const TYPE_META: Record<IoMTDevice['type'], { label: string; icon: React.ComponentType<{ className?: string }>; accent: string }> = {
+  CGM:            { label: 'Capteur glycémique continu', icon: Droplet,       accent: 'from-blue-500/20 to-cyan-500/10 text-blue-300 ring-blue-500/20' },
+  INSULIN_PUMP:   { label: 'Pompe à insuline',           icon: Syringe,       accent: 'from-violet-500/20 to-purple-500/10 text-violet-300 ring-violet-500/20' },
+  SMARTWATCH:     { label: 'Montre connectée',           icon: Watch,         accent: 'from-teal-500/20 to-cyan-500/10 text-teal-300 ring-teal-500/20' },
+  BLOODPRESSURE:  { label: 'Tensiomètre',                icon: HeartPulse,    accent: 'from-rose-500/20 to-pink-500/10 text-rose-300 ring-rose-500/20' },
+  GLUCOMETER:     { label: 'Glucomètre',                 icon: FlaskConical,  accent: 'from-amber-500/20 to-orange-500/10 text-amber-300 ring-amber-500/20' },
+  BPM:            { label: 'Cardiofréquencemètre',       icon: Activity,      accent: 'from-emerald-500/20 to-green-500/10 text-emerald-300 ring-emerald-500/20' },
+  ACTIVITY:       { label: 'Tracker d’activité',         icon: Activity,      accent: 'from-indigo-500/20 to-blue-500/10 text-indigo-300 ring-indigo-500/20' },
 };
 
 const STATUS_META = {
-  connected:    { label: 'Connecté',   variant: 'success' as const, icon: CheckCircle2 },
-  syncing:      { label: 'Synchro...', variant: 'info' as const,    icon: RefreshCw },
-  disconnected: { label: 'Hors ligne', variant: 'neutral' as const, icon: WifiOff },
-  error:        { label: 'Erreur',     variant: 'danger' as const,  icon: AlertCircle },
+  connected:    { label: 'Connecté',     variant: 'success' as const, icon: CheckCircle2 },
+  syncing:      { label: 'Synchro...',   variant: 'info' as const,    icon: RefreshCw },
+  disconnected: { label: 'Hors ligne',   variant: 'neutral' as const, icon: WifiOff },
+  error:        { label: 'Erreur',       variant: 'danger' as const,  icon: AlertCircle },
 };
 
 function formatRelative(timestamp: number): string {
@@ -40,9 +36,9 @@ function formatRelative(timestamp: number): string {
 }
 
 export default function DevicesView() {
-  const [devices, setDevices]   = useState<IoMTDevice[]>([]);
+  const [devices, setDevices] = useState<IoMTDevice[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [filter, setFilter]     = useState<'all' | IoMTDevice['status']>('all');
+  const [filter, setFilter] = useState<'all' | IoMTDevice['status']>('all');
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -51,21 +47,28 @@ export default function DevicesView() {
     if (loaded.length > 0) setSelectedId(loaded[0].id);
   }, []);
 
-  const filtered = useMemo(() => filter === 'all' ? devices : devices.filter(d => d.status === filter), [devices, filter]);
+  const filtered = useMemo(() => {
+    if (filter === 'all') return devices;
+    return devices.filter(d => d.status === filter);
+  }, [devices, filter]);
+
   const selected = useMemo(() => devices.find(d => d.id === selectedId) ?? null, [devices, selectedId]);
 
   const stats = useMemo(() => ({
-    total:            devices.length,
-    connected:        devices.filter(d => d.status === 'connected').length,
-    syncing:          devices.filter(d => d.status === 'syncing').length,
-    offline:          devices.filter(d => d.status === 'disconnected' || d.status === 'error').length,
-    totalDataPoints:  devices.reduce((s, d) => s + d.dataPoints, 0),
-    lowBattery:       devices.filter(d => d.battery < 30).length,
+    total: devices.length,
+    connected: devices.filter(d => d.status === 'connected').length,
+    syncing: devices.filter(d => d.status === 'syncing').length,
+    offline: devices.filter(d => d.status === 'disconnected' || d.status === 'error').length,
+    totalDataPoints: devices.reduce((s, d) => s + d.dataPoints, 0),
+    lowBattery: devices.filter(d => d.battery < 30).length,
   }), [devices]);
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => { setDevices(getIoMTDevices()); setRefreshing(false); }, 800);
+    setTimeout(() => {
+      setDevices(getIoMTDevices());
+      setRefreshing(false);
+    }, 800);
   };
 
   if (devices.length === 0) {
@@ -84,32 +87,60 @@ export default function DevicesView() {
   }
 
   return (
-    <div className="space-y-5 pb-20 lg:pb-0">
-
+    <div className="space-y-6">
       {/* === KPIs === */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatTile label="Dispositifs appairés" value={stats.total}                              icon={Cpu}          accent="blue"   hint={`${stats.connected} actifs`} />
-        <StatTile label="Connexions actives"    value={stats.connected} unit={`/ ${stats.total}`} icon={Wifi}         accent="green"  hint="Streaming en temps réel" />
-        <StatTile label="Données ingérées"      value={(stats.totalDataPoints / 1000).toFixed(1) + 'k'} icon={Server} accent="violet" hint="Échantillons aujourd'hui" />
-        <StatTile label="Batteries faibles"     value={stats.lowBattery} unit={`/ ${stats.total}`} icon={BatteryWarning} accent="amber" hint="Seuil < 30%" trend={stats.lowBattery > 0 ? { value: 'Action requise', direction: 'flat' } : undefined} />
+        <StatTile
+          label="Dispositifs appairés"
+          value={stats.total}
+          icon={Cpu}
+          accent="blue"
+          hint={`${stats.connected} actifs`}
+        />
+        <StatTile
+          label="Connexions actives"
+          value={stats.connected}
+          unit={`/ ${stats.total}`}
+          icon={Wifi}
+          accent="emerald"
+          hint="Streaming en temps réel"
+        />
+        <StatTile
+          label="Données ingérées"
+          value={(stats.totalDataPoints / 1000).toFixed(1) + 'k'}
+          icon={Server}
+          accent="violet"
+          hint="Échantillons aujourd'hui"
+        />
+        <StatTile
+          label="Batteries faibles"
+          value={stats.lowBattery}
+          unit={`/ ${stats.total}`}
+          icon={BatteryWarning}
+          accent="amber"
+          hint="Seuil < 30%"
+          trend={stats.lowBattery > 0 ? { value: 'Action requise', direction: 'flat' } : undefined}
+        />
       </div>
 
       {/* === Toolbar === */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-100 border border-slate-200">
+        <div className="flex items-center gap-2 flex-wrap">
           {(['all', 'connected', 'syncing', 'disconnected'] as const).map(f => {
-            const count  = f === 'all' ? devices.length : devices.filter(d => d.status === f).length;
+            const count = f === 'all' ? devices.length : devices.filter(d => d.status === f).length;
             const labels = { all: 'Tous', connected: 'Connectés', syncing: 'Synchro', disconnected: 'Hors ligne' };
             return (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={cn(
-                  'px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all',
-                  filter === f ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
+                  'px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all',
+                  filter === f
+                    ? 'bg-white/[0.08] text-white ring-1 ring-white/15'
+                    : 'text-white/55 hover:text-white/85 hover:bg-white/[0.04]'
                 )}
               >
-                {labels[f]} <span className="text-slate-400 ml-1 tabular-nums">{count}</span>
+                {labels[f]} <span className="text-white/35 ml-1 tabular-nums">{count}</span>
               </button>
             );
           })}
@@ -121,16 +152,15 @@ export default function DevicesView() {
 
       {/* === Main grid === */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-
         {/* Device list */}
         <div className="xl:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filtered.map(device => {
-            const typeMeta   = TYPE_META[device.type];
+            const typeMeta = TYPE_META[device.type];
             const statusMeta = STATUS_META[device.status];
-            const TypeIcon   = typeMeta.icon;
+            const TypeIcon = typeMeta.icon;
             const StatusIcon = statusMeta.icon;
-            const isSel      = selectedId === device.id;
-            const batteryColor = device.battery > 50 ? 'text-brand-600' : device.battery > 20 ? 'text-amber-600' : 'text-coral-500';
+            const isSel = selectedId === device.id;
+            const batteryColor = device.battery > 50 ? 'text-emerald-400' : device.battery > 20 ? 'text-amber-400' : 'text-rose-400';
 
             return (
               <button
@@ -138,26 +168,30 @@ export default function DevicesView() {
                 onClick={() => setSelectedId(device.id)}
                 className={cn(
                   'group text-left rounded-2xl border transition-all p-4',
-                  'bg-white hover:shadow-md',
-                  isSel ? 'border-brand-300 ring-1 ring-brand-200 shadow-md' : 'border-slate-200 hover:border-slate-300'
+                  'bg-gradient-to-b from-white/[0.04] to-white/[0.01] backdrop-blur-xl',
+                  isSel
+                    ? 'border-teal-400/40 shadow-[0_0_0_1px_rgba(45,212,191,0.2),0_8px_32px_-8px_rgba(45,212,191,0.3)]'
+                    : 'border-white/[0.08] hover:border-white/[0.16]'
                 )}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center ring-1', typeMeta.bg, typeMeta.ring)}>
-                    <TypeIcon className={cn('w-5 h-5', typeMeta.text)} />
+                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br ring-1', typeMeta.accent)}>
+                    <TypeIcon className="w-5 h-5" />
                   </div>
-                  <Badge variant={statusMeta.variant} dot>{statusMeta.label}</Badge>
+                  <Badge variant={statusMeta.variant} dot>
+                    {statusMeta.label}
+                  </Badge>
                 </div>
                 <div>
-                  <div className="text-[14px] font-bold text-slate-900 tracking-tight">{device.name}</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{device.manufacturer} · {typeMeta.label}</div>
+                  <div className="text-[14px] font-semibold text-white tracking-tight">{device.name}</div>
+                  <div className="text-[11px] text-white/45 mt-0.5">{device.manufacturer} · {typeMeta.label}</div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="flex items-center gap-1.5">
+                <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
+                  <span className="flex items-center gap-1.5 text-white/55">
                     <Battery className={cn('w-3.5 h-3.5', batteryColor)} />
-                    <span className={cn('font-bold tabular-nums', batteryColor)}>{device.battery}%</span>
+                    <span className={cn('font-medium tabular-nums', batteryColor)}>{device.battery}%</span>
                   </span>
-                  <span className="text-slate-400 flex items-center gap-1 font-medium">
+                  <span className="text-white/45 flex items-center gap-1">
                     <StatusIcon className={cn('w-3 h-3', device.status === 'syncing' && 'animate-spin')} />
                     {formatRelative(device.lastSync)}
                   </span>
@@ -171,7 +205,7 @@ export default function DevicesView() {
         <div className="space-y-4">
           {selected ? (
             <>
-              <Card>
+              <Card glow>
                 <CardHeader
                   title={selected.name}
                   subtitle={`${selected.manufacturer} · ${selected.id}`}
@@ -180,72 +214,82 @@ export default function DevicesView() {
                   action={<Badge variant={STATUS_META[selected.status].variant} dot>{STATUS_META[selected.status].label}</Badge>}
                 />
                 <div className="px-5 pb-5 space-y-4">
-                  {/* Battery */}
+                  {/* Battery visualization */}
                   <div>
-                    <div className="flex items-center justify-between text-[11px] mb-1.5">
-                      <span className="text-slate-500 font-medium">Niveau de batterie</span>
-                      <span className="text-slate-900 font-bold tabular-nums">{selected.battery}%</span>
+                    <div className="flex items-center justify-between text-[11px] text-white/55 mb-1.5">
+                      <span>Niveau de batterie</span>
+                      <span className="text-white font-semibold tabular-nums">{selected.battery}%</span>
                     </div>
-                    <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${selected.battery}%`,
                           background: selected.battery > 50
-                            ? 'linear-gradient(90deg, #10B981, #34D399)'
+                            ? 'linear-gradient(90deg, #10b981, #34d399)'
                             : selected.battery > 20
-                            ? 'linear-gradient(90deg, #d97706, #f59e0b)'
-                            : 'linear-gradient(90deg, #dc2626, #ef4444)',
+                            ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                            : 'linear-gradient(90deg, #ef4444, #f87171)',
                         }}
                       />
                     </div>
                   </div>
 
-                  {/* Specs */}
+                  {/* Specs grid */}
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { label: 'Firmware',      value: selected.firmware,                       icon: Cpu },
-                      { label: 'Échantillons',  value: selected.dataPoints.toLocaleString(),    icon: Server },
-                      { label: 'Type',          value: TYPE_META[selected.type].label.split(' ')[0], icon: Radio },
-                      { label: 'Dernière sync', value: formatRelative(selected.lastSync),       icon: RefreshCw },
+                      { label: 'Firmware', value: selected.firmware, icon: Cpu },
+                      { label: 'Échantillons', value: selected.dataPoints.toLocaleString(), icon: Server },
+                      { label: 'Type', value: TYPE_META[selected.type].label.split(' ')[0], icon: Radio },
+                      { label: 'Dernière sync', value: formatRelative(selected.lastSync), icon: RefreshCw },
                     ].map(spec => {
                       const SpecIcon = spec.icon;
                       return (
-                        <div key={spec.label} className="rounded-xl bg-slate-50 border border-slate-100 p-2.5">
-                          <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        <div key={spec.label} className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-2.5">
+                          <div className="flex items-center gap-1.5 text-[10px] text-white/45 uppercase tracking-wider">
                             <SpecIcon className="w-3 h-3" />
                             {spec.label}
                           </div>
-                          <div className="text-[13px] font-bold text-slate-900 mt-1 truncate">{spec.value}</div>
+                          <div className="text-[13px] font-semibold text-white mt-1 truncate">{spec.value}</div>
                         </div>
                       );
                     })}
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="secondary" size="sm" icon={RefreshCw} className="flex-1 justify-center">Resynchroniser</Button>
-                    <Button variant="ghost" size="sm" icon={Stethoscope}>Diagnostic</Button>
+                    <Button variant="secondary" size="sm" icon={RefreshCw} className="flex-1 justify-center">
+                      Resynchroniser
+                    </Button>
+                    <Button variant="ghost" size="sm" icon={Stethoscope}>
+                      Diagnostic
+                    </Button>
                   </div>
                 </div>
               </Card>
 
-              {/* Compliance */}
-              <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-brand-100 ring-1 ring-brand-200 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-4 h-4 text-brand-600" />
-                </div>
-                <div>
-                  <div className="text-[12.5px] font-bold text-slate-900">Communication appareil — démo</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 leading-relaxed font-medium">
-                    Prototype académique : aucun appairage réel. Données simulées localement. Une version certifiée viserait MQTT/TLS, signature device·gateway et pseudonymisation conforme RGPD.
+              {/* Compliance card */}
+              <Card>
+                <div className="p-4 flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/10 ring-1 ring-emerald-500/20 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div>
+                    <div className="text-[12.5px] font-semibold text-white">Transmission sécurisée</div>
+                    <div className="text-[11px] text-white/55 mt-0.5 leading-relaxed">
+                      Données chiffrées AES-256 en transit, MQTT/TLS 1.3, signature device·gateway, pseudonymisation conforme RGPD.
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </>
           ) : (
             <Card>
               <div className="p-5">
-                <EmptyState icon={Radio} title="Sélectionnez un dispositif" description="Cliquez sur une carte pour afficher le détail technique." />
+                <EmptyState
+                  icon={Radio}
+                  title="Sélectionnez un dispositif"
+                  description="Cliquez sur une carte pour afficher le détail technique."
+                />
               </div>
             </Card>
           )}

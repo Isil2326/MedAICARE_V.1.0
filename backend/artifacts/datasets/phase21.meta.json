@@ -1,0 +1,59 @@
+{
+  "n_rows": 6693,
+  "n_patients": 11,
+  "feature_columns": [
+    "cgm_mean_30",
+    "cgm_mean_60",
+    "cgm_std_30",
+    "cgm_slope_30",
+    "cgm_dg_dt",
+    "cgm_delta_15",
+    "cgm_delta_30",
+    "cgm_delta_60",
+    "tir_60",
+    "minutes_since_meal",
+    "minutes_since_insulin",
+    "post_prandial",
+    "post_insulin",
+    "hour_of_day",
+    "day_of_week",
+    "is_night",
+    "cgm_count_60",
+    "cgm_gap_60"
+  ],
+  "stride_min": 30,
+  "warmup_min": 60,
+  "generated_at": "2026-06-01T00:51:02.403078+00:00",
+  "is_synthetic": true,
+  "labels": {
+    "label_hypo_30": {
+      "labeled": 6692,
+      "positives": 206,
+      "negatives": 6486,
+      "prevalence": 0.03078302450687388
+    },
+    "label_hypo_60": {
+      "labeled": 6693,
+      "positives": 272,
+      "negatives": 6421,
+      "prevalence": 0.040639474077394294
+    },
+    "label_hyper_30": {
+      "labeled": 6692,
+      "positives": 1093,
+      "negatives": 5599,
+      "prevalence": 0.163329348475792
+    },
+    "label_hyper_60": {
+      "labeled": 6693,
+      "positives": 1347,
+      "negatives": 5346,
+      "prevalence": 0.20125504258180188
+    }
+  },
+  "time_range": {
+    "start": "2026-05-18 01:50:00+00:00",
+    "end": "2026-06-01 00:20:34.930192+00:00"
+  },
+  "parquet_path": "/home/runner/workspace/backend/artifacts/datasets/phase21.parquet"
+}
